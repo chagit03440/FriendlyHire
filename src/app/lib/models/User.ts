@@ -1,12 +1,5 @@
-import mongoose, { Schema, Document, Model } from "mongoose";
-
-interface IUser extends Document {
-  name: string;
-  email: string;
-  password: string;
-  role: "candidate" | "employee";
-  profile: Record<string, any>;
-}
+import IUser from "@/app/types/user";
+import mongoose, { Schema, Model } from "mongoose";
 
 const userSchema = new Schema<IUser>(
   {
@@ -14,7 +7,7 @@ const userSchema = new Schema<IUser>(
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     role: { type: String, enum: ["candidate", "employee"], required: true },
-    profile: { type: Object, default: {} },
+    profile: { type: String },
   },
   { discriminatorKey: "role", timestamps: true }
 );
