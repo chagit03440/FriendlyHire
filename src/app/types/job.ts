@@ -8,6 +8,6 @@ export default interface IJob extends Document {
   company: string;
   requirements: string[];
   location: string;
-  status: "Open" | "Closed"; // Limited to specific values
-  createdBy: Types.ObjectId; // References the user who created the job
+  status: "Open" | "Closed"; 
+  createdBy: Types.ObjectId; 
 }
