@@ -1,11 +1,6 @@
 import { Schema, Model } from "mongoose";
-import { User, IUser } from "./User";
-
-interface ICandidate extends IUser {
-  experience: number;
-  skills: string[];
-  fileUrl: string;
-}
+import { User } from "./User";
+import ICandidate from "@/app/types/candidate";
 
 const candidateSchema = new Schema<ICandidate>({
   experience: { type: Number, required: true },
