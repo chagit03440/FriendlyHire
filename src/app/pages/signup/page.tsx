@@ -13,20 +13,23 @@ const Login = () => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const handleSubmit = async (e: React.FormEvent, userData: IUser) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+  
+    const userData: IUser = { name, email, password, role, profile } as IUser;
+  
     try {
       const response = await createUser(userData);
       if (response) {
         router.push("/pages/home");
       } else {
-        console.log("היה בעיה בהתחברות. נסה שוב.");
         setError("היה בעיה בהתחברות. נסה שוב.");
       }
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

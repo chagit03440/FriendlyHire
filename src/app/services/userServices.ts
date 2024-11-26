@@ -1,12 +1,7 @@
 import axios from "axios";
+import IUser from "../types/user";
 
-export const createUser = async (user: {
-  name: string;
-  email: string;
-  password: string;
-  role: "candidate" | "employee";
-  profile: string;
-}) => {
+export const createUser = async (user: IUser) => {
   try {
     const response = await axios.post("/api/signup", user);
     const data = response.data;
