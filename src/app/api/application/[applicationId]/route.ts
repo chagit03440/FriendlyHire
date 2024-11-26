@@ -1,0 +1,98 @@
+import { NextRequest, NextResponse } from "next/server";
+import connect from "@/app/lib/db/mongodb";
+import Application from "@/app/lib/models/Application"; // Update to use the Application model
+
+// GET a specific application
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { applicationId: string } }
+) {
+  const { applicationId } = params;
+
+  try {
+    await connect(); // Connect to MongoDB
+    const application = await Application.findById(applicationId);
+    if (!application)
+      return NextResponse.json(
+        { message: "Application not found" },
+        { status: 404 }
+      );
+    return NextResponse.json(application, { status: 200 });
+  } catch (error) {
+    console.error("Error fetching application:", error);
+    return NextResponse.json(
+      { message: "Error fetching application", error },
+      { status: 500 }
+    );
+  }
+}
+
+// PUT to update an existing application
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { applicationId: string } }
+) {
+  const { applicationId } = params;
+  const { applicantName, jobId, status, resumeLink, submissionDate } =
+    await req.json();
+
+  console.log("Updating application with ID:", applicationId);
+  console.log("Updated Application Data:", {
+    applicantName,
+    jobId,
+    status,
+    resumeLink,
+    submissionDate,
+  });
+
+  try {
+    await connect(); // Connect to MongoDB
+    const updatedApplication = await Application.findByIdAndUpdate(
+      applicationId,
+      { applicantName, jobId, status, resumeLink, submissionDate },
+      { new: true } // Return the updated document
+    );
+    if (!updatedApplication)
+      return NextResponse.json(
+        { message: "Application not found" },
+        { status: 404 }
+      );
+    return NextResponse.json(updatedApplication, { status: 200 });
+  } catch (error) {
+    console.error("Error updating application:", error);
+    return NextResponse.json(
+      { message: "Error updating application", error },
+      { status: 500 }
+    );
+  }
+}
+
+// DELETE an application
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { applicationId: string } }
+) {
+  const { applicationId } = params;
+
+  try {
+    await connect(); // Connect to MongoDB
+    const deletedApplication = await Application.findByIdAndDelete(
+      applicationId
+    );
+    if (!deletedApplication)
+      return NextResponse.json(
+        { message: "Application not found" },
+        { status: 404 }
+      );
+    return NextResponse.json(
+      { message: "Application deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error deleting application:", error);
+    return NextResponse.json(
+      { message: "Error deleting application", error },
+      { status: 500 }
+    );
+  }
+}

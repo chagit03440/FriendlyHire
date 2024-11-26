@@ -12,6 +12,7 @@ const userSchema = new Schema<IUser>(
   { discriminatorKey: "role", timestamps: true }
 );
 
-const User: Model<IUser> = mongoose.model<IUser>("User", userSchema);
-export { User };
-export type { IUser };
+const User: Model<IUser> = 
+mongoose.models.User || mongoose.model<IUser>("User", userSchema);
+
+export default User;
