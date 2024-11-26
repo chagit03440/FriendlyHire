@@ -5,7 +5,7 @@ export const createUser = async (user: {
   email: string;
   password: string;
   role: "candidate" | "employee";
-  profile: string;
+  profile: string ;
 }) => {
   try {
     const response = await axios.post("/api/signup", user);

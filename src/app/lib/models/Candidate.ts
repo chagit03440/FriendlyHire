@@ -1,5 +1,5 @@
 import mongoose, { Schema, Model } from "mongoose";
-import { User } from "./User";
+import  User  from "./User";
 import ICandidate from "@/app/types/candidate";
 
 const candidateSchema = new Schema<ICandidate>({
