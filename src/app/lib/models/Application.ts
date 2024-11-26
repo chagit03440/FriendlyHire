@@ -7,7 +7,7 @@ const applicationSchema: Schema<IApplication> = new Schema({
     fileUrl: { type: String, required: true },                          // Resume file URL
     status: { 
       type: String, 
-      enum: ["Sent", "Reviewed", "Accepted", "Rejected"], // Allowed values for status
+      enum: ["Saved", "Sent", "Reviewed", "Accepted", "Rejected"], // Allowed values for status
       default: "Sent", 
       required: true 
     },
