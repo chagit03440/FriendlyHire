@@ -48,7 +48,7 @@ export async function POST(req: NextRequest) {
     );
 
     return NextResponse.json(
-      { message: "Login successful", token },
+      { message: "Login successful", token, role: user.role },
       { headers }
     );
   } catch (error) {

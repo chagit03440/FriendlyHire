@@ -27,11 +27,11 @@ export async function loginAxiosForGetToken(email: string, password: string) {
     });
 
     if (response.data.token) {
-      return true;
+      return { success: true, role: response.data.role };
     }
   } catch (err) {
     console.log(err);
-
-    return false;
   }
+    return { success: false, role: null };
+  
 }

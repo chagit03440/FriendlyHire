@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createUser } from "@/app/services/userServices";
 import IUser from "@/app/types/user";
+import { useRoleStore } from "@/app/store/userStore";
 
 const Login = () => {
   const [name, setName] = useState("");
@@ -12,6 +13,8 @@ const Login = () => {
   const [profile, setProfile] = useState("");
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
+
+  const updateRole= useRoleStore ((state) => state.updateRole);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,6 +31,12 @@ const Login = () => {
     } catch (error) {
       console.error(error);
     }
+  };
+
+  const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedRole = e.target.value;
+    setRole(selectedRole); 
+    updateRole(selectedRole); 
   };
   
 
@@ -98,7 +107,7 @@ const Login = () => {
               id="role"
               className="w-full mt-1 p-2 border border-gray-300 rounded-md"
               value={role}
-              onChange={(e) => setRole(e.target.value)}
+              onChange={handleRoleChange}
               required
             >
               <option value="" disabled>

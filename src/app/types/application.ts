@@ -6,5 +6,5 @@ export default interface IApplication extends Document {
   userId: Types.ObjectId; // ID of the candidate
   jobId: Types.ObjectId; // ID of the job applied for
   fileUrl: string; // URL of the uploaded resume
-  status: "Sent" | "Reviewed" | "Accepted" | "Rejected"; // Application status
+  status: "Saved"|"Sent" | "Reviewed" | "Accepted" | "Rejected"; // Application status
 }
