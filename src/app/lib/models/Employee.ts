@@ -7,8 +7,11 @@ const employeeSchema = new Schema<IEmployee>({
   position: { type: String, required: true },
 });
 
-const Employee: Model<IEmployee> = User.discriminator<IEmployee>(
-  mongoose.models.Employee || mongoose.model<IEmployee>("Employee", employeeSchema);
-
+const Employee: Model<IEmployee> = 
+mongoose.models.Employee ||
+User.discriminator<IEmployee>(
+"Employee",
+  employeeSchema
 );
-export default{ Employee };
+export default Employee ;
+
