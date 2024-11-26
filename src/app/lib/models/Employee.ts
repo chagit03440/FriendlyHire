@@ -1,4 +1,4 @@
-import { Schema, Model } from "mongoose";
+import mongoose,{ Schema, Model } from "mongoose";
 import { User } from "./User";
 import IEmployee from "@/app/types/employee";
 
@@ -8,8 +8,7 @@ const employeeSchema = new Schema<IEmployee>({
 });
 
 const Employee: Model<IEmployee> = User.discriminator<IEmployee>(
-  "employee",
-  employeeSchema
+  mongoose.models.Employee || mongoose.model<IEmployee>("Employee", employeeSchema);
+
 );
-export { Employee };
-export type { IEmployee };
+export default{ Employee };
