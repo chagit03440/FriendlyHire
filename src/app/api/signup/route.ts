@@ -6,10 +6,10 @@ import User from "@/app/lib/models/User"; // Make sure you have a User model
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, role, email, password } = await req.json();
+    const { name, role, email, password ,profile} = await req.json();
 
     // Ensure all required fields are provided
-    if (!name || !email || !password || !role) {
+    if (!name || !email || !password || !role || !profile)  {
       return NextResponse.json(
         { message: "Name, role, email, and password are required" },
         { status: 400 }
@@ -45,12 +45,13 @@ export async function POST(req: NextRequest) {
       role: role.toLowerCase(), // Save the role in lowercase for consistency
       email,
       password: hashedPassword,
+      profile
     });
     await newUser.save();
 
     // Generate a token for the new user
     const token = jwt.sign(
-      { id: newUser._id, email: newUser.email, role: newUser.role }, // Payload
+      { id: newUser._id, email: newUser.email, role: newUser.role, profile: newUser.profile}, // Payload
       process.env.JWT_SECRET!, // Secret key
       { expiresIn: "1h" } // Token expiry
     );
@@ -67,7 +68,7 @@ export async function POST(req: NextRequest) {
       {
         message: "Sign-up successful",
         token,
-        user: { id: newUser._id, name: newUser.name, email: newUser.email, role: newUser.role },
+        user: { id: newUser._id, name: newUser.name, email: newUser.email, role: newUser.role, profile: newUser.profile},
       },
       { headers, status: 201 }
     );
