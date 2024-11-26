@@ -3,9 +3,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from 'react-hot-toast';
 import { fetchProtectedData } from "@/app/services/loginServices";
-import { useRoleStore } from "../store/userStore";
 import EmployeeDashboard from "@/app/components/EmployeeDashboard "; // Import Employee component
 import CandidateDashboard from "@/app/components/CandidateDashboard"; // Import Candidate component
+import { useRoleStore } from "@/app/store/userStore";
 
 
 const Dashboard = () => {
