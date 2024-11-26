@@ -4,7 +4,7 @@ import { Types } from "mongoose";
 export const getJobs=async()=>{
   try{
     const response = await axios.get('/api/job');
-    const data = response.data.jobs;
+    const data = response.data;
     return data;
   }catch(error){
     console.error('Error get jobs:', error);
