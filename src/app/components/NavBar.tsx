@@ -8,7 +8,7 @@ import { useState } from "react";
 const NavBar: React.FC = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const role = useRoleStore((state) => state.role);
-
+    console.log("roleeeee", role)
 
     const togglePopup = () => setIsPopupOpen(!isPopupOpen);
 
@@ -22,7 +22,12 @@ const NavBar: React.FC = () => {
 
     // Render logic for "Candidate" role
     const renderCandidateNav = () => (
-        <div className="flex items-center space-x-4">
+        // <div className="flex items-center space-x-4">
+        //     <ButtonLink href="/pages/login" text="Papa" />
+        //     <ButtonLink href="/pages/signup" text="Sign Up" />
+        // </div>
+        <div className="flex items-center space-x-4 bg-yellow-500">
+            <p>ulgtclutxclutx</p>
             <ButtonLink href="/pages/home" text="Home" />
             <button
                 onClick={togglePopup}
@@ -42,11 +47,19 @@ const NavBar: React.FC = () => {
     // Render logic for "Employee" role
     const renderEmployeeNav = () => (
         <div className="flex items-center space-x-4">
-            <ButtonLink href="/pages/dashboard" text="Dashboard" />
-            <ButtonLink href="/pages/settings" text="Settings" />
-            <div className="p-2 bg-blue-500 rounded text-white">
-                Employee Tools
-            </div>
+            <ButtonLink href="/pages/home" text="Home" />
+            <button
+                onClick={togglePopup}
+                className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+                <Image
+                    src="/logo.jpg" // Replace with the path to your avatar image
+                    alt="User Avatar"
+                    width={40}
+                    height={40}
+                    className="object-cover"
+                />
+            </button>
         </div>
     );
 
