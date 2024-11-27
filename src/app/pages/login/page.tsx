@@ -2,13 +2,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginAxiosForGetToken } from "@/app/services/loginServices";
-// import { useRoleStore } from "@/app/store/userStore";
+import { useRoleStore } from "@/app/store/userStore";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  // const updateRole = useRoleStore((state) => state.updateRole);
+  const updateRole = useRoleStore((state) => state.updateRole);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -17,7 +17,7 @@ const Login = () => {
       const  {success, role }  = await loginAxiosForGetToken(email, password);
       console.log("roleeee", role);
       if (success && role) {
-        // updateRole(role);
+        updateRole(role);
         router.push("/pages/home");
       } else {
         console.log("היה בעיה בהתחברות. נסה שוב.");
