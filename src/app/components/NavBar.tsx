@@ -26,15 +26,14 @@ const NavBar: React.FC = () => {
         //     <ButtonLink href="/pages/login" text="Papa" />
         //     <ButtonLink href="/pages/signup" text="Sign Up" />
         // </div>
-        <div className="flex items-center space-x-4 bg-yellow-500">
-            <p>ulgtclutxclutx</p>
+        <div className="flex items-center space-x-4">
             <ButtonLink href="/pages/home" text="Home" />
             <button
                 onClick={togglePopup}
                 className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
                 <Image
-                    src="/logo.jpg" // Replace with the path to your avatar image
+                    src="/avatar.jpg" // Replace with the path to your avatar image
                     alt="User Avatar"
                     width={40}
                     height={40}
@@ -53,7 +52,7 @@ const NavBar: React.FC = () => {
                 className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
             >
                 <Image
-                    src="/logo.jpg" // Replace with the path to your avatar image
+                    src="/avatar.jpg" // Replace with the path to your avatar image
                     alt="User Avatar"
                     width={40}
                     height={40}
@@ -78,12 +77,12 @@ const NavBar: React.FC = () => {
             </div>
             {/* Conditional Rendering Section */}
             {role === "Login" && renderLoginNav()}
-            {role === "Candidate" && renderCandidateNav()}
-            {role === "Employee" && renderEmployeeNav()}
+            {role === "candidate" && renderCandidateNav()}
+            {role === "employee" && renderEmployeeNav()}
 
             {/* Popup Component */}
             {isPopupOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
+                <div className="absolute right-0 top-12 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
                     <ul className="p-2 space-y-2">
                         <li>
                             <button className="w-full text-left text-gray-700 hover:bg-gray-100 px-3 py-2 rounded">

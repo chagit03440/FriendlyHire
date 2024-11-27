@@ -5,7 +5,7 @@ interface RoleState {
   updateRole: (newRole: string) => void;
 }
 const useRoleStore = create<RoleState>((set) => ({
-  role: "",
+  role: " guy",
   updateRole: (newRole: string) => set({ role: newRole }),
 }));
 
