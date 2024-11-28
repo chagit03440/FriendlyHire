@@ -14,7 +14,8 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const  { success, role }  = await loginAxiosForGetToken(email, password);
+      const  {success, role }  = await loginAxiosForGetToken(email, password);
+      console.log("roleeee", role);
       if (success && role) {
         updateRole(role);
         router.push("/pages/home");
