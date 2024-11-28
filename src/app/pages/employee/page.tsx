@@ -1,7 +1,7 @@
 import EmployeeDashboard from '@/app/components/EmployeeDashboard '
 import React from 'react'
 
-const page = () => {
+const Page = () => {
   return (
     <div>
       Employee
@@ -10,4 +10,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page
