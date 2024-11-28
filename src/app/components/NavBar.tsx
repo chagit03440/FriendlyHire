@@ -2,17 +2,51 @@
 'use client'
 import Image from "next/image";
 import ButtonLink from "./Button";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import PopupList from "./PopupList";
+import { getRoleFromToken } from "../services/userServices";
 
 const NavBar: React.FC = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
+    const [role, setRole] = useState<string | null>(null);
     const pathname = usePathname();
 
-    const togglePopup = () => setIsPopupOpen(!isPopupOpen);
+    const employeeOptions = [
+        { label: 'Profile', onClick: () => console.log('Profile clicked') },
+        { label: 'Add Company', onClick: () => console.log('Settings clicked') },
+        { label: 'Add Position', onClick: () => console.log('Settings clicked') },
+        { label: 'Logout', onClick: () => console.log('Logout clicked'), style: 'text-red-500 hover:bg-red-100' },
+    ];
 
+    const candidateOptions = [
+        { label: 'Profile', onClick: () => console.log('Profile clicked') },
+        { label: 'Add Expirence', onClick: () => console.log('Settings clicked') },
+        { label: 'Add Skills', onClick: () => console.log('Settings clicked') },
+        { label: 'Add Resume', onClick: () => console.log('Settings clicked') },
+        { label: 'My Jobs', onClick: () => console.log('Settings clicked') },
+        { label: 'Logout', onClick: () => console.log('Logout clicked'), style: 'text-red-500 hover:bg-red-100' },
+    ];
+
+    const getRole = async () => {
+        try {
+            const response = await getRoleFromToken();
+            console.log(" dataaaaa", response);
+            if (response?.role) {
+                setRole(response.role.toLowerCase());
+            }
+        }
+        catch (error) {
+            console.error("Don't find the role:", error);
+        }
+
+    }
+
+
+    const togglePopup = () => setIsPopupOpen(!isPopupOpen);
     const renderNav = () => {
         if (pathname === "/pages/home") {
+            getRole();
             return (
                 <div className="flex items-center space-x-4">
                     <ButtonLink href="/pages/home" text="Home" />
@@ -40,7 +74,7 @@ const NavBar: React.FC = () => {
             );
         }
     }
-
+    console.log("i ammmmmm", role);
     return (
         <nav className="flex items-center justify-between px-6 py-4 bg-[#4335A7] text-white shadow-md">
             {/* Logo Section */}
@@ -58,28 +92,8 @@ const NavBar: React.FC = () => {
             {renderNav()}
 
             {/* Popup Component */}
-            {isPopupOpen && (
-                <div className="absolute right-0 top-12 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                    <ul className="p-2 space-y-2">
-                        <li>
-                            <button className="w-full text-left text-gray-700 hover:bg-gray-100 px-3 py-2 rounded">
-                                Profile
-                            </button>
-                        </li>
-                        <li>
-                            <button className="w-full text-left text-gray-700 hover:bg-gray-100 px-3 py-2 rounded">
-                                Settings
-                            </button>
-                        </li>
-                        <li>
-                            <button className="w-full text-left text-red-500 hover:bg-red-100 px-3 py-2 rounded">
-                                Logout
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-            )}
-
+            {isPopupOpen && (role === 'employee') && (<PopupList options={employeeOptions} /> )}
+            {isPopupOpen && (role === 'candidate') && (<PopupList options={candidateOptions} /> )}
         </nav>
     );
 };
