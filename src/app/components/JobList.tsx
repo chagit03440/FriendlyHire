@@ -1,8 +1,6 @@
 import React from 'react';
 import IJob from '../types/job';
 import { useQuery } from '@tanstack/react-query';
-import JobCard from './JobCard';
-import CandidateJobCard from './CandidateJobCard';
 import { getJobs } from '../services/jobServices';
 
 interface JobListProps {
