@@ -1,13 +1,12 @@
 import CandidateDashboard from '@/app/components/CandidateDashboard'
 import React from 'react'
 
-const page = () => {
+const Page = () => {
   return (
     <div>
-      Candidate
       <CandidateDashboard />
     </div>
   )
 }
 
-export default page
+export default Page
