@@ -2,8 +2,8 @@
 'use client'
 import Image from "next/image";
 import ButtonLink from "./Button";
-import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 import PopupList from "./PopupList";
 import { getRoleFromToken } from "../services/userServices";
 
