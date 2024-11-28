@@ -32,7 +32,7 @@ const Dashboard = () => {
     if (!isAuthenticated) {
         return <p>...טוען</p>;
     }
-
+console.log("role::::::::", role);
     return (
         <div className="">
             <Toaster />
