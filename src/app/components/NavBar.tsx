@@ -2,65 +2,44 @@
 'use client'
 import Image from "next/image";
 import ButtonLink from "./Button";
-import { useRoleStore } from "../store/userStore";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 const NavBar: React.FC = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const role = useRoleStore((state) => state.role);
-    console.log("roleeeee", role)
+    const pathname = usePathname();
 
     const togglePopup = () => setIsPopupOpen(!isPopupOpen);
 
-    // Render logic for "Login" role
-    const renderLoginNav = () => (
-        <div className="flex items-center space-x-4">
-            <ButtonLink href="/pages/login" text="Login" />
-            <ButtonLink href="/pages/signup" text="Sign Up" />
-        </div>
-    );
+    const renderNav = () => {
+        if (pathname === "/pages/home") {
+            return (
+                <div className="flex items-center space-x-4">
+                    <ButtonLink href="/pages/home" text="Home" />
+                    <button
+                        onClick={togglePopup}
+                        className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                    >
+                        <Image
+                            src="/avatar.jpg" // Replace with the path to your avatar image
+                            alt="User Avatar"
+                            width={40}
+                            height={40}
+                            className="object-cover"
+                        />
+                    </button>
+                </div>
 
-    // Render logic for "Candidate" role
-    const renderCandidateNav = () => (
-        // <div className="flex items-center space-x-4">
-        //     <ButtonLink href="/pages/login" text="Papa" />
-        //     <ButtonLink href="/pages/signup" text="Sign Up" />
-        // </div>
-        <div className="flex items-center space-x-4">
-            <ButtonLink href="/pages/home" text="Home" />
-            <button
-                onClick={togglePopup}
-                className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-                <Image
-                    src="/avatar.jpg" // Replace with the path to your avatar image
-                    alt="User Avatar"
-                    width={40}
-                    height={40}
-                    className="object-cover"
-                />
-            </button>
-        </div>
-    );
-
-    // Render logic for "Employee" role
-    const renderEmployeeNav = () => (
-        <div className="flex items-center space-x-4">
-            <ButtonLink href="/pages/home" text="Home" />
-            <button
-                onClick={togglePopup}
-                className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-            >
-                <Image
-                    src="/avatar.jpg" // Replace with the path to your avatar image
-                    alt="User Avatar"
-                    width={40}
-                    height={40}
-                    className="object-cover"
-                />
-            </button>
-        </div>
-    );
+            );
+        } else {
+            return (
+                <div className="flex items-center space-x-4">
+                    <ButtonLink href="/pages/login" text="Login" />
+                    <ButtonLink href="/pages/signup" text="Sign Up" />
+                </div>
+            );
+        }
+    }
 
     return (
         <nav className="flex items-center justify-between px-6 py-4 bg-[#4335A7] text-white shadow-md">
@@ -76,9 +55,7 @@ const NavBar: React.FC = () => {
                 <h1 className="text-2xl font-bold">FriendlyHire</h1>
             </div>
             {/* Conditional Rendering Section */}
-            {role === "Login" && renderLoginNav()}
-            {role === "candidate" && renderCandidateNav()}
-            {role === "employee" && renderEmployeeNav()}
+            {renderNav()}
 
             {/* Popup Component */}
             {isPopupOpen && (
