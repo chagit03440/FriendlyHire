@@ -3,34 +3,66 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createUser } from "@/app/services/userServices";
 import IUser from "@/app/types/user";
+import { UserSchema } from "@/app/types/userZod";
 
 const Login = () => {
+  const noValidationErrors = {
+    name: "",
+    email: "",
+    password: "",
+    role: "",
+    profile: "",
+  };
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
   const [profile, setProfile] = useState("");
+  const [validationErrors, setValidationErrors] = useState(noValidationErrors);
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
+  const userData: IUser = { name, email, password, role, profile } as IUser;
+
+  const validateForm = () => {
+    console.log("hi");
+    const parsed = UserSchema.safeParse(userData);
+    if (parsed.success) {
+      setValidationErrors(noValidationErrors);
+      console.log("true");
+
+      return true;
+    } else {
+      const newErrors = noValidationErrors;
+      parsed.error.errors.forEach((err) => {
+        const field = err.path[0] as keyof typeof newErrors;
+        newErrors[field] = err.message;
+        console.log(err.message);
+      });
+      setValidationErrors(newErrors);
+      console.log("false");
+
+      return false;
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
-    const userData: IUser = { name, email, password, role, profile } as IUser;
-  
     try {
-      const response = await createUser(userData);
-      if (response) {
-        router.push(`/pages/home`);
-      } else {
-        setError("היה בעיה בהתחברות. נסה שוב.");
+      if (validateForm()) {
+        const response = await createUser(userData);
+        if (response) {
+          router.push(`/pages/home`);
+        } else {
+          setError("היתה בעיה ביצירת המשרה. נסה שוב.");
+        }
       }
     } catch (error) {
       console.error(error);
+      setError("אירעה שגיאה. אנא נסה שוב.");
     }
   };
-  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -48,11 +80,20 @@ const Login = () => {
             <input
               type="string"
               id="name"
-              className="w-full mt-1 p-2 border border-gray-300 rounded-md"
+              className={`w-full mt-1 p-2 border rounded-md ${
+                validationErrors.name
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-gray-300 focus:ring-blue-500"
+              }`}
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
             />
+            {validationErrors.name && (
+              <p className="text-red-500 text-sm mt-1">
+                {validationErrors.name}
+              </p>
+            )}
           </div>
           <div className="mb-4">
             <label
@@ -64,11 +105,20 @@ const Login = () => {
             <input
               type="email"
               id="email"
-              className="w-full mt-1 p-2 border border-gray-300 rounded-md"
+              className={`w-full mt-1 p-2 border rounded-md ${
+                validationErrors.email
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-gray-300 focus:ring-blue-500"
+              }`}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
+            {validationErrors.email && (
+              <p className="text-red-500 text-sm mt-1">
+                {validationErrors.email}
+              </p>
+            )}
           </div>
 
           <div className="mb-4">
@@ -81,11 +131,20 @@ const Login = () => {
             <input
               type="password"
               id="password"
-              className="w-full mt-1 p-2 border border-gray-300 rounded-md"
+              className={`w-full mt-1 p-2 border rounded-md ${
+                validationErrors.password
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-gray-300 focus:ring-blue-500"
+              }`}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            {validationErrors.password && (
+              <p className="text-red-500 text-sm mt-1">
+                {validationErrors.password}
+              </p>
+            )}
           </div>
 
           <div className="mb-4">
@@ -97,9 +156,13 @@ const Login = () => {
             </label>
             <select
               id="role"
-              className="w-full mt-1 p-2 border border-gray-300 rounded-md"
+              className={`w-full mt-1 p-2 border rounded-md ${
+                validationErrors.role
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-gray-300 focus:ring-blue-500"
+              }`}
               value={role}
-              onChange={(e)=>setRole(e.target.value)}
+              onChange={(e) => setRole(e.target.value)}
               required
             >
               <option value="" disabled>
@@ -108,6 +171,11 @@ const Login = () => {
               <option value="Candidate">Candidate</option>
               <option value="Employee">Employee</option>
             </select>
+            {validationErrors.role && (
+              <p className="text-red-500 text-sm mt-1">
+                {validationErrors.role}
+              </p>
+            )}
           </div>
 
           <div className="mb-4">
@@ -120,11 +188,20 @@ const Login = () => {
             <input
               type="text"
               id="profile"
-              className="w-full mt-1 p-2 border border-gray-300 rounded-md"
+              className={`w-full mt-1 p-2 border border-gray-300 rounded-md${
+                validationErrors.profile
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-gray-300 focus:ring-blue-500"
+              }`}
               value={profile}
               onChange={(e) => setProfile(e.target.value)}
               required
             />
+            {validationErrors.profile && (
+              <p className="text-red-500 text-sm mt-1">
+                {validationErrors.profile}
+              </p>
+            )}
           </div>
 
           <button
