@@ -1,3 +1,4 @@
+"use client"
 import React from 'react';
 import IJob from '../types/job';
 import { useQuery } from '@tanstack/react-query';
