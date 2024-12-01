@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { createJob } from "@/app/services/jobServices"; // Assumed service method
 import IJob from "@/app/types/job"; // Assumed job interface
 import { JobSchema } from "@/app/types/jobZod"; // Assumed Zod schema for validation
+import { toast, Toaster } from "react-hot-toast";
 
 const addJob = () => {
   // Initial state for no validation errors
@@ -44,9 +45,12 @@ const addJob = () => {
 
   // Form validation function
   const validateForm = () => {
+        console.log(`validateForm`);
     const parsed = JobSchema.safeParse(jobData);
     if (parsed.success) {
       setValidationErrors(noValidationErrors);
+          console.log(`return true`);
+
       return true;
     } else {
       const newErrors = { ...noValidationErrors };
@@ -55,18 +59,24 @@ const addJob = () => {
         newErrors[field] = err.message;
       });
       setValidationErrors(newErrors);
+          console.log(`return false`);
+
       return false;
     }
   };
 
   // Submit handler
   const handleSubmit = async (e: React.FormEvent) => {
+    console.log(`handleSubmit`);
     e.preventDefault();
     try {
       if (validateForm()) {
         const response = await createJob(jobData);
         if (response) {
-          router.push(`/pages/jobs`); // Redirect to jobs page after successful creation
+          toast.success("המשרה נוספה בהצלחה!");
+          setTimeout(() => {
+            router.push("/pages/home"); // Redirect after showing the toast
+          }, 20000); // Wait for 2 seconds
         } else {
           setError("היתה בעיה ביצירת המשרה. נסה שוב.");
         }
