@@ -9,5 +9,5 @@ export default interface IJob extends Document {
   requirements: string[];
   location: string;
   status: "Open" | "Closed"; 
-  createdBy: Types.ObjectId; 
+  createdBy: string; 
 }
