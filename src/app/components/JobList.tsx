@@ -1,7 +1,7 @@
 import React from 'react';
-// import IJob from '../types/job';
-// import { useQuery } from '@tanstack/react-query';
-// import { getJobs } from '../services/jobServices';
+import IJob from '../types/job';
+import { useQuery } from '@tanstack/react-query';
+import { getJobs } from '../services/jobServices';
 
 interface JobListProps {
   userRole: 'candidate' | 'employee';  // Pass user role as a prop
@@ -9,10 +9,10 @@ interface JobListProps {
 
 const JobList: React.FC<JobListProps> = () => {
     
-  // const { data: jobs=[], isLoading, error } = useQuery<IJob[]>({
-  //   queryKey: ['jobs'],
-  //   queryFn: getJobs,
-  // });
+  const { data: jobs=[], isLoading, error } = useQuery<IJob[]>({
+    queryKey: ['jobs'],
+    queryFn: getJobs,
+  });
 
   // if (isLoading) return <div>Loading...</div>;
   // if (error instanceof Error) return <div>Error: {error.message}</div>;
