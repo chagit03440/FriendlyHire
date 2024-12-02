@@ -17,8 +17,8 @@ export const createJob=async(job:{title: string;
     company: string;
     requirements: string[];
     location: string;
-    status: "Open" | "Closed"; 
-    createdBy: Types.ObjectId; })=>{
+    status: string; 
+    createdBy: string; })=>{
     try{
       const response = await axios.post('/api/job', job);
       const data = response.data;
