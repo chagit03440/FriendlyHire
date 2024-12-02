@@ -17,6 +17,7 @@ export async function GET(req: NextRequest) {
       {
         message: "Protected data",
         role: (decoded as { role: string }).role, // Ensure decoded has a 'role' property
+        mail:  (decoded as { email: string }).email,
       },
       { status: 200 }
     );

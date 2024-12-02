@@ -1,4 +1,5 @@
 import axios from "axios";
+//import { Types } from "mongoose";
 
 export const getApplications=async()=>{
   try{
@@ -10,7 +11,7 @@ export const getApplications=async()=>{
   }
 }
 
-export const createApplication=async(application:{title: string; director:string; releaseYear:string})=>{
+export const createApplication=async(application:{userEmail: string; jobId: string; fileUrl: string; status:"Saved" | "Sent" | "Reviewed" | "Accepted" | "Rejected"})=>{
     try{
       const response = await axios.post('/api/application', application);
       const data = response.data;
