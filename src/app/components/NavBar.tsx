@@ -13,14 +13,14 @@ const NavBar: React.FC = () => {
     const router = useRouter();
 
     const employeeOptions = [
-        { label: 'Profile', onClick: () => router.push('/pages/profile') },
+        { label: 'Profile', onClick: () => router.push('/pages/home/profile') },
         { label: 'Logout', onClick: () => handleLogout(), style: 'text-red-500 hover:bg-red-100' },
     ];
 
     const candidateOptions = [
-        { label: 'Profile', onClick: () => router.push('/pages/profile') },
-        { label: 'Resume', onClick: () => router.push('/pages/resume') },
-        { label: 'My Jobs', onClick: () => router.push('/pages/myJobs') },
+        { label: 'Profile', onClick: () => router.push('/pages/home/profile') },
+        { label: 'Resume', onClick: () => router.push('/pages/home/resume') },
+        { label: 'My Jobs', onClick: () => router.push('/pages/home/myJobs') },
         { label: 'Logout', onClick: () => handleLogout(), style: 'text-red-500 hover:bg-red-100' },
     ];
 
