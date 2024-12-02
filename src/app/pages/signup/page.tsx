@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { createUser } from "@/app/services/userServices";
 import IUser from "@/app/types/user";
 import { UserSchema } from "@/app/types/userZod";
+import toast, { Toaster } from "react-hot-toast";
 
 const Login = () => {
   const noValidationErrors = {
@@ -53,9 +54,12 @@ const Login = () => {
       if (validateForm()) {
         const response = await createUser(userData);
         if (response) {
-          router.push(`/pages/home`);
+          toast.success("התחברת בהצלחה!");
+          setTimeout(() => {
+            router.push("/pages/home"); // Redirect after showing the toast
+          }, 2000); // Wait for 2 seconds               
         } else {
-          setError("היתה בעיה ביצירת המשרה. נסה שוב.");
+          setError("היתה בעיה בהתחברות. נסה שוב.");
         }
       }
     } catch (error) {
@@ -66,6 +70,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <Toaster />
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-4">הרשמה</h2>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}

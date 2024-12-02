@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { loginAxiosForGetToken } from "@/app/services/loginServices";
+import toast, { Toaster } from "react-hot-toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -14,7 +15,10 @@ const Login = () => {
     try {
       const  {success }  = await loginAxiosForGetToken(email, password);
       if (success) {
-        router.push(`/pages/home`);
+        toast.success("התחברת בהצלחה!");
+        setTimeout(() => {
+          router.push("/pages/home"); // Redirect after showing the toast
+        }, 2000); // Wait for 2 seconds
       } else {
         console.log("היה בעיה בהתחברות. נסה שוב.");
         setError("היה בעיה בהתחברות. נסה שוב.");
@@ -26,6 +30,7 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <Toaster />
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-4">התחברות</h2>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}

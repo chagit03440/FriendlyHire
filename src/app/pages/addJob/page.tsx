@@ -76,7 +76,7 @@ const addJob = () => {
           toast.success("המשרה נוספה בהצלחה!");
           setTimeout(() => {
             router.push("/pages/home"); // Redirect after showing the toast
-          }, 20000); // Wait for 2 seconds
+          }, 2000); // Wait for 2 seconds
         } else {
           setError("היתה בעיה ביצירת המשרה. נסה שוב.");
         }
@@ -89,6 +89,7 @@ const addJob = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <Toaster />
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h2 className="text-2xl font-bold text-center mb-4">פרסום משרה חדשה</h2>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
