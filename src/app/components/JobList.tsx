@@ -12,7 +12,7 @@ interface JobListProps {
 }
 
 const JobList: React.FC<JobListProps> = () => {
-  const { role } = useUser();
+  const { role,mail } = useUser();
     
   const { data: jobs=[], isLoading, error } = useQuery<IJob[]>({
     queryKey: ['jobs'],
