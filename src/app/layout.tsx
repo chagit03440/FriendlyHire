@@ -4,6 +4,7 @@ import NavBar from "./components/NavBar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 import { UserProvider } from "./context/UserContext";
+import Footer from "./components/Footer";
 
 export default function RootLayout({
   children,
@@ -18,10 +19,10 @@ export default function RootLayout({
           <QueryClientProvider client={queryClient}>
             <NavBar />
             {children}
+            <Footer />
           </QueryClientProvider>
         </body>
       </html>
     </UserProvider>
-
   );
 }
