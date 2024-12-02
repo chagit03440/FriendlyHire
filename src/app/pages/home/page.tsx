@@ -3,27 +3,32 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import toast, { Toaster } from 'react-hot-toast';
 import { fetchProtectedData } from "@/app/services/loginServices";
-import EmployeeDashboard from "@/app/components/EmployeeDashboard "; // Import Employee component
-import CandidateDashboard from "@/app/components/CandidateDashboard"; // Import Candidate component
-import { useRoleStore } from "@/app/store/userStore";
+import EmployeeDashboard from "@/app/components/EmployeeDashboard ";
+import CandidateDashboard from "@/app/components/CandidateDashboard";
 
 
 const Dashboard = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [userRole, setUserRole] = useState<string | null>(null);
     const router = useRouter();
-    const role = useRoleStore((state) => state.role);
 
     useEffect(() => {
         const checkAccess = async () => {
-            const validation = await fetchProtectedData();
-            console.log("validation data", validation);
-            if (validation) {
-                setIsAuthenticated(true);
-                toast.success("!הגעת בהצלחה לדף הראשי לאחר ההתחברות");
-                console.log("יש לך גישה למידע המוגן:", validation);
-            } else {
-                router.push("/pages/login"); // אם אין token, החזר לדף הלוגין
-                console.log("אין לך גישה למידע המוגן");
+            try {
+                const validation = await fetchProtectedData();
+                console.log("validation data", validation);
+
+                if (validation?.role) {
+                    setIsAuthenticated(true);
+                    setUserRole(validation.role.toLowerCase());
+                    toast.success("!הגעת בהצלחה לדף הראשי לאחר ההתחברות");
+                    console.log("יש לך גישה למידע המוגן:", validation);
+                } else {
+                    throw new Error("Unauthorized");
+                }
+            } catch (error) {
+                console.error("Access denied:", error);
+                router.push("/pages/login");
             }
         };
         checkAccess();
@@ -32,14 +37,16 @@ const Dashboard = () => {
     if (!isAuthenticated) {
         return <p>...טוען</p>;
     }
-console.log("role::::::::", role);
+
+
+
     return (
         <div className="">
             <Toaster />
             <div>
-                {role === "employee" ? (
+                {userRole === "employee" ? (
                     <EmployeeDashboard />
-                ) : role === "candidate" ? (
+                ) : userRole === "candidate" ? (
                     <CandidateDashboard />
                 ) : (
                     <p>תפקיד לא מזוהה</p> // Default message if role is undefined

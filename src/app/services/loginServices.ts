@@ -7,13 +7,13 @@ export async function fetchProtectedData() {
     });
     const data = response.data;
 
-    console.log("מידע מוגן:", data);
+    console.log("Protected data received:", data);
     return data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
-      console.log("שגיאה:", error.response.data.message);
+      console.log("Error:", error.response.data.message);
     } else {
-      console.log("שגיאה כלשהי:", error);
+      console.log("Unexpected error:", error);
     }
     return null;
   }
@@ -26,11 +26,16 @@ export async function loginAxiosForGetToken(email: string, password: string) {
       password,
     });
 
-    if (response.data.token) {
+    if (response.data?.role) {
+      console.log("Login successful:", response.data);
       return { success: true, role: response.data.role };
     }
-  } catch (err) {
-    console.log(err);
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      console.log("Login error:", error.response.data.message);
+    } else {
+      console.log("Unexpected error:", error);
+    }
   }
     return { success: false, role: null };
   

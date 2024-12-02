@@ -3,7 +3,6 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createUser } from "@/app/services/userServices";
 import IUser from "@/app/types/user";
-import { useRoleStore } from "@/app/store/userStore";
 
 const Login = () => {
   const [name, setName] = useState("");
@@ -14,7 +13,6 @@ const Login = () => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
-  const updateRole= useRoleStore ((state) => state.updateRole);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -24,19 +22,13 @@ const Login = () => {
     try {
       const response = await createUser(userData);
       if (response) {
-        router.push("/pages/home");
+        router.push(`/pages/home`);
       } else {
         setError("היה בעיה בהתחברות. נסה שוב.");
       }
     } catch (error) {
       console.error(error);
     }
-  };
-
-  const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedRole = e.target.value;
-    setRole(selectedRole); 
-    updateRole(selectedRole); 
   };
   
 
@@ -107,7 +99,7 @@ const Login = () => {
               id="role"
               className="w-full mt-1 p-2 border border-gray-300 rounded-md"
               value={role}
-              onChange={handleRoleChange}
+              onChange={(e)=>setRole(e.target.value)}
               required
             >
               <option value="" disabled>
