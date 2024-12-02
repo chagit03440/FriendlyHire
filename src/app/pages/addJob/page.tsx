@@ -2,11 +2,10 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createJob } from "@/app/services/jobServices"; // Assumed service method
-import IJob from "@/app/types/job"; // Assumed job interface
 import { JobSchema } from "@/app/types/jobZod"; // Assumed Zod schema for validation
 import { toast, Toaster } from "react-hot-toast";
 
-const addJob = () => {
+const AddJob = () => {
   // Initial state for no validation errors
   const noValidationErrors = {
     title: "",
@@ -32,24 +31,24 @@ const addJob = () => {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
- const jobData = {
-   title,
-   description,
-   experience: parseInt(experience),
-   company,
-   requirements: requirements.split(",").map((req) => req.trim()),
-   location,
-   status,
-   createdBy: "64a5cbb776c7310012345678", // Replace with the actual logged-in user's ID
- };
+  const jobData = {
+    title,
+    description,
+    experience: parseInt(experience),
+    company,
+    requirements: requirements.split(",").map((req) => req.trim()),
+    location,
+    status,
+    createdBy: "64a5cbb776c7310012345678", // Replace with the actual logged-in user's ID
+  };
 
   // Form validation function
   const validateForm = () => {
-        console.log(`validateForm`);
+    console.log(`validateForm`);
     const parsed = JobSchema.safeParse(jobData);
     if (parsed.success) {
       setValidationErrors(noValidationErrors);
-          console.log(`return true`);
+      console.log(`return true`);
 
       return true;
     } else {
@@ -59,7 +58,7 @@ const addJob = () => {
         newErrors[field] = err.message;
       });
       setValidationErrors(newErrors);
-          console.log(`return false`);
+      console.log(`return false`);
 
       return false;
     }
@@ -303,4 +302,4 @@ const addJob = () => {
   );
 };
 
-export default addJob;
+export default AddJob;
