@@ -1,4 +1,4 @@
-import { Document, Types } from "mongoose";
+import { Document } from "mongoose";
 
 export default interface IJob extends Document {
   _id: string;
@@ -8,6 +8,6 @@ export default interface IJob extends Document {
   company: string;
   requirements: string[];
   location: string;
-  status: "Open" | "Closed"; 
-  createdBy: string; 
+  status: "Open" | "Closed";
+  createdBy: string;
 }
