@@ -6,7 +6,7 @@ const EmployeeDashboard = () => {
   const router = useRouter(); // Initialize useRouter
 
   const handleAddJobClick = () => {
-    router.push('/pages/addJob'); // Navigate to the Add Job page
+    router.push('/pages/home/addJob'); // Navigate to the Add Job page
   };
 
   return (
