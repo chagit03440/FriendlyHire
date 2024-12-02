@@ -20,3 +20,17 @@ export const createUser = async (user: IUser) => {
     };
   }
 };
+
+export async function getRoleFromToken() {
+  try {
+    const response = await axios.get("/api/role");
+    return { success: true, role: response.data.role };
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      console.log("Error:", error.response.data.message);
+    } else {
+      console.log("Unexpected error:", error);
+    }
+    return { success: false, role: null };
+  }
+}

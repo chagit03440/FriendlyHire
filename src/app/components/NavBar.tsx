@@ -2,36 +2,37 @@
 'use client'
 import Image from "next/image";
 import ButtonLink from "./Button";
-import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
+import PopupList from "./PopupList";
+import { useUser } from "../context/UserContext";
 
 const NavBar: React.FC = () => {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const pathname = usePathname();
+    const { role, setRole } = useUser();
+    const router = useRouter();
+
+    const employeeOptions = [
+        { label: 'Profile', onClick: () => router.push('/pages/profile') },
+        { label: 'Logout', onClick: () => handleLogout(), style: 'text-red-500 hover:bg-red-100' },
+    ];
+
+    const candidateOptions = [
+        { label: 'Profile', onClick: () => router.push('/pages/profile') },
+        { label: 'Resume', onClick: () => router.push('/pages/resume') },
+        { label: 'My Jobs', onClick: () => router.push('/pages/myJobs') },
+        { label: 'Logout', onClick: () => handleLogout(), style: 'text-red-500 hover:bg-red-100' },
+    ];
 
     const togglePopup = () => setIsPopupOpen(!isPopupOpen);
 
-    const renderNav = () => {
-        if (pathname === "/pages/home") {
-            return (
-                <div className="flex items-center space-x-4">
-                    <ButtonLink href="/pages/home" text="Home" />
-                    <button
-                        onClick={togglePopup}
-                        className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    >
-                        <Image
-                            src="/avatar.jpg" // Replace with the path to your avatar image
-                            alt="User Avatar"
-                            width={40}
-                            height={40}
-                            className="object-cover"
-                        />
-                    </button>
-                </div>
-
-            );
-        } else {
+    const handleLogout = () => {
+        console.log("Logging out...");
+        setRole(null); 
+        router.push('/pages/login');
+    };
+    const renderNav = () => { 
+        if (!role) {
             return (
                 <div className="flex items-center space-x-4">
                     <ButtonLink href="/pages/login" text="Login" />
@@ -39,8 +40,27 @@ const NavBar: React.FC = () => {
                 </div>
             );
         }
-    }
 
+        return (
+            <div className="flex items-center space-x-4">
+                <ButtonLink href="/pages/home" text="Home" />
+                <button
+                    onClick={togglePopup}
+                    className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                    <Image
+                        src="/avatar.jpg" // Replace with the path to your avatar image
+                        alt="User Avatar"
+                        width={40}
+                        height={40}
+                        className="object-cover"
+                    />
+                </button>
+            </div>
+
+        );
+    }
+    console.log("i ammmmmm", role);
     return (
         <nav className="flex items-center justify-between px-6 py-4 bg-[#4335A7] text-white shadow-md">
             {/* Logo Section */}
@@ -58,28 +78,8 @@ const NavBar: React.FC = () => {
             {renderNav()}
 
             {/* Popup Component */}
-            {isPopupOpen && (
-                <div className="absolute right-0 top-12 w-48 bg-white border border-gray-200 rounded-lg shadow-lg z-50">
-                    <ul className="p-2 space-y-2">
-                        <li>
-                            <button className="w-full text-left text-gray-700 hover:bg-gray-100 px-3 py-2 rounded">
-                                Profile
-                            </button>
-                        </li>
-                        <li>
-                            <button className="w-full text-left text-gray-700 hover:bg-gray-100 px-3 py-2 rounded">
-                                Settings
-                            </button>
-                        </li>
-                        <li>
-                            <button className="w-full text-left text-red-500 hover:bg-red-100 px-3 py-2 rounded">
-                                Logout
-                            </button>
-                        </li>
-                    </ul>
-                </div>
-            )}
-
+            {isPopupOpen && (role === 'employee') && (<PopupList options={employeeOptions} />)}
+            {isPopupOpen && (role === 'candidate') && (<PopupList options={candidateOptions} />)}
         </nav>
     );
 };

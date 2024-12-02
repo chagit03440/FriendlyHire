@@ -5,12 +5,14 @@ import toast, { Toaster } from 'react-hot-toast';
 import { fetchProtectedData } from "@/app/services/loginServices";
 import EmployeeDashboard from "@/app/components/EmployeeDashboard ";
 import CandidateDashboard from "@/app/components/CandidateDashboard";
+import { useUser } from "@/app/context/UserContext";
 
 
 const Dashboard = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
-    const [userRole, setUserRole] = useState<string | null>(null);
+    // const [userRole, setUserRole] = useState<string | null>(null);
     const router = useRouter();
+    const { role, setRole } = useUser();
 
     useEffect(() => {
         const checkAccess = async () => {
@@ -20,7 +22,8 @@ const Dashboard = () => {
 
                 if (validation?.role) {
                     setIsAuthenticated(true);
-                    setUserRole(validation.role.toLowerCase());
+                    setRole(validation.role.toLowerCase()); 
+                    // setUserRole(validation.role.toLowerCase());
                     toast.success("!הגעת בהצלחה לדף הראשי לאחר ההתחברות");
                     console.log("יש לך גישה למידע המוגן:", validation);
                 } else {
@@ -38,15 +41,13 @@ const Dashboard = () => {
         return <p>...טוען</p>;
     }
 
-
-
     return (
         <div className="">
             <Toaster />
             <div>
-                {userRole === "employee" ? (
+                {role === "employee" ? (
                     <EmployeeDashboard />
-                ) : userRole === "candidate" ? (
+                ) : role === "candidate" ? (
                     <CandidateDashboard />
                 ) : (
                     <p>תפקיד לא מזוהה</p> // Default message if role is undefined
