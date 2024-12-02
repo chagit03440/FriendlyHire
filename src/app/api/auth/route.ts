@@ -2,16 +2,12 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 
 export async function GET(req: NextRequest) {
-  
-  const token = req.cookies.get("token")?.value; // בגרסה זו יש גישה ישירה לעוגיות דרך req.cookies
+  const token = req.cookies.get("token")?.value;
 
-
-
-  // אם יש token, מחזירים תשובה עם מידע מאובטח
   if (!token) {
     return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
   }
-  try{
+  try {
     const secret = process.env.JWT_SECRET;
     if (!secret) {
       throw new Error("JWT secret is not defined in environment variables.");
@@ -28,5 +24,4 @@ export async function GET(req: NextRequest) {
     console.error("Token verification error:", error);
     return NextResponse.json({ message: "Invalid token" }, { status: 403 });
   }
-
 }
