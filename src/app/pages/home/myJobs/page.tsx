@@ -18,6 +18,7 @@ const CandidateApplications = () => {
     queryFn: getApplications, // Fetch applications service
   });
 
+  console.log("email:",mail)
   // Filter applications based on the candidate's email
   const filteredApplications =
     role === "candidate"
