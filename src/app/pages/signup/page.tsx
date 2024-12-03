@@ -1,12 +1,30 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { createUser } from "@/app/services/userServices";
 import IUser from "@/app/types/user";
 import { UserSchema } from "@/app/types/userZod";
 import toast, { Toaster } from "react-hot-toast";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import checkAccess from "@/app/store/checkAccess";
 
 const Signup = () => {
+  const router = useRouter();
+
+    useEffect(() => {
+      const validateAccess = async () => {
+        try {
+          const userData = await checkAccess();
+          if (userData.hasAccess) {
+            router.push("/pages/home");
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      validateAccess();
+    }, [router]);
+  
   const noValidationErrors = {
     name: "",
     email: "",
@@ -22,7 +40,6 @@ const Signup = () => {
   const [profile, setProfile] = useState("");
   const [validationErrors, setValidationErrors] = useState(noValidationErrors);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
 
   const userData: IUser = { name, email, password, role, profile } as IUser;
 

@@ -1,12 +1,38 @@
 "use client";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { createJob } from "@/app/services/jobServices"; // Assumed service method
 import { JobSchema } from "@/app/types/jobZod"; // Assumed Zod schema for validation
 import { toast, Toaster } from "react-hot-toast";
-import { useUser } from "@/app/context/UserContext";
+import { useUser } from "@/app/store/UserContext";
+import { useEffect, useState } from "react";
+import checkAccess from "@/app/store/checkAccess";
 
 const AddJob = () => {
+  const router = useRouter();
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
+  useEffect(() => {
+    const validateAccess = async () => {
+      try {
+        const userData = await checkAccess();
+        if (!userData.hasAccess) {
+          router.push("/pages/login");
+        } else {
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        router.push("/pages/login");
+      }
+    };
+
+    validateAccess();
+  }, [router]);
+
+  if (!isAuthenticated) {
+    return <p>...טוען</p>;
+  }
+
   const { role, mail } = useUser();
   console.log(`role: ${role} mail: ${mail}`);
 
@@ -28,12 +54,11 @@ const AddJob = () => {
   const [company, setCompany] = useState("");
   const [requirements, setRequirements] = useState("");
   const [location, setLocation] = useState("");
-const [status, setStatus] = useState<"Open" | "Closed">("Open");
+  const [status, setStatus] = useState<"Open" | "Closed">("Open");
 
   // State for validation and error handling
   const [validationErrors, setValidationErrors] = useState(noValidationErrors);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
 
   const jobData = {
     title,

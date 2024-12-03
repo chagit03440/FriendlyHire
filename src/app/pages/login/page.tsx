@@ -1,14 +1,31 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { loginAxiosForGetToken } from "@/app/services/loginServices";
 import toast, { Toaster } from "react-hot-toast";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import checkAccess from "@/app/store/checkAccess";
 
 const Login = () => {
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const validateAccess = async () => {
+      try {
+        const userData = await checkAccess();
+        if (userData.hasAccess) {
+          router.push("/pages/home");
+      }} catch (error) {
+        console.log(error);
+      }
+    };
+
+    validateAccess();
+  }, [router]);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
