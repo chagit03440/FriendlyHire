@@ -89,3 +89,4 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({ job }) => {
 };
 
 export default CandidateJobCard;
+
