@@ -6,7 +6,7 @@ import IUser from "@/app/types/user";
 import { UserSchema } from "@/app/types/userZod";
 import toast, { Toaster } from "react-hot-toast";
 
-const Login = () => {
+const Signup = () => {
   const noValidationErrors = {
     name: "",
     email: "",
@@ -27,23 +27,17 @@ const Login = () => {
   const userData: IUser = { name, email, password, role, profile } as IUser;
 
   const validateForm = () => {
-    console.log("hi");
     const parsed = UserSchema.safeParse(userData);
     if (parsed.success) {
       setValidationErrors(noValidationErrors);
-      console.log("true");
-
       return true;
     } else {
       const newErrors = noValidationErrors;
       parsed.error.errors.forEach((err) => {
         const field = err.path[0] as keyof typeof newErrors;
         newErrors[field] = err.message;
-        console.log(err.message);
       });
       setValidationErrors(newErrors);
-      console.log("false");
-
       return false;
     }
   };
@@ -54,12 +48,12 @@ const Login = () => {
       if (validateForm()) {
         const response = await createUser(userData);
         if (response) {
-          toast.success("התחברת בהצלחה!");
+          toast.success("נרשמת בהצלחה!");
           setTimeout(() => {
-            router.push("/pages/home"); // Redirect after showing the toast
-          }, 2000); // Wait for 2 seconds               
+            router.push("/pages/home");
+          }, 2000);
         } else {
-          setError("היתה בעיה בהתחברות. נסה שוב.");
+          setError("היתה בעיה בהרשמה. נסה שוב.");
         }
       }
     } catch (error) {
@@ -69,23 +63,23 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-[calc(100vh-200px)] flex items-center justify-center bg-gray-100 py-8">
       <Toaster />
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-4">הרשמה</h2>
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+      <div className="bg-white p-12 rounded-xl shadow-2xl w-full max-w-lg">
+        <h2 className="text-3xl font-bold text-center mb-8">הרשמה</h2>
+        {error && <p className="text-red-500 text-center mb-6">{error}</p>}
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
+          <div className="mb-6">
             <label
               htmlFor="name"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-md font-medium text-gray-700 mb-2"
             >
               Name
             </label>
             <input
               type="string"
               id="name"
-              className={`w-full mt-1 p-2 border rounded-md ${
+              className={`w-full mt-1 p-3 border rounded-lg text-md ${
                 validationErrors.name
                   ? "border-red-500 focus:ring-red-500"
                   : "border-gray-300 focus:ring-blue-500"
@@ -100,17 +94,18 @@ const Login = () => {
               </p>
             )}
           </div>
-          <div className="mb-4">
+
+          <div className="mb-6">
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-md font-medium text-gray-700 mb-2"
             >
               Email
             </label>
             <input
               type="email"
               id="email"
-              className={`w-full mt-1 p-2 border rounded-md ${
+              className={`w-full mt-1 p-3 border rounded-lg text-md ${
                 validationErrors.email
                   ? "border-red-500 focus:ring-red-500"
                   : "border-gray-300 focus:ring-blue-500"
@@ -126,17 +121,17 @@ const Login = () => {
             )}
           </div>
 
-          <div className="mb-4">
+          <div className="mb-6">
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-md font-medium text-gray-700 mb-2"
             >
               Password
             </label>
             <input
               type="password"
               id="password"
-              className={`w-full mt-1 p-2 border rounded-md ${
+              className={`w-full mt-1 p-3 border rounded-lg text-md ${
                 validationErrors.password
                   ? "border-red-500 focus:ring-red-500"
                   : "border-gray-300 focus:ring-blue-500"
@@ -152,16 +147,16 @@ const Login = () => {
             )}
           </div>
 
-          <div className="mb-4">
+          <div className="mb-6">
             <label
               htmlFor="role"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-md font-medium text-gray-700 mb-2"
             >
               Role
             </label>
             <select
               id="role"
-              className={`w-full mt-1 p-2 border rounded-md ${
+              className={`w-full mt-1 p-3 border rounded-lg text-md ${
                 validationErrors.role
                   ? "border-red-500 focus:ring-red-500"
                   : "border-gray-300 focus:ring-blue-500"
@@ -183,17 +178,17 @@ const Login = () => {
             )}
           </div>
 
-          <div className="mb-4">
+          <div className="mb-6">
             <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
+              htmlFor="profile"
+              className="block text-md font-medium text-gray-700 mb-2"
             >
               Profile
             </label>
             <input
               type="text"
               id="profile"
-              className={`w-full mt-1 p-2 border border-gray-300 rounded-md${
+              className={`w-full mt-1 p-3 border rounded-lg text-md ${
                 validationErrors.profile
                   ? "border-red-500 focus:ring-red-500"
                   : "border-gray-300 focus:ring-blue-500"
@@ -211,7 +206,7 @@ const Login = () => {
 
           <button
             type="submit"
-            className="w-full py-2 mt-4 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            className="w-full py-3 mt-8 text-lg bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300"
           >
             הרשם
           </button>
@@ -221,4 +216,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

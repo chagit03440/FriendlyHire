@@ -4,8 +4,12 @@ import { useRouter } from "next/navigation";
 import { createJob } from "@/app/services/jobServices"; // Assumed service method
 import { JobSchema } from "@/app/types/jobZod"; // Assumed Zod schema for validation
 import { toast, Toaster } from "react-hot-toast";
+import { useUser } from "@/app/context/UserContext";
 
 const AddJob = () => {
+  const { role, mail } = useUser();
+  console.log(`role: ${role} mail: ${mail}`);
+
   // Initial state for no validation errors
   const noValidationErrors = {
     title: "",
@@ -24,7 +28,7 @@ const AddJob = () => {
   const [company, setCompany] = useState("");
   const [requirements, setRequirements] = useState("");
   const [location, setLocation] = useState("");
-  const [status, setStatus] = useState("");
+const [status, setStatus] = useState<"Open" | "Closed">("Open");
 
   // State for validation and error handling
   const [validationErrors, setValidationErrors] = useState(noValidationErrors);
@@ -39,7 +43,7 @@ const AddJob = () => {
     requirements: requirements.split(",").map((req) => req.trim()),
     location,
     status,
-    createdBy: "64a5cbb776c7310012345678", // Replace with the actual logged-in user's ID
+    createdBy: mail || "",
   };
 
   // Form validation function
@@ -273,12 +277,9 @@ const AddJob = () => {
                   : "border-gray-300 focus:ring-blue-500"
               }`}
               value={status}
-              onChange={(e) => setStatus(e.target.value)}
+              onChange={(e) => setStatus(e.target.value as "Open" | "Closed")}
               required
             >
-              <option value="" disabled>
-                Select Job Status
-              </option>
               <option value="Open">Open</option>
               <option value="Closed">Closed</option>
             </select>
