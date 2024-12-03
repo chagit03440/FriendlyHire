@@ -6,7 +6,7 @@ import Application from "@/app/lib/models/Application"; // Update to use the App
 export async function GET() {
   try {
     await connect(); // Connect to MongoDB
-    const applications = await Application.find(); // Fetch all applications
+    const applications = await Application.find().populate("jobId", "title company");
     return NextResponse.json(applications, { status: 200 });
   } catch (error) {
     return NextResponse.json(

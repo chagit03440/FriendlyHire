@@ -12,6 +12,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   const [queryClient] = useState(() => new QueryClient());
+
+
   return (
     <UserProvider>
       <html lang="en">

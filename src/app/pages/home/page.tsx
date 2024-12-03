@@ -10,7 +10,7 @@ const Dashboard = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   // const [userRole, setUserRole] = useState<string | null>(null);
   const router = useRouter();
-  const { role, setRole } = useUser();
+  const { role, setRole, setMail } = useUser();
 
   useEffect(() => {
     const checkAccess = async () => {
@@ -21,6 +21,7 @@ const Dashboard = () => {
         if (validation?.role) {
           setIsAuthenticated(true);
           setRole(validation.role.toLowerCase());
+          setMail(validation.email);
           // setUserRole(validation.role.toLowerCase());
           console.log("יש לך גישה למידע המוגן:", validation);
         } else {
