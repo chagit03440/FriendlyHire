@@ -28,11 +28,17 @@ const CandidateDashboard: React.FC = () => {
   if (isJobsLoading || isApplicationsLoading) return <div>Loading...</div>;
   if (jobsError || applicationsError) return <div>Error loading data</div>;
 
+  console.log('Fetched jobs:', jobs);
+  console.log('Fetched user applications:', userApplications);
+
   // Filter out jobs the user has already applied for or saved (from the applications)
-  const filteredJobs = jobs.filter((job:IJob) => {
-    const isJobInApplications = userApplications.some((app:IApplication) => app.jobId.toString() === job._id);
+  const filteredJobs = jobs.filter((job: IJob) => {
+    const isJobInApplications = userApplications.some((app: IApplication) => app.jobId._id.toString() === job._id.toString());
+    console.log(`Checking job ${job._id}: is applied or saved?`, isJobInApplications);
     return !isJobInApplications; // Only include jobs not in the user's application list
   });
+
+  console.log('Filtered jobs:', filteredJobs);
 
   return (
     <div className="candidate-page">
