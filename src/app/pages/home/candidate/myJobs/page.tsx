@@ -3,14 +3,45 @@
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getUserApplications } from "@/app/services/applicationServices";
-import { useUser } from "@/app/context/UserContext";
+import { useUser } from "@/app/store/UserContext";
 import ApplicationList from "@/app/components/ApplicationList";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import checkAccess from "@/app/store/checkAccess";
 
 const CandidateApplications = () => {
   const { mail, role } = useUser(); // Get the current user's email and role
 
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    const validateAccess = async () => {
+      try {
+        const userData = await checkAccess();
+        if (!userData.hasAccess) {
+          router.push("/pages/login");
+        } else {
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        router.push("/pages/login");
+      }
+    };
+
+    validateAccess();
+  }, [router]);
+
+  if (!isAuthenticated) {
+    return <p>...טוען</p>;
+  }
+
   // Fetch applications for the current user using react-query
-  const { data: applications = [], isLoading, error } = useQuery({
+  const {
+    data: applications = [],
+    isLoading,
+    error,
+  } = useQuery({
     queryKey: ["userApplications", mail],
     queryFn: () => getUserApplications(mail), // Fetch user-specific applications
     enabled: !!mail && role === "candidate", // Only fetch if mail exists and user is a candidate

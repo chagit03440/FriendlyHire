@@ -1,38 +1,33 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { fetchProtectedData } from "@/app/services/loginServices";
 import EmployeeDashboard from "@/app/components/EmployeeDashboard ";
 import CandidateDashboard from "@/app/components/CandidateDashboard";
-import { useUser } from "@/app/context/UserContext";
+import { useUser } from "@/app/store/UserContext";
+import checkAccess from "@/app/store/checkAccess";
 
 const Dashboard = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  // const [userRole, setUserRole] = useState<string | null>(null);
   const router = useRouter();
   const { role, setRole, setMail } = useUser();
 
   useEffect(() => {
-    const checkAccess = async () => {
+    const validateAccess = async () => {
       try {
-        const validation = await fetchProtectedData();
-        console.log("validation data", validation);
-
-        if (validation?.role) {
-          setIsAuthenticated(true);
-          setRole(validation.role.toLowerCase());
-          setMail(validation.email);
-          // setUserRole(validation.role.toLowerCase());
-          console.log("יש לך גישה למידע המוגן:", validation);
+        const userData = await checkAccess();
+        if (!userData.hasAccess) {
+          router.push("/pages/login");
         } else {
-          throw new Error("Unauthorized");
+          setIsAuthenticated(true);
+          setRole(userData.role.toLowerCase());
+          setMail(userData.email);
         }
       } catch (error) {
-        console.error("Access denied:", error);
         router.push("/pages/login");
       }
     };
-    checkAccess();
+
+    validateAccess();
   }, [router]);
 
   if (!isAuthenticated) {
