@@ -30,7 +30,7 @@ const EmployeeDashboard = () => {
 
   return (
     <div className="employee-page">
-      <h1 className="text-2xl font-bold mb-4">Available Jobs for Employees</h1>
+      <h1 className="text-2xl font-bold mb-4">All the Employee Jobs</h1>
       
       {/* Add Job button */}
       <button 
