@@ -6,10 +6,10 @@ import User from "@/app/lib/models/User"; // Make sure you have a User model
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, role, email, password ,profile} = await req.json();
+    const { name, role, email, password, profile } = await req.json();
 
     // Ensure all required fields are provided
-    if (!name || !email || !password || !role || !profile)  {
+    if (!name || !email || !password || !role || !profile) {
       return NextResponse.json(
         { message: "Name, role, email, and password are required" },
         { status: 400 }
@@ -45,22 +45,28 @@ export async function POST(req: NextRequest) {
       role: role.toLowerCase(), // Save the role in lowercase for consistency
       email,
       password: hashedPassword,
-      profile
+      profile,
     });
     await newUser.save();
 
     // Generate a token for the new user
     const token = jwt.sign(
-      { id: newUser._id, email: newUser.email, role: newUser.role, profile: newUser.profile}, // Payload
+      {
+        id: newUser._id,
+        email: newUser.email,
+        role: newUser.role,
+        profile: newUser.profile,
+      }, // Payload
       process.env.JWT_SECRET!, // Secret key
       { expiresIn: "1h" } // Token expiry
     );
 
     // Set the token as a cookie
     const headers = new Headers();
+    // Modify your login route to set the cookie without HttpOnly
     headers.append(
       "Set-Cookie",
-      `token=${token}; path=/; secure; HttpOnly; SameSite=Strict`
+      `token=${token}; path=/; secure; SameSite=Strict`
     );
 
     // Return success response
@@ -68,7 +74,13 @@ export async function POST(req: NextRequest) {
       {
         message: "Sign-up successful",
         token,
-        user: { id: newUser._id, name: newUser.name, email: newUser.email, role: newUser.role, profile: newUser.profile},
+        user: {
+          id: newUser._id,
+          name: newUser.name,
+          email: newUser.email,
+          role: newUser.role,
+          profile: newUser.profile,
+        },
       },
       { headers, status: 201 }
     );
