@@ -11,7 +11,7 @@ const candidateSchema = new Schema<ICandidate>({
 const Candidate: Model<ICandidate> = 
 mongoose.models.Candidate ||
 User.discriminator<ICandidate>(
-"Employee",
+"candidate",
 candidateSchema
 );
 export default Candidate ;

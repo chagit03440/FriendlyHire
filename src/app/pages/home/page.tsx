@@ -12,7 +12,7 @@ const Dashboard = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     // const [userRole, setUserRole] = useState<string | null>(null);
     const router = useRouter();
-    const { role, setRole } = useUser();
+    const {mail, role, setRole, setMail} = useUser();
 
     useEffect(() => {
         const checkAccess = async () => {
@@ -22,7 +22,8 @@ const Dashboard = () => {
 
                 if (validation?.role) {
                     setIsAuthenticated(true);
-                    setRole(validation.role.toLowerCase()); 
+                    setRole(validation.role.toLowerCase());
+                    setMail(validation.email);
                     // setUserRole(validation.role.toLowerCase());
                     toast.success("!הגעת בהצלחה לדף הראשי לאחר ההתחברות");
                     console.log("יש לך גישה למידע המוגן:", validation);
