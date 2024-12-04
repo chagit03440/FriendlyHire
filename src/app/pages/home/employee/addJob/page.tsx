@@ -11,6 +11,16 @@ const AddJob = () => {
   const router = useRouter();
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { mail } = useUser();
+
+  // State for form fields
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [experience, setExperience] = useState("");
+  const [company, setCompany] = useState("");
+  const [requirements, setRequirements] = useState("");
+  const [location, setLocation] = useState("");
+  const [status, setStatus] = useState<"Open" | "Closed">("Open");
 
   useEffect(() => {
     const validateAccess = async () => {
@@ -24,6 +34,7 @@ const AddJob = () => {
           setIsAuthenticated(true);
         }
       } catch (error) {
+        console.log(error);
         router.push("/pages/login");
       }
     };
@@ -35,9 +46,6 @@ const AddJob = () => {
     return <p>...טוען</p>;
   }
 
-  const { role, mail } = useUser();
-  console.log(`role: ${role} mail: ${mail}`);
-
   // Initial state for no validation errors
   const noValidationErrors = {
     title: "",
@@ -48,15 +56,6 @@ const AddJob = () => {
     location: "",
     status: "",
   };
-
-  // State for form fields
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [experience, setExperience] = useState("");
-  const [company, setCompany] = useState("");
-  const [requirements, setRequirements] = useState("");
-  const [location, setLocation] = useState("");
-  const [status, setStatus] = useState<"Open" | "Closed">("Open");
 
   // State for validation and error handling
   const [validationErrors, setValidationErrors] = useState(noValidationErrors);
