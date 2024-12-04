@@ -18,6 +18,8 @@ const AddJob = () => {
         const userData = await checkAccess();
         if (!userData.hasAccess) {
           router.push("/pages/login");
+        } else if (userData.role.toLowerCase() !== "employee") {
+          router.push("/pages/home");
         } else {
           setIsAuthenticated(true);
         }

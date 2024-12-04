@@ -27,8 +27,13 @@ const CandidateApplications = () => {
     const validateAccess = async () => {
       try {
         const userData = await checkAccess();
-        if (!userData.hasAccess) {
+        if (
+          !userData.hasAccess
+        ) {
           router.push("/pages/login");
+        }
+        else if (userData.role.toLowerCase() !== "candidate") {
+          router.push("/pages/home");
         }
       } catch (error) {
         console.error(error);
