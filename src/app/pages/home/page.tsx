@@ -23,6 +23,7 @@ const Dashboard = () => {
           setMail(userData.email);
         }
       } catch (error) {
+        console.error(error);
         router.push("/pages/login");
       }
     };
