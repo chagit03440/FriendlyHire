@@ -8,10 +8,7 @@ import { useEffect, useState } from "react";
 import checkAccess from "@/app/store/checkAccess";
 
 const AddJob = () => {
-  const router = useRouter();
-
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const { mail } = useUser();
+  
 
   // State for form fields
   const [title, setTitle] = useState("");
@@ -21,6 +18,11 @@ const AddJob = () => {
   const [requirements, setRequirements] = useState("");
   const [location, setLocation] = useState("");
   const [status, setStatus] = useState<"Open" | "Closed">("Open");
+
+  const router = useRouter();
+
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const { mail } = useUser();
 
   useEffect(() => {
     const validateAccess = async () => {
