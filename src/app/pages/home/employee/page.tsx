@@ -1,3 +1,4 @@
+"use client";
 import EmployeeDashboard from "@/app/components/EmployeeDashboard ";
 import React from "react";
 import { useEffect, useState } from "react";
@@ -5,7 +6,6 @@ import { useRouter } from "next/navigation";
 import checkAccess from "@/app/store/checkAccess";
 
 const Page = () => {
-
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
 
