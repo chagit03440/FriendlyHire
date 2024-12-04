@@ -15,6 +15,8 @@ const Page = () => {
         const userData = await checkAccess();
         if (!userData.hasAccess) {
           router.push("/pages/login");
+        } else if (userData.role.toLowerCase() !== "candidate") {
+          router.push("/pages/home");
         } else {
           setIsAuthenticated(true);
         }
