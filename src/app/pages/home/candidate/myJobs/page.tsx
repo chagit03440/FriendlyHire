@@ -16,7 +16,6 @@ const CandidateApplications = () => {
   const {
     data: applications = [],
     isLoading,
-    error, // You can keep this to satisfy TypeScript, or remove the unused variable
   } = useQuery({
     queryKey: ["userApplications", mail],
     queryFn: () => getUserApplications(mail),

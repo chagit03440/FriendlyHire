@@ -21,6 +21,7 @@ const Page = () => {
           setIsAuthenticated(true);
         }
       } catch (error) {
+        console.log(error);
         router.push("/pages/login");
       }
     };
