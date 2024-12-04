@@ -16,21 +16,50 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Git commands:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# 1. Switch to your working branch
 
-## Learn More
+git checkout racheli
 
-To learn more about Next.js, take a look at the following resources:
+# 2. Check branch state and ensure it’s up-to-date
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+git log
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# 3. Pull updates from main branch to stay updated
 
-## Deploy on Vercel
+if everything in the branch is up on git: (HEAD -> racheli == origin/racheli):
+git pull origin main
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+# 4. Stage and commit changes
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+git add .
+git commit -m "add something"
+
+# 5. Push to the remote branch and ensure no Vercel errors
+
+git push origin racheli
+
+# 6. Update main with the latest changes
+
+git checkout main
+git pull origin main
+git checkout racheli
+
+# Resolve conflicts if necessary
+
+git merge main
+
+# 7. push updates again and ensure no errors on Vercel after resolving conflicts
+
+git push origin racheli
+
+# 8. Merge back into main
+
+git checkout main
+git merge racheli
+git push origin main
+
+# 9. Switch back to your working branch
+
+git checkout racheli

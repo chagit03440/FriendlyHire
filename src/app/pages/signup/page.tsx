@@ -1,105 +1,185 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { createUser } from "@/app/services/userServices";
 import IUser from "@/app/types/user";
+import { UserSchema } from "@/app/types/userZod";
+import toast, { Toaster } from "react-hot-toast";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import checkAccess from "@/app/store/checkAccess";
 
-const Login = () => {
+const Signup = () => {
+  const router = useRouter();
+
+    useEffect(() => {
+      const validateAccess = async () => {
+        try {
+          const userData = await checkAccess();
+          if (userData.hasAccess) {
+            router.push("/pages/home");
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      validateAccess();
+    }, [router]);
+  
+  const noValidationErrors = {
+    name: "",
+    email: "",
+    password: "",
+    role: "",
+    profile: "",
+  };
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
   const [profile, setProfile] = useState("");
+  const [validationErrors, setValidationErrors] = useState(noValidationErrors);
   const [error, setError] = useState<string | null>(null);
-  const router = useRouter();
 
+  const userData: IUser = { name, email, password, role, profile } as IUser;
+
+  const validateForm = () => {
+    const parsed = UserSchema.safeParse(userData);
+    if (parsed.success) {
+      setValidationErrors(noValidationErrors);
+      return true;
+    } else {
+      const newErrors = noValidationErrors;
+      parsed.error.errors.forEach((err) => {
+        const field = err.path[0] as keyof typeof newErrors;
+        newErrors[field] = err.message;
+      });
+      setValidationErrors(newErrors);
+      return false;
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-  
-    const userData: IUser = { name, email, password, role, profile } as IUser;
-  
     try {
-      const response = await createUser(userData);
-      if (response) {
-        router.push(`/pages/home`);
-      } else {
-        setError("היה בעיה בהתחברות. נסה שוב.");
+      if (validateForm()) {
+        const response = await createUser(userData);
+        if (response) {
+          toast.success("נרשמת בהצלחה!");
+          setTimeout(() => {
+            router.push("/pages/home");
+          }, 2000);
+        } else {
+          setError("היתה בעיה בהרשמה. נסה שוב.");
+        }
       }
     } catch (error) {
       console.error(error);
+      setError("אירעה שגיאה. אנא נסה שוב.");
     }
   };
-  
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-4">הרשמה</h2>
-        {error && <p className="text-red-500 text-center mb-4">{error}</p>}
+    <div className="min-h-[calc(100vh-200px)] flex items-center justify-center bg-gray-100 py-8">
+      <Toaster />
+      <div className="bg-white p-12 rounded-xl shadow-2xl w-full max-w-lg">
+        <h2 className="text-3xl font-bold text-center mb-8">הרשמה</h2>
+        {error && <p className="text-red-500 text-center mb-6">{error}</p>}
         <form onSubmit={handleSubmit}>
-          <div className="mb-4">
+          <div className="mb-6">
             <label
               htmlFor="name"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-md font-medium text-gray-700 mb-2"
             >
               Name
             </label>
             <input
               type="string"
               id="name"
-              className="w-full mt-1 p-2 border border-gray-300 rounded-md"
+              className={`w-full mt-1 p-3 border rounded-lg text-md ${
+                validationErrors.name
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-gray-300 focus:ring-blue-500"
+              }`}
               value={name}
               onChange={(e) => setName(e.target.value)}
               required
             />
+            {validationErrors.name && (
+              <p className="text-red-500 text-sm mt-1">
+                {validationErrors.name}
+              </p>
+            )}
           </div>
-          <div className="mb-4">
+
+          <div className="mb-6">
             <label
               htmlFor="email"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-md font-medium text-gray-700 mb-2"
             >
               Email
             </label>
             <input
               type="email"
               id="email"
-              className="w-full mt-1 p-2 border border-gray-300 rounded-md"
+              className={`w-full mt-1 p-3 border rounded-lg text-md ${
+                validationErrors.email
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-gray-300 focus:ring-blue-500"
+              }`}
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
+            {validationErrors.email && (
+              <p className="text-red-500 text-sm mt-1">
+                {validationErrors.email}
+              </p>
+            )}
           </div>
 
-          <div className="mb-4">
+          <div className="mb-6">
             <label
               htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-md font-medium text-gray-700 mb-2"
             >
               Password
             </label>
             <input
               type="password"
               id="password"
-              className="w-full mt-1 p-2 border border-gray-300 rounded-md"
+              className={`w-full mt-1 p-3 border rounded-lg text-md ${
+                validationErrors.password
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-gray-300 focus:ring-blue-500"
+              }`}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
+            {validationErrors.password && (
+              <p className="text-red-500 text-sm mt-1">
+                {validationErrors.password}
+              </p>
+            )}
           </div>
 
-          <div className="mb-4">
+          <div className="mb-6">
             <label
               htmlFor="role"
-              className="block text-sm font-medium text-gray-700"
+              className="block text-md font-medium text-gray-700 mb-2"
             >
               Role
             </label>
             <select
               id="role"
-              className="w-full mt-1 p-2 border border-gray-300 rounded-md"
+              className={`w-full mt-1 p-3 border rounded-lg text-md ${
+                validationErrors.role
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-gray-300 focus:ring-blue-500"
+              }`}
               value={role}
-              onChange={(e)=>setRole(e.target.value)}
+              onChange={(e) => setRole(e.target.value)}
               required
             >
               <option value="" disabled>
@@ -108,28 +188,42 @@ const Login = () => {
               <option value="Candidate">Candidate</option>
               <option value="Employee">Employee</option>
             </select>
+            {validationErrors.role && (
+              <p className="text-red-500 text-sm mt-1">
+                {validationErrors.role}
+              </p>
+            )}
           </div>
 
-          <div className="mb-4">
+          <div className="mb-6">
             <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700"
+              htmlFor="profile"
+              className="block text-md font-medium text-gray-700 mb-2"
             >
               Profile
             </label>
             <input
               type="text"
               id="profile"
-              className="w-full mt-1 p-2 border border-gray-300 rounded-md"
+              className={`w-full mt-1 p-3 border rounded-lg text-md ${
+                validationErrors.profile
+                  ? "border-red-500 focus:ring-red-500"
+                  : "border-gray-300 focus:ring-blue-500"
+              }`}
               value={profile}
               onChange={(e) => setProfile(e.target.value)}
               required
             />
+            {validationErrors.profile && (
+              <p className="text-red-500 text-sm mt-1">
+                {validationErrors.profile}
+              </p>
+            )}
           </div>
 
           <button
             type="submit"
-            className="w-full py-2 mt-4 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            className="w-full py-3 mt-8 text-lg bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300"
           >
             הרשם
           </button>
@@ -139,4 +233,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default Signup;

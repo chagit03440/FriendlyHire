@@ -1,12 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import toast, { Toaster } from 'react-hot-toast';
-import { fetchProtectedData } from "@/app/services/loginServices";
 import EmployeeDashboard from "@/app/components/EmployeeDashboard ";
 import CandidateDashboard from "@/app/components/CandidateDashboard";
-import { useUser } from "@/app/context/UserContext";
-
+import { useUser } from "@/app/store/UserContext";
+import checkAccess from "@/app/store/checkAccess";
 
 const Dashboard = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -38,24 +36,23 @@ const Dashboard = () => {
         checkAccess();
     }, [router]);
 
-    if (!isAuthenticated) {
-        return <p>...טוען</p>;
-    }
+  if (!isAuthenticated) {
+    return <p>...טוען</p>;
+  }
 
-    return (
-        <div className="">
-            <Toaster />
-            <div>
-                {role === "employee" ? (
-                    <EmployeeDashboard />
-                ) : role === "candidate" ? (
-                    <CandidateDashboard />
-                ) : (
-                    <p>תפקיד לא מזוהה</p> // Default message if role is undefined
-                )}
-            </div>
-        </div>
-    );
+  return (
+    <div className="">
+      <div>
+        {role === "employee" ? (
+          <EmployeeDashboard />
+        ) : role === "candidate" ? (
+          <CandidateDashboard />
+        ) : (
+          <p>תפקיד לא מזוהה</p> // Default message if role is undefined
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default Dashboard;
