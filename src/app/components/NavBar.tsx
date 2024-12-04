@@ -60,7 +60,6 @@ const NavBar: React.FC = () => {
 
         );
     }
-    console.log("i ammmmmm", role);
     return (
         <nav className="flex items-center justify-between px-6 py-4 bg-[#4335A7] text-white shadow-md">
             {/* Logo Section */}

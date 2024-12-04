@@ -7,16 +7,18 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { candidateId: string } }
 ) {
-  const { candidateId } = params;
+  const { candidateId } = params; 
+  console.log("Candidate ID (email):", candidateId);
 
   try {
-    await connect(); // Connect to MongoDB
-    const candidate = await Candidate.findById(candidateId);
-    if (!candidate)
+    await connect(); 
+    const candidate = await Candidate.findById(  candidateId ); 
+    if (!candidate) {
       return NextResponse.json(
         { message: "Candidate not found" },
         { status: 404 }
       );
+    }
     return NextResponse.json(candidate, { status: 200 });
   } catch (error) {
     console.error("Error fetching candidate:", error);
@@ -33,7 +35,8 @@ export async function PUT(
   { params }: { params: { candidateId: string } }
 ) {
   const { candidateId } = params;
-  const { name, email, phone, skills, experience, resumeLink } = await req.json();
+  const { name, email, phone, skills, experience, resumeLink } =
+    await req.json();
 
   console.log("Updating candidate with ID:", candidateId);
   console.log("Updated Candidate Data:", {

@@ -13,6 +13,7 @@ const Login = () => {
     e.preventDefault();
     try {
       const  {success }  = await loginAxiosForGetToken(email, password);
+      console.log("success", success);
       if (success) {
         router.push(`/pages/home`);
       } else {
