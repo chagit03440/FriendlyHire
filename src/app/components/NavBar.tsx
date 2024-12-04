@@ -43,11 +43,24 @@ const NavBar: React.FC = () => {
 
   const togglePopup = () => setIsPopupOpen(!isPopupOpen);
 
+
   const handleLogout = () => {
     console.log("Logging out...");
+
+    // Try multiple ways to clear the cookie
+    document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "token=; max-age=0; path=/;";
+    document.cookie =
+      "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=" +
+      window.location.hostname;
+
+    // Clear the user role in your state management
     setRole(null);
+
+    // Redirect to login page
     router.push("/pages/login");
   };
+
   const renderNav = () => {
     if (!role) {
       return (
