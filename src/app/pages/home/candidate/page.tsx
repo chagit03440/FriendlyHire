@@ -1,3 +1,4 @@
+"use client";
 import CandidateDashboard from "@/app/components/CandidateDashboard";
 import React from "react";
 import { useEffect, useState } from "react";
