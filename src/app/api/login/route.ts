@@ -37,7 +37,7 @@ export async function POST(req: NextRequest) {
     const token = jwt.sign(
       { id: user.id, role: user.role, email: user.email }, // Include necessary payload data
       process.env.JWT_SECRET!, // Your JWT secret key
-      { expiresIn: "1m" } // Token expiration time
+      { expiresIn: "1h" } // Token expiration time
     );
 
     const headers = new Headers();
