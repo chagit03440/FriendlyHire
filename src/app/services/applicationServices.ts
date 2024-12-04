@@ -1,16 +1,18 @@
 import axios from "axios";
+import IApplication from "../types/application";
+//import { Types } from "mongoose";
 
 export const getApplications=async()=>{
   try{
     const response = await axios.get('/api/application');
-    const data = response.data.applications;
+    const data = response.data;
     return data;
   }catch(error){
     console.error('Error get applications:', error);
   }
 }
 
-export const createApplication=async(application:{title: string; director:string; releaseYear:string})=>{
+export const createApplication=async(application:{userEmail: string; jobId: string; fileUrl: string; status:"Saved" | "Sent" | "Reviewed" | "Accepted" | "Rejected"})=>{
     try{
       const response = await axios.post('/api/application', application);
       const data = response.data;
@@ -42,3 +44,12 @@ export const createApplication=async(application:{title: string; director:string
       console.error('Error deleting application:', error);
     }
   }
+
+  export const getUserApplications = async (userEmail: string| null) => {
+    const applications = await getApplications()
+
+    const filteredApplications = applications.filter(
+      (application: IApplication) => application.userEmail === userEmail);
+
+    return filteredApplications; // Returns a list of applications
+  };

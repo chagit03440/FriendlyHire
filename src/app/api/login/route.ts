@@ -7,7 +7,6 @@ import User from "@/app/lib/models/User";
 export async function POST(req: NextRequest) {
   try {
     const { email, password } = await req.json();
-    console.log("bbbbbbbbbbbb", email, password)
     if (!email || !password) {
       return NextResponse.json(
         { message: "Email and password are required" },
@@ -15,7 +14,6 @@ export async function POST(req: NextRequest) {
       );
     }
     await connect();
-    console.log("bbbbbbbbbbbb")
 
     const user = await User.findOne({ email });
 
@@ -43,9 +41,10 @@ export async function POST(req: NextRequest) {
     );
 
     const headers = new Headers();
+    // Modify your login route to set the cookie without HttpOnly
     headers.append(
       "Set-Cookie",
-      `token=${token}; path=/; secure; HttpOnly; SameSite=Strict`
+      `token=${token}; path=/; secure; SameSite=Strict`
     );
 
     return NextResponse.json(

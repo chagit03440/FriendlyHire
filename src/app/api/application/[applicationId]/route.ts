@@ -11,13 +11,13 @@ export async function GET(
 
   try {
     await connect(); // Connect to MongoDB
-    const application = await Application.findById(applicationId);
-    if (!application)
+    const applications = await Application.findById(applicationId);
+    if (!applications)
       return NextResponse.json(
         { message: "Application not found" },
         { status: 404 }
       );
-    return NextResponse.json(application, { status: 200 });
+    return NextResponse.json(applications, { status: 200 });
   } catch (error) {
     console.error("Error fetching application:", error);
     return NextResponse.json(

@@ -1,18 +1,44 @@
-"use client"
-import LoadSpinner from '@/app/components/LoadSpinner';
-import ProfilePage from '@/app/components/Profile';
-import { useUser } from '@/app/context/UserContext';
-import { getCandidate } from '@/app/services/candidateServices';
-import { getEmployee } from '@/app/services/employeeServices';
-import ICandidate from '@/app/types/candidate';
-import IUser from '@/app/types/user';
-import React, { useEffect, useState } from 'react';
+"use client";
+import React from "react";
+import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import checkAccess from "@/app/store/checkAccess";
+import { useUser } from "@/app/store/UserContext";
+import ProfilePage from "@/app/components/Profile";
+import LoadSpinner from "@/app/components/LoadSpinner";
+import { getCandidate } from "@/app/services/candidateServices";
+import { getEmployee } from "@/app/services/employeeServices";
+import IUser from "@/app/types/user";
+import ICandidate from "@/app/types/candidate";
+import IEmployee from "@/app/types/employee";
+
 
 const Page = () => {
-  const { role, mail } = useUser(); // Context for the current user
-  const [user, setUser] = useState<IUser & ICandidate | null>(null); // State to store user data
-  const [loading, setLoading] = useState(true); // Loading state
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<IUser & ICandidate |IUser & IEmployee| null>(null); 
+  const [loading, setLoading] = useState(true); 
+  const { role, mail } = useUser(); 
+  const router = useRouter();
 
+  useEffect(() => {
+    const validateAccess = async () => {
+      try {
+        const userData = await checkAccess();
+        if (!userData.hasAccess) {
+          router.push("/pages/login");
+        } else {
+          setIsAuthenticated(true);
+        }
+      } catch (error) {
+        console.error(error);
+        router.push("/pages/login");
+      }
+    };
+
+    validateAccess();
+  }, [router]);
+
+  
   useEffect(() => {
     const fetchData = async () => {
       if (!mail) {
@@ -38,6 +64,10 @@ const Page = () => {
     fetchData();
   }, [role, mail]);
 
+
+  if (!isAuthenticated) {
+    return <p><LoadSpinner/></p>;
+  }
   if (loading) {
     return <div><LoadSpinner/></div>;
   }
@@ -47,8 +77,10 @@ const Page = () => {
   }
 
   return (
-    <div>
+    <div className="">
+      <div>
       <ProfilePage user={user} />
+      </div>
     </div>
   );
 };
