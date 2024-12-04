@@ -1,10 +1,10 @@
-import React from 'react'
+"use client";
+import React from "react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import checkAccess from "@/app/store/checkAccess";
 
 const Page = () => {
-
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const router = useRouter();
 
@@ -29,11 +29,7 @@ const Page = () => {
     return <p>...טוען</p>;
   }
 
-  return (
-    <div>
-      
-    </div>
-  )
-}
+  return <div></div>;
+};
 
-export default Page
+export default Page;
