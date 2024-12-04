@@ -8,7 +8,16 @@ import { useEffect, useState } from "react";
 import checkAccess from "@/app/store/checkAccess";
 
 const AddJob = () => {
-  
+  // Initial state for no validation errors
+  const noValidationErrors = {
+    title: "",
+    description: "",
+    experience: "",
+    company: "",
+    requirements: "",
+    location: "",
+    status: "",
+  };
 
   // State for form fields
   const [title, setTitle] = useState("");
@@ -19,10 +28,14 @@ const AddJob = () => {
   const [location, setLocation] = useState("");
   const [status, setStatus] = useState<"Open" | "Closed">("Open");
 
-  const router = useRouter();
-
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  // State for validation and error handling
+  const [validationErrors, setValidationErrors] = useState(noValidationErrors);
+  const [error, setError] = useState<string | null>(null);
+
   const { mail } = useUser();
+
+  const router = useRouter();
 
   useEffect(() => {
     const validateAccess = async () => {
@@ -47,21 +60,6 @@ const AddJob = () => {
   if (!isAuthenticated) {
     return <p>...טוען</p>;
   }
-
-  // Initial state for no validation errors
-  const noValidationErrors = {
-    title: "",
-    description: "",
-    experience: "",
-    company: "",
-    requirements: "",
-    location: "",
-    status: "",
-  };
-
-  // State for validation and error handling
-  const [validationErrors, setValidationErrors] = useState(noValidationErrors);
-  const [error, setError] = useState<string | null>(null);
 
   const jobData = {
     title,
