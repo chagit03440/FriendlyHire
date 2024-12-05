@@ -10,7 +10,7 @@ const employeeSchema = new Schema<IEmployee>({
 const Employee: Model<IEmployee> = 
 mongoose.models.Employee ||
 User.discriminator<IEmployee>(
-"Employee",
+"employee",
   employeeSchema
 );
 export default Employee ;

@@ -7,16 +7,18 @@ export async function GET(
   req: NextRequest,
   { params }: { params: { candidateId: string } }
 ) {
-  const { candidateId } = params;
+  const { candidateId } = params; 
+  console.log("Candidate ID (email):", candidateId);
 
   try {
-    await connect(); // Connect to MongoDB
-    const candidate = await Candidate.findById(candidateId);
-    if (!candidate)
+    await connect(); 
+    const candidate = await Candidate.findOne(  {email:candidateId} ); 
+    if (!candidate) {
       return NextResponse.json(
         { message: "Candidate not found" },
         { status: 404 }
       );
+    }
     return NextResponse.json(candidate, { status: 200 });
   } catch (error) {
     console.error("Error fetching candidate:", error);
@@ -33,24 +35,27 @@ export async function PUT(
   { params }: { params: { candidateId: string } }
 ) {
   const { candidateId } = params;
-  const { name, email, phone, skills, experience, resumeLink } = await req.json();
+  const { name, email, password, role, profile, experience, skills, fileUrl }  =
+    await req.json();
 
-  console.log("Updating candidate with ID:", candidateId);
+  console.log("Updating candidate with Email:", candidateId);
   console.log("Updated Candidate Data:", {
     name,
     email,
-    phone,
-    skills,
+    password,
+    role,
+    profile,
     experience,
-    resumeLink,
+    skills,
+    fileUrl,  
   });
 
   try {
-    await connect(); // Connect to MongoDB
-    const updatedCandidate = await Candidate.findByIdAndUpdate(
-      candidateId,
-      { name, email, phone, skills, experience, resumeLink },
-      { new: true } // Return the updated document
+    await connect(); 
+    const updatedCandidate = await Candidate.findOneAndUpdate(
+      {email: candidateId},
+      { name, email, password, role, profile, experience, skills, fileUrl },
+      { new: true } 
     );
     if (!updatedCandidate)
       return NextResponse.json(
