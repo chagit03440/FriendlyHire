@@ -16,7 +16,7 @@ export async function GET(req: NextRequest) {
     return NextResponse.json(
       {
         message: "Protected data",
-        role: (decoded as { role: string }).role, // Ensure decoded has a 'role' property
+        role: (decoded as { role: string }).role,
         email:  (decoded as { email: string }).email,
       },
       { status: 200 }

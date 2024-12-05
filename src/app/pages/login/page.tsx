@@ -30,7 +30,8 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const { success } = await loginAxiosForGetToken(email, password);
+      const  {success }  = await loginAxiosForGetToken(email, password);
+      console.log("success", success);
       if (success) {
         toast.success("התחברת בהצלחה!");
         setTimeout(() => {

@@ -87,8 +87,9 @@ const NavBar: React.FC = () => {
           />
         </button>
       </div>
+
     );
-  };
+  }
   console.log("i ammmmmm", role);
   return (
     <nav className="flex items-center justify-between px-6 py-4 bg-[#4335A7] text-white shadow-md">
@@ -97,7 +98,7 @@ const NavBar: React.FC = () => {
         <Image
           src="/logo.jpg" // Path to the logo in the public folder
           alt="FriendlyHire Logo"
-          width={50} // Adjust width as per your design
+          width={50}  // Adjust width as per your design
           height={50} // Adjust height as per your design
           className="mr-3" // Margin right for spacing
         />

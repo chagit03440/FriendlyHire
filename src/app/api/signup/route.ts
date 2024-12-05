@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import bcrypt from "bcryptjs"; // For password hashing
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import connect from "@/app/lib/db/mongodb";
-import User from "@/app/lib/models/User"; // Make sure you have a User model
+import User from "@/app/lib/models/User"; 
 
 export async function POST(req: NextRequest) {
   try {

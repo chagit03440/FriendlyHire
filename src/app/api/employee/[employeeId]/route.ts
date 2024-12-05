@@ -11,7 +11,7 @@ export async function GET(
 
   try {
     await connect(); // Connect to MongoDB
-    const employee = await Employee.findById(employeeId);
+    const employee = await Employee.findOne({email:employeeId});
     if (!employee)
       return NextResponse.json(
         { message: "Employee not found" },
@@ -33,22 +33,24 @@ export async function PUT(
   { params }: { params: { employeeId: string } }
 ) {
   const { employeeId } = params;
-  const { name, position, email, salary, hireDate } = await req.json();
+  const { name, email, password, role, profile, company, position } = await req.json();
 
   console.log("Updating employee with ID:", employeeId);
   console.log("Updated Employee Data:", {
     name,
-    position,
     email,
-    salary,
-    hireDate,
+    password,
+    role,
+    profile,
+    company,
+    position,
   });
 
   try {
     await connect(); // Connect to MongoDB
-    const updatedEmployee = await Employee.findByIdAndUpdate(
-      employeeId,
-      { name, position, email, salary, hireDate },
+    const updatedEmployee = await Employee.findOneAndUpdate(
+      {email:employeeId},
+      { name, email, password, role, profile, company, position },
       { new: true } // Return the updated document
     );
     if (!updatedEmployee)

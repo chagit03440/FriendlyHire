@@ -6,7 +6,7 @@ import Employee from "@/app/lib/models/Employee"; // Update to use the Employee 
 export async function GET() {
   try {
     await connect(); // Connect to MongoDB
-    const employees = await Employee.find(); // Fetch all employees
+    const employees = await Employee.find(); 
     return NextResponse.json(employees, { status: 200 });
   } catch (error) {
     return NextResponse.json(
@@ -19,14 +19,23 @@ export async function GET() {
 // POST a new employee
 export async function POST(req: NextRequest) {
   try {
-    const employeeData = await req.json();
-
     // Connect to MongoDB
     await connect();
-    const newEmployee = new Employee(employeeData); // Create a new Employee
-    await newEmployee.save();
+    const { name, email, password, role, profile, company, position } =
+      await req.json();
+
+    const newEmployee = await Employee.create({
+      name,
+      email,
+      password,
+      role,
+      profile,
+      company,
+      position,
+    });
     return NextResponse.json(newEmployee, { status: 201 });
   } catch (error) {
+    console.error("Error creating employee:", error);
     return NextResponse.json(
       { message: "Error creating employee", error },
       { status: 500 }
