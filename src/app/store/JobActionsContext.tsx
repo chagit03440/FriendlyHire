@@ -27,14 +27,13 @@ export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const doesApplicationExist = async (jobId: string) => {
     if (!mail) return false;
     
-    const { data: applications = [] } = await queryClient.fetchQuery({
-      queryKey: ["userApplications", mail],
-      queryFn: () => getUserApplications(mail),
-    });
+    const userApp=await getUserApplications(mail);
+
     console.log("mail",mail);
-    console.log("applications",applications);
+    console.log("userApp",userApp);
     console.log("jobid",jobId);
-    return applications.find((application: IApplication) => application.jobId._id == jobId.toString());
+    
+    return userApp.find((application: IApplication) => application.jobId._id == jobId.toString());
   };
 
   const handleSaveJob = async (jobId: string) => {
@@ -44,15 +43,12 @@ export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     }
 
     // Check if the application already exists
-    const existingApplication = await doesApplicationExist(jobId);
+    const existingApplication:IApplication = await doesApplicationExist(jobId);
     if (existingApplication) {
       // If the job is already saved, update the status to 'Saved'
+      existingApplication.status="Saved";
       try {
-        await updateApplication(existingApplication._id, {
-          title: existingApplication.jobId.title,
-          director: existingApplication.jobId.company, // Update with relevant fields from the job
-          releaseYear: existingApplication.jobId.releaseYear, // Adjust based on the actual data structure
-        });
+        await updateApplication(existingApplication);
         console.log("Job status updated to 'Saved'.");
         queryClient.invalidateQueries({ queryKey: ["userApplications", mail] });
       } catch (error) {
@@ -86,12 +82,9 @@ export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     const existingApplication = await doesApplicationExist(jobId);
     if (existingApplication) {
       // If the job is already applied for, update the status to 'Sent'
+      existingApplication.status="Sent";
       try {
-        await updateApplication(existingApplication._id, {
-          title: existingApplication.jobId.title,
-          director: existingApplication.jobId.company, // Update with relevant fields from the job
-          releaseYear: existingApplication.jobId.releaseYear, // Adjust based on the actual data structure
-        });
+        await updateApplication(existingApplication);
         console.log("Job status updated to 'Sent'.");
         queryClient.invalidateQueries({ queryKey: ["userApplications", mail] });
       } catch (error) {
@@ -99,6 +92,7 @@ export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       }
       return;
     }
+
 
     // If no application exists, create a new one
     try {

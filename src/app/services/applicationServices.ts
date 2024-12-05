@@ -23,9 +23,9 @@ export const createApplication=async(application:{userEmail: string; jobId: stri
     }
   }
 
-  export const updateApplication=async(id: string, application:{title: string; director:string; releaseYear:string})=>{
+  export const updateApplication=async(application:IApplication)=>{
     try{
-      const response = await axios.put(`/api/application/${id}`, application);
+      const response = await axios.put(`/api/application/${application._id}`, application);
       const data = response.data;
       console.log('Application updated:', data);
       return data;
