@@ -18,7 +18,7 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setProfileData({ ...profileData, [name]: value });
+    setProfileData({ ...profileData, [name]: value } as (IUser & ICandidate) | (IUser & IEmployee));
   };
 
   const handleSave = async () => {
