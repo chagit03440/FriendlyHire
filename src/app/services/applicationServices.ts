@@ -1,5 +1,6 @@
 import axios from "axios";
 import IApplication from "../types/application";
+import { ApplicationStatus } from "../types/enums";
 //import { Types } from "mongoose";
 
 export const getApplications=async()=>{
@@ -12,7 +13,7 @@ export const getApplications=async()=>{
   }
 }
 
-export const createApplication=async(application:{userEmail: string; jobId: string; fileUrl: string; status:"Saved" | "Sent" | "Reviewed" | "Accepted" | "Rejected"})=>{
+export const createApplication=async(application:{userEmail: string; jobId: string; fileUrl: string; status:ApplicationStatus})=>{
     try{
       const response = await axios.post('/api/application', application);
       const data = response.data;
