@@ -11,7 +11,7 @@ const Dashboard = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
     // const [userRole, setUserRole] = useState<string | null>(null);
     const router = useRouter();
-    const {mail, role, setRole, setMail} = useUser();
+    const { role, setRole, setMail} = useUser();
 
     useEffect(() => {
       const validateAccess = async () => {

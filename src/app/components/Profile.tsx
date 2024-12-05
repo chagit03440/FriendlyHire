@@ -32,6 +32,7 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
       console.log("Saved data:", profileData);
       setIsEditing(false);
     } catch (error) {
+      console.error(error);
 
     }
   };
