@@ -3,6 +3,8 @@ import React, { useState } from "react";
 import IUser from "../types/user";
 import IEmployee from "../types/employee";
 import ICandidate from "../types/candidate";
+import { updateCandidate } from "../services/candidateServices";
+import { updateEmployee } from "../services/employeeServices";
 
 type Props = {
   user: IUser & (IEmployee | ICandidate);
@@ -10,19 +12,28 @@ type Props = {
 
 const ProfilePage: React.FC<Props> = ({ user }) => {
   const [isEditing, setIsEditing] = useState(false);
-  const [profileData, setProfileData] = useState(user );
+  const [profileData, setProfileData] = useState(user);
 
   const handleEditToggle = () => setIsEditing((prev) => !prev);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setProfileData({...profileData, [name]: value});
+    setProfileData({ ...profileData, [name]: value });
   };
 
-  const handleSave = () => {
-    // Simulate save API call
-    console.log("Saved data:", profileData);
-    setIsEditing(false);
+  const handleSave = async () => {
+    try {
+      if (profileData.role === "candidate") {
+        await updateCandidate(profileData.email, profileData);
+      }
+      if (profileData.role === "employee") {
+        await updateEmployee(profileData.email, profileData);
+      }
+      console.log("Saved data:", profileData);
+      setIsEditing(false);
+    } catch (error) {
+
+    }
   };
 
   return (
@@ -38,9 +49,8 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
             value={profileData.name}
             onChange={handleInputChange}
             disabled={!isEditing}
-            className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${
-              isEditing ? "bg-white border-gray-300" : "bg-gray-100 border-gray-200"
-            }`}
+            className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${isEditing ? "bg-white border-gray-300" : "bg-gray-100 border-gray-200"
+              }`}
           />
         </div>
 
@@ -52,9 +62,8 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
             value={profileData.email}
             onChange={handleInputChange}
             disabled={!isEditing}
-            className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${
-              isEditing ? "bg-white border-gray-300" : "bg-gray-100 border-gray-200"
-            }`}
+            className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${isEditing ? "bg-white border-gray-300" : "bg-gray-100 border-gray-200"
+              }`}
           />
         </div>
 
@@ -79,9 +88,8 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
                 value={(profileData as IEmployee).company}
                 onChange={handleInputChange}
                 disabled={!isEditing}
-                className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${
-                  isEditing ? "bg-white border-gray-300" : "bg-gray-100 border-gray-200"
-                }`}
+                className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${isEditing ? "bg-white border-gray-300" : "bg-gray-100 border-gray-200"
+                  }`}
               />
             </div>
             <div>
@@ -92,9 +100,8 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
                 value={(profileData as IEmployee).position}
                 onChange={handleInputChange}
                 disabled={!isEditing}
-                className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${
-                  isEditing ? "bg-white border-gray-300" : "bg-gray-100 border-gray-200"
-                }`}
+                className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${isEditing ? "bg-white border-gray-300" : "bg-gray-100 border-gray-200"
+                  }`}
               />
             </div>
           </>
@@ -110,9 +117,8 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
                 value={(profileData as ICandidate).experience}
                 onChange={handleInputChange}
                 disabled={!isEditing}
-                className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${
-                  isEditing ? "bg-white border-gray-300" : "bg-gray-100 border-gray-200"
-                }`}
+                className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${isEditing ? "bg-white border-gray-300" : "bg-gray-100 border-gray-200"
+                  }`}
               />
             </div>
             <div>
@@ -122,9 +128,20 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
                 value={(profileData as ICandidate).skills.join(", ")}
                 onChange={handleInputChange}
                 disabled={!isEditing}
-                className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${
-                  isEditing ? "bg-white border-gray-300" : "bg-gray-100 border-gray-200"
-                }`}
+                className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${isEditing ? "bg-white border-gray-300" : "bg-gray-100 border-gray-200"
+                  }`}
+              />
+            </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700">Resume Url</label>
+              <input
+                type="text"
+                name="resumeUrl"
+                value={(profileData as ICandidate).fileUrl}
+                onChange={handleInputChange}
+                disabled={!isEditing}
+                className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${isEditing ? "bg-white border-gray-300" : "bg-gray-100 border-gray-200"
+                  }`}
               />
             </div>
           </>

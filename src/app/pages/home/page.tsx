@@ -5,6 +5,7 @@ import EmployeeDashboard from "@/app/components/EmployeeDashboard ";
 import CandidateDashboard from "@/app/components/CandidateDashboard";
 import { useUser } from "@/app/store/UserContext";
 import checkAccess from "@/app/store/checkAccess";
+import LoadSpinner from "@/app/components/LoadSpinner";
 
 const Dashboard = () => {
     const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -13,31 +14,27 @@ const Dashboard = () => {
     const {mail, role, setRole, setMail} = useUser();
 
     useEffect(() => {
-        const checkAccess = async () => {
-            try {
-                const validation = await fetchProtectedData();
-                console.log("validation data", validation);
-
-                if (validation?.role) {
-                    setIsAuthenticated(true);
-                    setRole(validation.role.toLowerCase());
-                    setMail(validation.email);
-                    // setUserRole(validation.role.toLowerCase());
-                    toast.success("!הגעת בהצלחה לדף הראשי לאחר ההתחברות");
-                    console.log("יש לך גישה למידע המוגן:", validation);
-                } else {
-                    throw new Error("Unauthorized");
-                }
-            } catch (error) {
-                console.error("Access denied:", error);
-                router.push("/pages/login");
-            }
-        };
-        checkAccess();
+      const validateAccess = async () => {
+        try {
+          const userData = await checkAccess();
+          if (!userData.hasAccess) {
+            router.push("/pages/login");
+          } else {
+            setIsAuthenticated(true);
+            setRole(userData.role.toLowerCase());
+            setMail(userData.email);
+          }
+        } catch (error) {
+          console.error(error);
+          router.push("/pages/login");
+        }
+      };
+  
+      validateAccess();
     }, [router]);
 
   if (!isAuthenticated) {
-    return <p>...טוען</p>;
+    return <p><LoadSpinner/></p>;
   }
 
   return (

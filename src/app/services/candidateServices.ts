@@ -1,5 +1,7 @@
 import axios from "axios";
 import ICandidate from "../types/candidate";
+import IUser from "../types/user";
+import IEmployee from "../types/employee";
 
 
 export const getCandidate = async (email: string) => {
@@ -34,11 +36,11 @@ export const createCandidate = async (candidate: ICandidate) => {
   }
 };
 export const updateCandidate = async (
-  id: string,
-  candidate: { experience: number; skills: string[]; fileUrl: string }
+  email: string,
+  candidate: IUser & ICandidate | IUser & IEmployee
 ) => {
   try {
-    const response = await axios.put(`/api/candidate/${id}`, candidate);
+    const response = await axios.put(`/api/candidate/${email}`, candidate);
     const data = response.data;
     console.log("Candidate updated:", data);
     return data;
