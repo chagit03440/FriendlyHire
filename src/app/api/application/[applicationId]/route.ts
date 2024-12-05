@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import connect from "@/app/lib/db/mongodb";
 import Application from "@/app/lib/models/Application"; // Update to use the Application model
+import IApplication from "@/app/types/application";
 
 // GET a specific application
 export async function GET(
@@ -33,23 +34,15 @@ export async function PUT(
   { params }: { params: { applicationId: string } }
 ) {
   const { applicationId } = params;
-  const { applicantName, jobId, status, resumeLink, submissionDate } =
-    await req.json();
+  const application :IApplication= await req.json();
 
   console.log("Updating application with ID:", applicationId);
-  console.log("Updated Application Data:", {
-    applicantName,
-    jobId,
-    status,
-    resumeLink,
-    submissionDate,
-  });
+  console.log("Updated Application Data:", application);
 
   try {
     await connect(); // Connect to MongoDB
     const updatedApplication = await Application.findByIdAndUpdate(
-      applicationId,
-      { applicantName, jobId, status, resumeLink, submissionDate },
+      application._id ,application,
       { new: true } // Return the updated document
     );
     if (!updatedApplication)

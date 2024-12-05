@@ -4,6 +4,7 @@ import Job from "@/app/lib/models/Job"; // Update to use the Job model
 
 // GET a specific job
 export async function GET(
+  
   req: NextRequest,
   { params }: { params: { jobId: string } }
 ) {
