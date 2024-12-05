@@ -15,7 +15,8 @@ import IEmployee from "@/app/types/employee";
 
 const Page = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<IUser & ICandidate |IUser & IEmployee| null>(null); 
+  const [user, setUser] = useState<IUser & ICandidate |IUser & IEmployee
+  | null>(null); 
   const [loading, setLoading] = useState(true); 
   const { role, mail } = useUser(); 
   const router = useRouter();
@@ -66,7 +67,7 @@ const Page = () => {
 
 
   if (!isAuthenticated) {
-    return <p><LoadSpinner/></p>;
+    return <div><LoadSpinner/></div>;
   }
   if (loading) {
     return <div><LoadSpinner/></div>;

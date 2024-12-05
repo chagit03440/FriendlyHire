@@ -21,13 +21,14 @@ export async function POST(req: NextRequest) {
   try {
     // Connect to MongoDB
     await connect();
-    const { name, email, password, profile, company, position } =
+    const { name, email, password, role, profile, company, position } =
       await req.json();
 
     const newEmployee = await Employee.create({
       name,
       email,
       password,
+      role,
       profile,
       company,
       position,

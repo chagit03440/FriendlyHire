@@ -12,7 +12,7 @@ export async function GET(
 
   try {
     await connect(); 
-    const candidate = await Candidate.findById(  candidateId ); 
+    const candidate = await Candidate.findOne(  {email:candidateId} ); 
     if (!candidate) {
       return NextResponse.json(
         { message: "Candidate not found" },
@@ -35,25 +35,27 @@ export async function PUT(
   { params }: { params: { candidateId: string } }
 ) {
   const { candidateId } = params;
-  const { name, email, phone, skills, experience, resumeLink } =
+  const { name, email, password, role, profile, experience, skills, fileUrl }  =
     await req.json();
 
-  console.log("Updating candidate with ID:", candidateId);
+  console.log("Updating candidate with Email:", candidateId);
   console.log("Updated Candidate Data:", {
     name,
     email,
-    phone,
-    skills,
+    password,
+    role,
+    profile,
     experience,
-    resumeLink,
+    skills,
+    fileUrl,  
   });
 
   try {
-    await connect(); // Connect to MongoDB
-    const updatedCandidate = await Candidate.findByIdAndUpdate(
-      candidateId,
-      { name, email, phone, skills, experience, resumeLink },
-      { new: true } // Return the updated document
+    await connect(); 
+    const updatedCandidate = await Candidate.findOneAndUpdate(
+      {email: candidateId},
+      { name, email, password, role, profile, experience, skills, fileUrl },
+      { new: true } 
     );
     if (!updatedCandidate)
       return NextResponse.json(
