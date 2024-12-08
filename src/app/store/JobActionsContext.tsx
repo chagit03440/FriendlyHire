@@ -2,9 +2,10 @@ import React, { createContext, useContext } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import {
   createApplication,
+  getApplicationById,
   getUserApplications,
   updateApplication,
-} from "@/app/services/applicationServices"; // Assuming you have an updateApplication function
+} from "@/app/services/applicationServices"; 
 import { useUser } from "@/app/store/UserContext";
 import IApplication from "../types/application";
 import { ApplicationStatus } from "../types/enums";
@@ -13,6 +14,7 @@ interface JobActionsContextProps {
   handleSaveJob: (jobId: string) => Promise<void>;
   handleApplyJob: (jobId: string) => Promise<void>;
   handleArchiveJob: (jobId: string) => Promise<void>;
+  handleSendJob: (jobId: string) => Promise<void>; 
 }
 
 const JobActionsContext = createContext<JobActionsContextProps | undefined>(undefined);
@@ -29,7 +31,6 @@ export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   const queryClient = useQueryClient();
   const { mail } = useUser();
 
-  // Helper function to check if an application exists
   const doesApplicationExist = async (jobId: string): Promise<IApplication | null> => {
     if (!mail) return null;
 
@@ -125,9 +126,44 @@ export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     }
   };
 
+  const handleSendJob = async (applicationId: string) => {
+    if (!mail) {
+      console.error("Employee email is required to send the application.");
+      return;
+    }
+  
+    try {
+      // Fetch the application by its ID
+      const applicationToSend = await getApplicationById(applicationId);
+      if (!applicationToSend) {
+        console.error("Application not found for the specified ID.");
+        return;
+      }
+  
+      // Update the application's status to "Sent"
+      applicationToSend.status = ApplicationStatus.Sent;
+  
+      // Call the update API to save the changes
+      await updateApplication(applicationToSend);
+      console.log("Application status updated to 'Sent'.");
+  
+      // Invalidate the query cache for the user's applications
+      queryClient.invalidateQueries({ queryKey: ["userApplications", mail] });
+    } catch (error) {
+      console.error("Error sending the application:", error);
+    }
+  };
+  
+  
+
   return (
     <JobActionsContext.Provider
-      value={{ handleSaveJob, handleApplyJob, handleArchiveJob }}
+      value={{
+        handleSaveJob,
+        handleApplyJob,
+        handleArchiveJob,
+        handleSendJob, // Include handleSendJob in the provider
+      }}
     >
       {children}
     </JobActionsContext.Provider>

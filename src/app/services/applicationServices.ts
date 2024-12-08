@@ -13,6 +13,17 @@ export const getApplications=async()=>{
   }
 }
 
+export const getApplicationById = async (applicationId: string) => {
+  try {
+    const response = await axios.get(`/api/application/${applicationId}`);
+    const data = response.data;
+    console.log("Fetched application by ID:", data);
+    return data;
+  } catch (error) {
+    console.error("Error getting application by ID:", error);
+  }
+};
+
 export const createApplication=async(application:{userEmail: string; jobId: string; fileUrl: string; status:ApplicationStatus})=>{
     try{
       const response = await axios.post('/api/application', application);
@@ -51,6 +62,15 @@ export const createApplication=async(application:{userEmail: string; jobId: stri
 
     const filteredApplications = applications.filter(
       (application: IApplication) => application.userEmail === userEmail);
+
+    return filteredApplications; // Returns a list of applications
+  };
+
+  export const getJobApplications = async (jobId: string| null) => {
+    const applications = await getApplications()
+
+    const filteredApplications = applications.filter(
+      (application: IApplication) => application.jobId._id === jobId);
 
     return filteredApplications; // Returns a list of applications
   };

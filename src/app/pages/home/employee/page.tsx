@@ -4,6 +4,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import checkAccess from "@/app/store/checkAccess";
+import { JobActionsProvider } from "@/app/store/JobActionsContext";
 
 const Page = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -34,9 +35,11 @@ const Page = () => {
   }
 
   return (
-    <div>
-      <EmployeeDashboard />
-    </div>
+    <JobActionsProvider>
+      <div>
+        <EmployeeDashboard />
+      </div>
+    </JobActionsProvider>
   );
 };
 
