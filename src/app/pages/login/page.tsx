@@ -4,28 +4,29 @@ import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import checkAccess from "@/app/utils/checkAccess";
+import { sendEmail } from "@/app/utils/email";
 
 const Login = () => {
   const router = useRouter();
 
-  useEffect(() => {
-    const validateAccess = async () => {
-      try {
-        const userData = await checkAccess();
-        if (userData.hasAccess) {
-          router.push("/pages/home");
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    validateAccess();
-  }, [router]);
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+      const validateAccess = async () => {
+        try {
+          const userData = await checkAccess();
+          if (userData.hasAccess) {
+            router.push("/pages/home");
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      };
+
+      validateAccess();
+    }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,6 +42,20 @@ const Login = () => {
         console.log("היה בעיה בהתחברות. נסה שוב.");
         setError("היה בעיה בהתחברות. נסה שוב.");
       }
+
+
+      //send email
+      try {
+        await sendEmail({
+          to: email,
+          subject: `התחברת בהצלחה לאתר שלנו`,
+          content: `<p>The user <b>${email}</b> has connected to our site</b>.</p>`,
+        });
+        console.log("Application email sent successfully!");
+      } catch (error) {
+        console.error("Failed to send application email:", error);
+      }
+
     } catch (error) {
       console.log(error);
     }
