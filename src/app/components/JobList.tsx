@@ -20,7 +20,9 @@ const JobList: React.FC<JobListProps> = ({ jobs }) => {
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
 
   const { handleSendJob } = useJobActions();
-  
+  const handleEditJob = async (job: IJob) => {
+    setSelectedJob(job); // Set the selected job
+  }
   const handleOpenPopUp = async (job: IJob) => {
     setSelectedJob(job); // Set the selected job
     try {
@@ -58,6 +60,7 @@ const JobList: React.FC<JobListProps> = ({ jobs }) => {
                 >
                   View Applications
                 </button>
+                <button onClick={() => handleEditJob(job)}>Edit</button>
               </div>
             ) : (
               <CandidateJobCard key={job._id} job={job} />
