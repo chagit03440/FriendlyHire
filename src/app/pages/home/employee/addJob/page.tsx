@@ -5,7 +5,7 @@ import { JobSchema } from "@/app/types/jobZod"; // Assumed Zod schema for valida
 import { toast, Toaster } from "react-hot-toast";
 import { useUser } from "@/app/store/UserContext";
 import { useEffect, useState } from "react";
-import checkAccess from "@/app/store/checkAccess";
+import checkAccess from "@/app/utils/checkAccess";
 
 const AddJob = () => {
   // Initial state for no validation errors

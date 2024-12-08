@@ -3,10 +3,9 @@ import { loginAxiosForGetToken } from "@/app/services/loginServices";
 import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import checkAccess from "@/app/store/checkAccess";
+import checkAccess from "@/app/utils/checkAccess";
 
 const Login = () => {
-
   const router = useRouter();
 
   useEffect(() => {
@@ -15,7 +14,8 @@ const Login = () => {
         const userData = await checkAccess();
         if (userData.hasAccess) {
           router.push("/pages/home");
-      }} catch (error) {
+        }
+      } catch (error) {
         console.log(error);
       }
     };
@@ -30,7 +30,7 @@ const Login = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const  {success }  = await loginAxiosForGetToken(email, password);
+      const { success } = await loginAxiosForGetToken(email, password);
       console.log("success", success);
       if (success) {
         toast.success("התחברת בהצלחה!");

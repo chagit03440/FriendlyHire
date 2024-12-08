@@ -2,7 +2,7 @@
 import React from "react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import checkAccess from "@/app/store/checkAccess";
+import checkAccess from "@/app/utils/checkAccess";
 import { useUser } from "@/app/store/UserContext";
 import ProfilePage from "@/app/components/Profile";
 import LoadSpinner from "@/app/components/LoadSpinner";
@@ -12,13 +12,13 @@ import IUser from "@/app/types/user";
 import ICandidate from "@/app/types/candidate";
 import IEmployee from "@/app/types/employee";
 
-
 const Page = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<IUser & ICandidate |IUser & IEmployee
-  | null>(null); 
-  const [loading, setLoading] = useState(true); 
-  const { role, mail } = useUser(); 
+  const [user, setUser] = useState<
+    (IUser & ICandidate) | (IUser & IEmployee) | null
+  >(null);
+  const [loading, setLoading] = useState(true);
+  const { role, mail } = useUser();
   const router = useRouter();
 
   useEffect(() => {
@@ -39,24 +39,23 @@ const Page = () => {
     validateAccess();
   }, [router]);
 
-  
   useEffect(() => {
     const fetchData = async () => {
       if (!mail) {
-        setLoading(false); 
+        setLoading(false);
         return;
       }
 
       try {
-        if (role === 'employee') {
+        if (role === "employee") {
           const thisUser = await getEmployee(mail);
-          setUser(thisUser); 
+          setUser(thisUser);
         } else {
           const thisUser = await getCandidate(mail);
-          setUser(thisUser); 
+          setUser(thisUser);
         }
       } catch (error) {
-        console.error('Error fetching user data:', error);
+        console.error("Error fetching user data:", error);
       } finally {
         setLoading(false);
       }
@@ -65,12 +64,19 @@ const Page = () => {
     fetchData();
   }, [role, mail]);
 
-
   if (!isAuthenticated) {
-    return <div><LoadSpinner/></div>;
+    return (
+      <div>
+        <LoadSpinner />
+      </div>
+    );
   }
   if (loading) {
-    return <div><LoadSpinner/></div>;
+    return (
+      <div>
+        <LoadSpinner />
+      </div>
+    );
   }
 
   if (!user) {
@@ -80,7 +86,7 @@ const Page = () => {
   return (
     <div className="">
       <div>
-      <ProfilePage user={user} />
+        <ProfilePage user={user} />
       </div>
     </div>
   );

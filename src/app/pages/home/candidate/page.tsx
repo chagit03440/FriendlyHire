@@ -3,7 +3,7 @@ import CandidateDashboard from "@/app/components/CandidateDashboard";
 import React from "react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import checkAccess from "@/app/store/checkAccess";
+import checkAccess from "@/app/utils/checkAccess";
 
 const Page = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

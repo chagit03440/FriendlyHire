@@ -5,26 +5,26 @@ import { UserSchema } from "@/app/types/userZod";
 import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import checkAccess from "@/app/store/checkAccess";
+import checkAccess from "@/app/utils/checkAccess";
 
 const Signup = () => {
   const router = useRouter();
 
-    useEffect(() => {
-      const validateAccess = async () => {
-        try {
-          const userData = await checkAccess();
-          if (userData.hasAccess) {
-            router.push("/pages/home");
-          }
-        } catch (error) {
-          console.log(error);
+  useEffect(() => {
+    const validateAccess = async () => {
+      try {
+        const userData = await checkAccess();
+        if (userData.hasAccess) {
+          router.push("/pages/home");
         }
-      };
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-      validateAccess();
-    }, [router]);
-  
+    validateAccess();
+  }, [router]);
+
   const noValidationErrors = {
     name: "",
     email: "",
