@@ -28,7 +28,6 @@ export async function GET({ params }: { params: { applicationId: string } }) {
 // PUT to update an existing application
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { applicationId: string } }
 ) {
   const application: IApplication = await req.json();
 

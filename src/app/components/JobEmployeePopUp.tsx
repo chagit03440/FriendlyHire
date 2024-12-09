@@ -3,7 +3,6 @@ import IJob from "../types/job";
 import IApplication from "../types/application";
 import { sendEmail } from "@/app/utils/email";
 import React, { useState } from "react";
-import App from "next/app";
 
 interface Props {
   job: IJob; // The job for which we are showing applicants
