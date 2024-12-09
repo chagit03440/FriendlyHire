@@ -4,7 +4,10 @@ import Application from "@/app/lib/models/Application"; // Update to use the App
 import IApplication from "@/app/types/application";
 
 // GET a specific application
-export async function GET({ params }: { params: { applicationId: string } }) {
+export async function GET(
+  req: NextRequest,
+  { params }: { params: { applicationId: string } }
+) {
   const { applicationId } = params;
 
   try {
