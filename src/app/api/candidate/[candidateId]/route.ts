@@ -8,7 +8,7 @@ export async function GET(
   { params }: { params: { candidateId: string } }
 ) {
   const { candidateId } = params; 
-  console.log("Candidate ID (email):", candidateId);
+
 
   try {
     await connect(); 
@@ -37,18 +37,6 @@ export async function PUT(
   const { candidateId } = params;
   const { name, email, password, role, profile, experience, skills, fileUrl }  =
     await req.json();
-
-  console.log("Updating candidate with Email:", candidateId);
-  console.log("Updated Candidate Data:", {
-    name,
-    email,
-    password,
-    role,
-    profile,
-    experience,
-    skills,
-    fileUrl,  
-  });
 
   try {
     await connect(); 

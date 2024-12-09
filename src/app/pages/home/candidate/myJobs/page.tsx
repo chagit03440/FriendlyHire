@@ -32,7 +32,7 @@ const CandidateApplications = () => {
           setIsAuthenticated(true);
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
         router.push("/pages/login");
       }
     };

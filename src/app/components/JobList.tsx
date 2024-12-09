@@ -75,7 +75,6 @@ const JobList: React.FC<JobListProps> = ({ jobs }) => {
             applications={jobApplications} // Pass the fetched applications
             onClose={handleClosePopUp}
             onUpdateStatus={(applicationId) => {
-              console.log(`Updated application ${applicationId}`);
               handleSendJob(applicationId);
             }}
           />

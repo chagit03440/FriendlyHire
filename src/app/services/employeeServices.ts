@@ -8,7 +8,6 @@ export const getEmployee = async (email: string) => {
   try {
     const response = await axios.get(`/api/employee/${email}`);
     const data = response.data;
-    console.log("Employee:", data);
     return data;
   } catch (error) {
     console.error("Error getting employee:", error);
@@ -19,7 +18,6 @@ export const createEmployee = async (employee: IEmployee) => {
   try {
     const response = await axios.post("/api/signup", employee);
     const data = response.data;
-    console.log("Employee successfully created:", data);
 
     if (data.message === "Employee created successfully") {
       return { success: true, message: data.message };
@@ -41,7 +39,6 @@ export const updateEmployee = async (
   try {
     const response = await axios.put(`/api/employee/${email}`, employee);
     const data = response.data;
-    console.log("Employee updated:", data);
     return data;
   } catch (error) {
     console.error("Error updating employee:", error);

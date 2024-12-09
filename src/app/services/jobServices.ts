@@ -22,7 +22,6 @@ export const createJob=async(job:{title: string;
     try{
       const response = await axios.post('/api/job', job);
       const data = response.data;
-      console.log('Job created:', data);
       return data;
     }catch(error){
       console.error('Error creating job:', error);
@@ -40,7 +39,6 @@ export const createJob=async(job:{title: string;
     try{
       const response = await axios.put(`/api/job/${id}`, job);
       const data = response.data;
-      console.log('job updated:', data);
       return data;
     }catch(error){
       console.error('Error updating job:', error);
@@ -51,7 +49,6 @@ export const createJob=async(job:{title: string;
     try{
       const response = await axios.delete(`/api/job/${id}`);
       const data = response.data;
-      console.log('job deleted:', data);
       return data;
     }catch(error){
       console.error('Error deleting job:', error);

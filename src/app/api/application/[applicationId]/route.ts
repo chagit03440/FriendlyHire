@@ -36,9 +36,6 @@ export async function PUT(
   const { applicationId } = params;
   const application :IApplication= await req.json();
 
-  console.log("Updating application with ID:", applicationId);
-  console.log("Updated Application Data:", application);
-
   try {
     await connect(); // Connect to MongoDB
     const updatedApplication = await Application.findByIdAndUpdate(

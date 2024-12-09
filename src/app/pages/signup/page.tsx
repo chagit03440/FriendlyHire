@@ -18,7 +18,7 @@ const Signup = () => {
           router.push("/pages/home");
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
 

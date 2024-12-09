@@ -17,10 +17,8 @@ export const getApplicationById = async (applicationId: string) => {
   try {
     const response = await axios.get(`/api/application/${applicationId}`);
     const data = response.data;
-    console.log("Fetched application by ID:", data);
     return data;
   } catch (error) {
-    console.error("Error getting application by ID:", error);
   }
 };
 
@@ -28,10 +26,8 @@ export const createApplication=async(application:{userEmail: string; jobId: stri
     try{
       const response = await axios.post('/api/application', application);
       const data = response.data;
-      console.log('Application created:', data);
       return data;
     }catch(error){
-      console.error('Error creating application:', error);
     }
   }
 
@@ -39,10 +35,8 @@ export const createApplication=async(application:{userEmail: string; jobId: stri
     try{
       const response = await axios.put(`/api/application/${application._id}`, application);
       const data = response.data;
-      console.log('Application updated:', data);
       return data;
     }catch(error){
-      console.error('Error updating application:', error);
     }
   }
 
@@ -50,10 +44,8 @@ export const createApplication=async(application:{userEmail: string; jobId: stri
     try{
       const response = await axios.delete(`/api/application/${id}`);
       const data = response.data;
-      console.log('Application deleted:', data);
       return data;
     }catch(error){
-      console.error('Error deleting application:', error);
     }
   }
 

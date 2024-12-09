@@ -45,7 +45,6 @@ const NavBar: React.FC = () => {
 
 
   const handleLogout = () => {
-    console.log("Logging out...");
 
     // Try multiple ways to clear the cookie
     document.cookie = "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -90,7 +89,6 @@ const NavBar: React.FC = () => {
 
     );
   }
-  console.log("i ammmmmm", role);
   return (
     <nav className="flex items-center justify-between px-6 py-4 bg-[#4335A7] text-white shadow-md">
       {/* Logo Section */}

@@ -37,15 +37,7 @@ export async function PUT(
   const { title, company, location, description, salary, postedDate } =
     await req.json();
 
-  console.log("Updating job with ID:", jobId);
-  console.log("Updated Job Data:", {
-    title,
-    company,
-    location,
-    description,
-    salary,
-    postedDate,
-  });
+
 
   try {
     await connect(); // Connect to MongoDB

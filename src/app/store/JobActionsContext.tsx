@@ -49,7 +49,6 @@ export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       existingApplication.status = ApplicationStatus.Saved;
       try {
         await updateApplication(existingApplication);
-        console.log("Job status updated to 'Saved'.");
         queryClient.invalidateQueries({ queryKey: ["userApplications", mail] });
       } catch (error) {
         console.error("Error updating the job status:", error);
@@ -64,7 +63,6 @@ export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         fileUrl: "file:///C:/path/to/your/CV.pdf",
         status: ApplicationStatus.Saved,
       });
-      console.log("Job saved successfully.");
       queryClient.invalidateQueries({ queryKey: ["userApplications", mail] });
     } catch (error) {
       console.error("Error saving the job:", error);
@@ -82,7 +80,6 @@ export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       existingApplication.status = ApplicationStatus.Applied;
       try {
         await updateApplication(existingApplication);
-        console.log("Job status updated to 'Applied'.");
         queryClient.invalidateQueries({ queryKey: ["userApplications", mail] });
       } catch (error) {
         console.error("Error updating the job status:", error);
@@ -97,7 +94,6 @@ export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         fileUrl: "file:///C:/path/to/your/CV.pdf",
         status: ApplicationStatus.Applied,
       });
-      console.log("Job applied successfully.");
       queryClient.invalidateQueries({ queryKey: ["userApplications", mail] });
     } catch (error) {
       console.error("Error applying for the job:", error);
@@ -119,7 +115,6 @@ export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     existingApplication.status = ApplicationStatus.Archived;
     try {
       await updateApplication(existingApplication);
-      console.log("Job status updated to 'Archived'.");
       queryClient.invalidateQueries({ queryKey: ["userApplications", mail] });
     } catch (error) {
       console.error("Error archiving the job:", error);
@@ -145,7 +140,6 @@ export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   
       // Call the update API to save the changes
       await updateApplication(applicationToSend);
-      console.log("Application status updated to 'Sent'.");
   
       // Invalidate the query cache for the user's applications
       queryClient.invalidateQueries({ queryKey: ["userApplications", mail] });

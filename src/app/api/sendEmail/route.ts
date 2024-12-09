@@ -1,15 +1,17 @@
-import type { NextApiRequest, NextApiResponse } from "next";
-import SibApiV3Sdk from "@sendinblue/client";
+import { NextRequest, NextResponse } from "next/server";
+import * as SibApiV3Sdk from "@sendinblue/client";
 
-const sendEmail = async (req: NextApiRequest, res: NextApiResponse) => {
-  if (req.method !== "POST") {
-    return res.status(405).json({ error: "Method not allowed" });
-  }
+export async function POST(req: NextRequest) {
+  // Parse the request body
+  const body = await req.json();
+  const { to, subject, htmlContent } = body;
 
-  const { to, subject, htmlContent, sender } = req.body;
-
+  // Validate required fields
   if (!to || !subject || !htmlContent) {
-    return res.status(400).json({ error: "Missing required fields" });
+    return NextResponse.json(
+      { error: "Missing required fields" },
+      { status: 400 }
+    );
   }
 
   try {
@@ -19,24 +21,36 @@ const sendEmail = async (req: NextApiRequest, res: NextApiResponse) => {
       process.env.BREVO_API_KEY!
     );
 
-    // Send the email via Brevo
     const emailData = {
-      sender: sender || {
-        name: "Default Sender",
-        email: "noreply@yourdomain.com",
+      sender: {
+        name: "Friendly Hire",
+        email: "viderracheli@gmail.com",
       },
       to: [{ email: to }],
       subject,
       htmlContent,
     };
 
-    const response = await apiInstance.sendTransacEmail(emailData);
-    res
-      .status(200)
-      .json({ message: "Email sent successfully!", data: response });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to send email", details: error });
-  }
-};
 
-export default sendEmail;
+    const response = await apiInstance.sendTransacEmail(emailData);
+
+
+    return NextResponse.json(
+      {
+        message: "Email sent successfully",
+        response,
+      },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error(`Email sending error:`, error);
+
+    return NextResponse.json(
+      {
+        error: "Failed to send email",
+        details: error,
+      },
+      { status: 500 }
+    );
+  }
+}

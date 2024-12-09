@@ -29,7 +29,6 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
       if (profileData.role === "employee") {
         await updateEmployee(profileData.email, profileData);
       }
-      console.log("Saved data:", profileData);
       setIsEditing(false);
     } catch (error) {
       console.error(error);

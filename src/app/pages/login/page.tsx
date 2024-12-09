@@ -4,7 +4,6 @@ import toast, { Toaster } from "react-hot-toast";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import checkAccess from "@/app/utils/checkAccess";
-import { sendEmail } from "@/app/utils/email";
 
 const Login = () => {
   const router = useRouter();
@@ -21,7 +20,7 @@ const Login = () => {
             router.push("/pages/home");
           }
         } catch (error) {
-          console.log(error);
+          console.error(error);
         }
       };
 
@@ -32,32 +31,17 @@ const Login = () => {
     e.preventDefault();
     try {
       const { success } = await loginAxiosForGetToken(email, password);
-      console.log("success", success);
       if (success) {
         toast.success("התחברת בהצלחה!");
         setTimeout(() => {
           router.push("/pages/home"); // Redirect after showing the toast
         }, 2000); // Wait for 2 seconds
       } else {
-        console.log("היה בעיה בהתחברות. נסה שוב.");
         setError("היה בעיה בהתחברות. נסה שוב.");
       }
 
-
-      //send email
-      try {
-        await sendEmail({
-          to: email,
-          subject: `התחברת בהצלחה לאתר שלנו`,
-          content: `<p>The user <b>${email}</b> has connected to our site</b>.</p>`,
-        });
-        console.log("Application email sent successfully!");
-      } catch (error) {
-        console.error("Failed to send application email:", error);
-      }
-
     } catch (error) {
-      console.log(error);
+      console.error(error);
     }
   };
 
