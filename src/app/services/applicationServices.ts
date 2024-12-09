@@ -19,6 +19,7 @@ export const getApplicationById = async (applicationId: string) => {
     const data = response.data;
     return data;
   } catch (error) {
+    console.error(error)
   }
 };
 

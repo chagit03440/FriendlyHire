@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getUserApplications } from "@/app/services/applicationServices";
 import { useUser } from "@/app/store/UserContext";
@@ -8,7 +8,6 @@ import ApplicationList from "@/app/components/ApplicationList";
 import IApplication from "@/app/types/application";
 import { JobActionsProvider } from "@/app/store/JobActionsContext";
 import { ApplicationStatus } from "@/app/types/enums";
-import { useRouter } from "next/navigation";
 
 const CandidateApplications = () => {
   const { mail, role } = useUser();

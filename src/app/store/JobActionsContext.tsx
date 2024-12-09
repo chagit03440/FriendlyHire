@@ -9,7 +9,7 @@ import {
 import { useUser } from "@/app/store/UserContext";
 import IApplication from "../types/application";
 import { ApplicationStatus } from "../types/enums";
-import { sendEmail } from "../utils/email";
+// import { sendEmail } from "../utils/email";
 
 interface JobActionsContextProps {
   handleSaveJob: (jobId: string) => Promise<void>;
