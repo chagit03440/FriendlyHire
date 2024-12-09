@@ -28,7 +28,8 @@ export const createApplication=async(application:{userEmail: string; jobId: stri
       const response = await axios.post('/api/application', application);
       const data = response.data;
       return data;
-    }catch(error){
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -37,7 +38,8 @@ export const createApplication=async(application:{userEmail: string; jobId: stri
       const response = await axios.put(`/api/application/${application._id}`, application);
       const data = response.data;
       return data;
-    }catch(error){
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -46,7 +48,8 @@ export const createApplication=async(application:{userEmail: string; jobId: stri
       const response = await axios.delete(`/api/application/${id}`);
       const data = response.data;
       return data;
-    }catch(error){
+    } catch (error) {
+      console.error(error);
     }
   }
 

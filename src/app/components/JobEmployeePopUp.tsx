@@ -3,6 +3,7 @@ import IJob from "../types/job";
 import IApplication from "../types/application";
 import { sendEmail } from "@/app/utils/email";
 import React, { useState } from "react";
+import App from "next/app";
 
 interface Props {
   job: IJob; // The job for which we are showing applicants
@@ -46,10 +47,11 @@ const JobEmployeePopUp: React.FC<Props> = ({
     }
 
     // Update the application status locally
-    setLocalApplications((prevApplications: any) =>
-      prevApplications.map((app: any) =>
-        app._id === applicationId ? { ...app, status: "Sent" } : app
-      )
+    setLocalApplications(
+      (prevApplications) =>
+        prevApplications.map((app) =>
+          app._id === applicationId ? { ...app, status: "Sent" } : app
+        ) as IApplication []
     );
   };
 
