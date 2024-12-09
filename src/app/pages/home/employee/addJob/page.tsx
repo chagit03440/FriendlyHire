@@ -6,7 +6,6 @@ import { toast, Toaster } from "react-hot-toast";
 import { useUser } from "@/app/store/UserContext";
 import { useEffect, useState } from "react";
 import checkAccess from "@/app/utils/checkAccess";
-import { sendEmail } from "@/app/utils/email";
 
 const AddJob = () => {
   // Initial state for no validation errors
@@ -104,16 +103,6 @@ const AddJob = () => {
             router.push("/pages/home"); // Redirect after showing the toast
           }, 2000); // Wait for 2 seconds
 
-          //send email
-          try {
-            await sendEmail(
-              mail!,
-              "המשרה שלך נוספה בהצלחה!",
-              "<p>עכשיו כולם יכולים לצפות במשרה שהעלת</p>"
-            );
-          } catch (error) {
-            console.error(error);
-          }
         } else {
           setError("היתה בעיה ביצירת המשרה. נסה שוב.");
         }

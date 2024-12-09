@@ -5,19 +5,22 @@ import {
   getApplicationById,
   getUserApplications,
   updateApplication,
-} from "@/app/services/applicationServices"; 
+} from "@/app/services/applicationServices";
 import { useUser } from "@/app/store/UserContext";
 import IApplication from "../types/application";
 import { ApplicationStatus } from "../types/enums";
+import { sendEmail } from "../utils/email";
 
 interface JobActionsContextProps {
   handleSaveJob: (jobId: string) => Promise<void>;
   handleApplyJob: (jobId: string) => Promise<void>;
   handleArchiveJob: (jobId: string) => Promise<void>;
-  handleSendJob: (jobId: string) => Promise<void>; 
+  handleSendJob: (jobId: string) => Promise<void>;
 }
 
-const JobActionsContext = createContext<JobActionsContextProps | undefined>(undefined);
+const JobActionsContext = createContext<JobActionsContextProps | undefined>(
+  undefined
+);
 
 export const useJobActions = () => {
   const context = useContext(JobActionsContext);
@@ -27,15 +30,23 @@ export const useJobActions = () => {
   return context;
 };
 
-export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const queryClient = useQueryClient();
   const { mail } = useUser();
 
-  const doesApplicationExist = async (jobId: string): Promise<IApplication | null> => {
+  const doesApplicationExist = async (
+    jobId: string
+  ): Promise<IApplication | null> => {
     if (!mail) return null;
 
     const userApplications = await getUserApplications(mail);
-    return userApplications.find((application: IApplication) => application.jobId._id === jobId) || null;
+    return (
+      userApplications.find(
+        (application: IApplication) => application.jobId._id === jobId
+      ) || null
+    );
   };
 
   const handleSaveJob = async (jobId: string) => {
@@ -78,12 +89,28 @@ export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     const existingApplication = await doesApplicationExist(jobId);
     if (existingApplication) {
       existingApplication.status = ApplicationStatus.Applied;
+
       try {
         await updateApplication(existingApplication);
         queryClient.invalidateQueries({ queryKey: ["userApplications", mail] });
       } catch (error) {
         console.error("Error updating the job status:", error);
       }
+
+      //send email
+      // try {
+      //         await sendEmail(
+      //           userApplication.email,
+      //           "Someone applied to the job you've published",
+      //           `
+      //   <p>Dear employee,</p>
+      //   <p>someone want you to send his application to you'r boss for the <strong>${userApplication.title} position</strong> has </p>
+      //   `
+      //         );
+      // } catch (error) {
+      //   console.error(error);
+      // }
+
       return;
     }
 
@@ -126,7 +153,7 @@ export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({ ch
       console.error("Employee email is required to send the application.");
       return;
     }
-  
+
     try {
       // Fetch the application by its ID
       const applicationToSend = await getApplicationById(applicationId);
@@ -134,21 +161,19 @@ export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         console.error("Application not found for the specified ID.");
         return;
       }
-  
+
       // Update the application's status to "Sent"
       applicationToSend.status = ApplicationStatus.Sent;
-  
+
       // Call the update API to save the changes
       await updateApplication(applicationToSend);
-  
+
       // Invalidate the query cache for the user's applications
       queryClient.invalidateQueries({ queryKey: ["userApplications", mail] });
     } catch (error) {
       console.error("Error sending the application:", error);
     }
   };
-  
-  
 
   return (
     <JobActionsContext.Provider

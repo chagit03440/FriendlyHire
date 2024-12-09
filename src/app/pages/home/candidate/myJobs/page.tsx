@@ -9,53 +9,26 @@ import IApplication from "@/app/types/application";
 import { JobActionsProvider } from "@/app/store/JobActionsContext";
 import { ApplicationStatus } from "@/app/types/enums";
 import { useRouter } from "next/navigation";
-import checkAccess from "@/app/utils/checkAccess";
 
 const CandidateApplications = () => {
-  const { mail, role } = useUser(); // Get the current user's email and role
+  const { mail, role } = useUser();
   const [statusFilter, setStatusFilter] = useState<ApplicationStatus | null>(
     null
-  ); // Filter state
+  );
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const router = useRouter();
-
-  useEffect(() => {
-    const validateAccess = async () => {
-      try {
-        const userData = await checkAccess();
-        if (!userData.hasAccess) {
-          router.push("/pages/login");
-        } else if (userData.role.toLowerCase() !== "candidate") {
-          router.push("/pages/home");
-        } else {
-          setIsAuthenticated(true);
-        }
-      } catch (error) {
-        console.error(error);
-        router.push("/pages/login");
-      }
-    };
-
-    validateAccess();
-  }, [router]);
-
-  if (!isAuthenticated) {
-    return <p>...טוען</p>;
-  }
-
-  // Fetch applications for the current user using react-query
   const {
     data: applications = [],
     isLoading,
     error,
   } = useQuery({
     queryKey: ["userApplications", mail],
-    queryFn: () => getUserApplications(mail), // Fetch user-specific applications
-    enabled: !!mail && role === "candidate", // Only fetch if mail exists and user is a candidate
+    queryFn: () =>
+      mail && role === "candidate"
+        ? getUserApplications(mail)
+        : Promise.resolve([]),
+    enabled: !!mail,
   });
 
-  // Filter applications based on the selected status
   const filteredApplications = statusFilter
     ? applications.filter(
         (application: IApplication) => application.status === statusFilter
@@ -64,7 +37,7 @@ const CandidateApplications = () => {
 
   const handleStatusChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const value = event.target.value as ApplicationStatus | "all";
-    setStatusFilter(value === "all" ? null : (value as ApplicationStatus)); // Set filter to null for "all"
+    setStatusFilter(value === "all" ? null : (value as ApplicationStatus));
   };
 
   if (isLoading) return <div>Loading...</div>;
@@ -74,7 +47,6 @@ const CandidateApplications = () => {
     <JobActionsProvider>
       <div className="candidate-page">
         <h1 className="text-2xl font-bold mb-4">My Job Applications</h1>
-        {/* Filter options */}
         <div className="mb-4">
           <label htmlFor="status-filter" className="mr-2 font-medium">
             Filter by Status:
@@ -94,7 +66,6 @@ const CandidateApplications = () => {
           </select>
         </div>
 
-        {/* Application list */}
         {filteredApplications.length > 0 ? (
           <ApplicationList applications={filteredApplications} />
         ) : (
