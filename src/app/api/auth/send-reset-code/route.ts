@@ -1,51 +1,72 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { sendEmail } from "@/app/utils/email";
 import PasswordReset from "@/app/lib/models/PasswordReset";
+import { NextResponse } from "next/server";
+import connect from "@/app/lib/db/mongodb";
 
-/*
- This route is responsible for sending a password reset code to the user's email.
-
-Input:
-The user provides their email address (email) in the request body.
-Process:
-Generates a 6-digit random code (e.g., 123456).
-Sets an expiration time for the code (15 minutes from the time it is generated).
-Stores the code and its expiration time in a mock database (mockDB).
-Sends the reset code to the user's email using a mail service like nodemailer.
-Output:
-Returns a success message if the email is sent successfully.
-Returns an error message if the email cannot be sent or if an invalid request is made.
-*/
-
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
+export async function POST(req: Request) {
   if (req.method !== "POST") {
-    return res.status(405).json({ message: "Method Not Allowed" });
+    return NextResponse.json(
+      { message: "Method Not Allowed" },
+      { status: 405 }
+    );
   }
 
-  const { email } = req.body;
+  const { email } = await req.json();
+
   if (!email) {
-    return res.status(400).json({ message: "Email is required" });
+    return NextResponse.json({ message: "Email is required" }, { status: 400 });
   }
 
   const resetCode = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit code
-  const resetCodeExpires = Date.now() + 15 * 60 * 1000; // 15 minutes
+  const expirationTime = Date.now() + 15 * 60 * 1000; // 15 minutes
 
   try {
-    // Save the reset code and expiration time in the database
-    await PasswordReset.create({ email, resetCode, resetCodeExpires });
+    // Connect to MongoDB
+    await connect();
 
-    // Send email
-    await sendEmail(
-      email,
-      "Password Reset Code",
-      `<p>Your password reset code is: <strong>${resetCode}</strong></p>`
+    // Save the reset code and expiration time in the database
+    await PasswordReset.findOneAndUpdate(
+      { email }, // Query to find an existing document with the same email
+      { resetCode, expirationTime }, // Data to update
+      { upsert: true, new: true } // Options: upsert creates a new document if none is found
     );
-    return res.status(200).json({ message: "Reset code sent successfully" });
+    
+    // Dynamically build the base URL from the request
+    const baseUrl = `${
+      req.headers.get("x-forwarded-proto") || "http"
+    }://${req.headers.get("host")}`;
+    const sendEmailUrl = `${baseUrl}/api/sendEmail`;
+
+    // Send email using the dynamic sendEmail URL
+    const emailResponse = await fetch(sendEmailUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        to: email,
+        subject: "Password Reset Code",
+        htmlContent: `<p>Your password reset code is: <strong>${resetCode}</strong></p>`,
+      }),
+    });
+
+    if (emailResponse.ok) {
+      return NextResponse.json(
+        { message: "Reset code sent successfully" },
+        { status: 200 }
+      );
+    } else {
+      const errorData = await emailResponse.json();
+      console.error("Email sending failed:", errorData);
+      return NextResponse.json(
+        { message: "Failed to send email", details: errorData },
+        { status: 500 }
+      );
+    }
   } catch (error) {
     console.error("Email error:", error);
-    return res.status(500).json({ message: "Failed to send email" });
+    return NextResponse.json(
+      { message: "Failed to send email" },
+      { status: 500 }
+    );
   }
 }

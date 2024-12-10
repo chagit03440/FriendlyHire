@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import * as SibApiV3Sdk from "@sendinblue/client";
 
 export async function POST(req: NextRequest) {
+
   // Parse the request body
   const body = await req.json();
   const { to, subject, htmlContent } = body;
@@ -31,9 +32,7 @@ export async function POST(req: NextRequest) {
       htmlContent,
     };
 
-
     const response = await apiInstance.sendTransacEmail(emailData);
-
 
     return NextResponse.json(
       {

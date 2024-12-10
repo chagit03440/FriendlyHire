@@ -1,7 +1,7 @@
-"use client"
+"use client";
 import IJob from "../types/job";
 import IApplication from "../types/application";
-import { sendEmail } from "@/app/utils/email";
+import { sendEmail } from "@/app/services/sendEmail";
 import React, { useState } from "react";
 
 interface Props {
@@ -17,7 +17,6 @@ const JobEmployeePopUp: React.FC<Props> = ({
   onClose,
   onUpdateStatus,
 }) => {
-
   const [localApplications, setLocalApplications] = useState(applications);
 
   // Function to handle changing the status of an application to "Sent"
@@ -50,7 +49,7 @@ const JobEmployeePopUp: React.FC<Props> = ({
       (prevApplications) =>
         prevApplications.map((app) =>
           app._id === applicationId ? { ...app, status: "Sent" } : app
-        ) as IApplication []
+        ) as IApplication[]
     );
   };
 
