@@ -13,11 +13,12 @@ export const sendResetPasswordCode = async (
       email,
     });
     return { success: true, message: response.data.message };
-  } catch (error: any) {
+  } catch (error) {
     console.error("Send reset code error:", error);
     return {
       success: false,
-      message: error.response?.data?.message || "שליחת קוד איפוס נכשלה",
+      // message: error.response?.data?.message || "שליחת קוד איפוס נכשלה",
+      message: "שליחת קוד איפוס נכשלה",
     };
   }
 };
@@ -40,11 +41,12 @@ export const resetPassword = async (
       newPassword,
     });
     return { success: true, message: response.data.message };
-  } catch (error: any) {
+  } catch (error) {
     console.error("Reset password error:", error);
     return {
       success: false,
-      message: error.response?.data?.message || "איפוס סיסמה נכשל",
+      // message: error.response?.data?.message || "איפוס סיסמה נכשל",
+      message: "איפוס סיסמה נכשל",
     };
   }
 };
