@@ -1,4 +1,4 @@
-import mongoose, { Schema, Model } from "mongoose";
+import { Schema, Model } from "mongoose";
 import  User  from "./User";
 import ICandidate from "@/app/types/candidate";
 
@@ -8,10 +8,7 @@ const candidateSchema = new Schema<ICandidate>({
   fileUrl: { type: String, required: true },
 });
 
-const Candidate: Model<ICandidate> = 
-mongoose.models.Candidate ||
-User.discriminator<ICandidate>(
-"candidate",
-candidateSchema
-);
+const Candidate: Model<ICandidate> =
+  (User.discriminators && User.discriminators.candidate) ||
+  User.discriminator<ICandidate>("candidate", candidateSchema);;
 export default Candidate ;

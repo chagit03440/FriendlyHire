@@ -132,7 +132,7 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
                   }`}
               />
             </div>
-            <div>
+            {/* <div>
               <label className="block text-sm font-medium text-gray-700">Resume Url</label>
               <input
                 type="text"
@@ -143,7 +143,7 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
                 className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${isEditing ? "bg-white border-gray-300" : "bg-gray-100 border-gray-200"
                   }`}
               />
-            </div>
+            </div> */}
           </>
         )}
       </div>
