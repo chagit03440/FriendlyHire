@@ -4,7 +4,7 @@ import IUser from "../types/user";
 import IEmployee from "../types/employee";
 
 
-export const getCandidate = async (email: string) => {
+export const getCandidate = async (email: string | null) => {
   try {
     const response = await axios.get(`/api/candidate/${email}`);
     const data = response.data;
