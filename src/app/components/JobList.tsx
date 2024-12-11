@@ -1,11 +1,11 @@
-"use client"
+"use client";
 import React, { useState } from "react";
 import IJob from "../types/job";
 import JobCard from "./JobCard";
 import CandidateJobCard from "./CandidateJobCard";
 import { useUser } from "../store/UserContext";
 import JobEmployeePopUp from "./JobEmployeePopUp";
-import EditJobForm from "./EditJobForm "; 
+import EditJobForm from "./EditJobForm ";
 import { getJobApplications } from "../services/applicationServices";
 import IApplication from "../types/application";
 import { JobActionsProvider, useJobActions } from "../store/JobActionsContext";
@@ -15,8 +15,9 @@ interface JobListProps {
   jobs: IJob[]; // Accept jobs as a prop
 }
 
-const JobList: React.FC<JobListProps> = ({ jobs }) => {
+const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
   const { role } = useUser();
+  const [jobs, setJobs] = useState<IJob[]>(initialJobs); // Local state for jobs
   const [selectedJob, setSelectedJob] = useState<IJob | null>(null);
   const [jobApplications, setJobApplications] = useState<IApplication[]>([]);
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
@@ -49,10 +50,17 @@ const JobList: React.FC<JobListProps> = ({ jobs }) => {
     setIsEditPopUpOpen(false); // Close the edit popup
   };
 
-  const handleJobUpdate = (updatedJob: IJob) => {
-    console.log("Updated Job:", updatedJob);
-    updateJob(updatedJob)
-    setIsEditPopUpOpen(false); // Close the edit pop-up after submission
+  const handleJobUpdate = async (updatedJob: IJob) => {
+    try {
+      const updated = await updateJob(updatedJob); // Call the server to update the job
+      setJobs((prevJobs) =>
+        prevJobs.map((job) => (job._id === updated._id ? updated : job)) // Update the local state
+      );
+    } catch (error) {
+      console.error("Failed to update the job:", error);
+    } finally {
+      setIsEditPopUpOpen(false); // Close the edit pop-up after submission
+    }
   };
 
   if (!jobs || jobs.length === 0) {
