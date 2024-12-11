@@ -1,4 +1,3 @@
-"use client";
 import React, { useState } from "react";
 import IJob from "../types/job";
 import JobCard from "./JobCard";
@@ -65,6 +64,23 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
     }
   };
 
+  // New function to close the job directly
+  const handleCloseJob = async (job: IJob) => {
+    if (job.status === "Closed") {
+      return; // Prevent closing the job if it is already closed
+    }
+
+    const updatedJob = { ...job, status: "Closed" } as IJob;
+    try {
+      const updated = await updateJob(updatedJob); // Update the job status to 'Closed'
+      setJobs((prevJobs) =>
+        prevJobs.map((j) => (j._id === updated._id ? updated : j)) // Update the job list
+      );
+    } catch (error) {
+      console.error("Failed to close the job:", error);
+    }
+  };
+
   if (!jobs || jobs.length === 0) {
     return <div>No jobs available</div>;
   }
@@ -84,6 +100,19 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
                   View Applications
                 </button>
                 <button onClick={() => handleEditJob(job)}>Edit</button>
+
+                {/* New button to close the job, with conditional styles */}
+                <button
+                  onClick={() => handleCloseJob(job)}
+                  className={`mt-2 px-4 py-2 rounded text-white ${
+                    job.status === "Closed"
+                      ? "bg-gray-500 cursor-not-allowed" // Gray and disabled if job is closed
+                      : "bg-red-500 hover:bg-red-600" // Red when active
+                  }`}
+                  disabled={job.status === "Closed"} // Disable if job is closed
+                >
+                  Close Job
+                </button>
               </div>
             ) : (
               <CandidateJobCard key={job._id} job={job} />
