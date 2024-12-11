@@ -1,5 +1,4 @@
 import axios from "axios";
-import { Types } from "mongoose";
 import IJob from "../types/job";
 
 export const getJobs=async()=>{
