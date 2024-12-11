@@ -3,7 +3,8 @@ import EmployeeDashboard from "@/app/components/EmployeeDashboard ";
 import React from "react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import checkAccess from "@/app/store/checkAccess";
+import checkAccess from "@/app/utils/checkAccess";
+import { JobActionsProvider } from "@/app/store/JobActionsContext";
 
 const Page = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -13,7 +14,7 @@ const Page = () => {
     const validateAccess = async () => {
       try {
         const userData = await checkAccess();
-        if (!userData.hasAccess){
+        if (!userData.hasAccess) {
           router.push("/pages/login");
         } else if (userData.role.toLowerCase() !== "employee") {
           router.push("/pages/home");
@@ -34,9 +35,11 @@ const Page = () => {
   }
 
   return (
-    <div>
-      <EmployeeDashboard />
-    </div>
+    <JobActionsProvider>
+      <div>
+        <EmployeeDashboard />
+      </div>
+    </JobActionsProvider>
   );
 };
 

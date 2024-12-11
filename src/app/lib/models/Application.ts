@@ -1,4 +1,5 @@
 import IApplication from "@/app/types/application";
+import { ApplicationStatus } from "@/app/types/enums";
 import mongoose, { Model, Schema } from "mongoose";
 
 const applicationSchema: Schema<IApplication> = new Schema({
@@ -7,8 +8,8 @@ const applicationSchema: Schema<IApplication> = new Schema({
     fileUrl: { type: String, required: true },                          // Resume file URL
     status: { 
       type: String, 
-      enum: ["Saved", "Sent", "Reviewed", "Accepted", "Rejected"], // Allowed values for status
-      default: "Sent", 
+      enum: ApplicationStatus, // Allowed values for status
+      default: ApplicationStatus.Saved, 
       required: true 
     },
   });

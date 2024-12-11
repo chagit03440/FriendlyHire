@@ -5,7 +5,7 @@ import { JobSchema } from "@/app/types/jobZod"; // Assumed Zod schema for valida
 import { toast, Toaster } from "react-hot-toast";
 import { useUser } from "@/app/store/UserContext";
 import { useEffect, useState } from "react";
-import checkAccess from "@/app/store/checkAccess";
+import checkAccess from "@/app/utils/checkAccess";
 
 const AddJob = () => {
   // Initial state for no validation errors
@@ -49,7 +49,7 @@ const AddJob = () => {
           setIsAuthenticated(true);
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
         router.push("/pages/login");
       }
     };
@@ -74,11 +74,9 @@ const AddJob = () => {
 
   // Form validation function
   const validateForm = () => {
-    console.log(`validateForm`);
     const parsed = JobSchema.safeParse(jobData);
     if (parsed.success) {
       setValidationErrors(noValidationErrors);
-      console.log(`return true`);
 
       return true;
     } else {
@@ -88,7 +86,6 @@ const AddJob = () => {
         newErrors[field] = err.message;
       });
       setValidationErrors(newErrors);
-      console.log(`return false`);
 
       return false;
     }
@@ -96,7 +93,6 @@ const AddJob = () => {
 
   // Submit handler
   const handleSubmit = async (e: React.FormEvent) => {
-    console.log(`handleSubmit`);
     e.preventDefault();
     try {
       if (validateForm()) {
@@ -106,6 +102,7 @@ const AddJob = () => {
           setTimeout(() => {
             router.push("/pages/home"); // Redirect after showing the toast
           }, 2000); // Wait for 2 seconds
+
         } else {
           setError("היתה בעיה ביצירת המשרה. נסה שוב.");
         }

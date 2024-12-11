@@ -1,5 +1,6 @@
 import axios from "axios";
 import IApplication from "../types/application";
+import { ApplicationStatus } from "../types/enums";
 //import { Types } from "mongoose";
 
 export const getApplications=async()=>{
@@ -12,25 +13,33 @@ export const getApplications=async()=>{
   }
 }
 
-export const createApplication=async(application:{userEmail: string; jobId: string; fileUrl: string; status:"Saved" | "Sent" | "Reviewed" | "Accepted" | "Rejected"})=>{
+export const getApplicationById = async (applicationId: string) => {
+  try {
+    const response = await axios.get(`/api/application/${applicationId}`);
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error(error)
+  }
+};
+
+export const createApplication=async(application:{userEmail: string; jobId: string; fileUrl: string; status:ApplicationStatus})=>{
     try{
       const response = await axios.post('/api/application', application);
       const data = response.data;
-      console.log('Application created:', data);
       return data;
-    }catch(error){
-      console.error('Error creating application:', error);
+    } catch (error) {
+      console.error(error);
     }
   }
 
-  export const updateApplication=async(id: string, application:{title: string; director:string; releaseYear:string})=>{
+  export const updateApplication=async(application:IApplication)=>{
     try{
-      const response = await axios.put(`/api/application/${id}`, application);
+      const response = await axios.put(`/api/application/${application._id}`, application);
       const data = response.data;
-      console.log('Application updated:', data);
       return data;
-    }catch(error){
-      console.error('Error updating application:', error);
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -38,10 +47,9 @@ export const createApplication=async(application:{userEmail: string; jobId: stri
     try{
       const response = await axios.delete(`/api/application/${id}`);
       const data = response.data;
-      console.log('Application deleted:', data);
       return data;
-    }catch(error){
-      console.error('Error deleting application:', error);
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -50,6 +58,15 @@ export const createApplication=async(application:{userEmail: string; jobId: stri
 
     const filteredApplications = applications.filter(
       (application: IApplication) => application.userEmail === userEmail);
+
+    return filteredApplications; // Returns a list of applications
+  };
+
+  export const getJobApplications = async (jobId: string| null) => {
+    const applications = await getApplications()
+
+    const filteredApplications = applications.filter(
+      (application: IApplication) => application.jobId._id === jobId);
 
     return filteredApplications; // Returns a list of applications
   };

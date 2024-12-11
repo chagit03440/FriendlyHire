@@ -5,7 +5,6 @@ export const createUser = async (user: IUser) => {
   try {
     const response = await axios.post("/api/signup", user);
     const data = response.data;
-    console.log("User successfully created:", data);
 
     if (data.message === "User created successfully") {
       return { success: true, message: data.message };
@@ -27,9 +26,9 @@ export async function getRoleFromToken() {
     return { success: true, role: response.data.role };
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
-      console.log("Error:", error.response.data.message);
+      console.error("Error:", error.response.data.message);
     } else {
-      console.log("Unexpected error:", error);
+      console.error("Unexpected error:", error);
     }
     return { success: false, role: null };
   }

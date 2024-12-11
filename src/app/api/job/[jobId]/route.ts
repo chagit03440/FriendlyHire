@@ -4,6 +4,7 @@ import Job from "@/app/lib/models/Job"; // Update to use the Job model
 
 // GET a specific job
 export async function GET(
+  
   req: NextRequest,
   { params }: { params: { jobId: string } }
 ) {
@@ -36,15 +37,7 @@ export async function PUT(
   const { title, company, location, description, salary, postedDate } =
     await req.json();
 
-  console.log("Updating job with ID:", jobId);
-  console.log("Updated Job Data:", {
-    title,
-    company,
-    location,
-    description,
-    salary,
-    postedDate,
-  });
+
 
   try {
     await connect(); // Connect to MongoDB

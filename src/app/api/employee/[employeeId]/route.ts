@@ -35,17 +35,6 @@ export async function PUT(
   const { employeeId } = params;
   const { name, email, password, role, profile, company, position } = await req.json();
 
-  console.log("Updating employee with ID:", employeeId);
-  console.log("Updated Employee Data:", {
-    name,
-    email,
-    password,
-    role,
-    profile,
-    company,
-    position,
-  });
-
   try {
     await connect(); // Connect to MongoDB
     const updatedEmployee = await Employee.findOneAndUpdate(

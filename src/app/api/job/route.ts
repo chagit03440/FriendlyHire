@@ -4,6 +4,7 @@ import Job from "@/app/lib/models/Job"; // Update to use the Job model
 
 // GET all jobs
 export async function GET() {
+
   try {
     await connect(); // Connect to MongoDB
     const jobs = await Job.find(); // Fetch all jobs

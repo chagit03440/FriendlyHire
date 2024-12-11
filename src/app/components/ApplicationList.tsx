@@ -7,8 +7,9 @@ interface Props {
 }
 
 const ApplicationList: React.FC<Props> = ({ applications }) => {
-  const { handleApplyJob } = useJobActions();
+  const { handleApplyJob, handleArchiveJob } = useJobActions(); // Use the archive action from context
   const [applyingJob, setApplyingJob] = useState<string | null>(null); // Track the job being applied for
+  const [archivingJob, setArchivingJob] = useState<string | null>(null); // Track the job being archived
 
   const handleApplyButtonClick = async (jobId: string) => {
     setApplyingJob(jobId); // Set the jobId of the job being applied for
@@ -16,6 +17,19 @@ const ApplicationList: React.FC<Props> = ({ applications }) => {
       await handleApplyJob(jobId); // Apply for the job
     } catch (error) {
       console.error("Error applying for job:", error);
+    } finally {
+      setApplyingJob(null); // Reset applying job state
+    }
+  };
+
+  const handleArchiveButtonClick = async (jobId: string) => {
+    setArchivingJob(jobId); // Set the jobId of the job being archived
+    try {
+      await handleArchiveJob(jobId); // Archive the job
+    } catch (error) {
+      console.error("Error archiving job:", error);
+    } finally {
+      setArchivingJob(null); // Reset archiving job state
     }
   };
 
@@ -44,10 +58,9 @@ const ApplicationList: React.FC<Props> = ({ applications }) => {
                   : "N/A"}
               </td>
               <td className="border px-4 py-2">{application.status}</td>
-              <td className="border px-4 py-2">
-                {application.status === "Saved" &&
-                application.jobId &&
-                typeof application.jobId === "object" ? (
+              <td className="border px-4 py-2 space-x-2">
+                {/* Apply Button: Only show if status is 'Saved' */}
+                {application.status === "Saved" && application.jobId && typeof application.jobId === "object" && (
                   <button
                     onClick={() => handleApplyButtonClick(application.jobId._id.toString())}
                     disabled={applyingJob === application.jobId._id.toString()} // Disable if applying for this job
@@ -55,8 +68,17 @@ const ApplicationList: React.FC<Props> = ({ applications }) => {
                   >
                     {applyingJob === application.jobId._id.toString() ? "Applying..." : "Apply Job"}
                   </button>
-                ) : (
-                  <span className="text-gray-500">No Actions</span>
+                )}
+
+                {/* Archive Button: Show for all statuses except 'Archived' */}
+                {application.status !== "Archived" && application.jobId && typeof application.jobId === "object" && (
+                  <button
+                    onClick={() => handleArchiveButtonClick(application.jobId._id.toString())}
+                    disabled={archivingJob === application.jobId._id.toString()} // Disable if archiving this job
+                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  >
+                    {archivingJob === application.jobId._id.toString() ? "Archiving..." : "Archive"}
+                  </button>
                 )}
               </td>
             </tr>
