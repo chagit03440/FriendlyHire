@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Types } from "mongoose";
+import IJob from "../types/job";
 
 export const getJobs=async()=>{
   try{
@@ -28,16 +29,10 @@ export const createJob=async(job:{title: string;
     }
   }
 
-  export const updateJob=async(id: string, job:{title: string;
-    description: string;
-    experience: number;
-    company: string;
-    requirements: string[];
-    location: string;
-    status: "Open" | "Closed"; 
-    createdBy: Types.ObjectId; })=>{
+  export const updateJob=async(job:IJob)=>{
+
     try{
-      const response = await axios.put(`/api/job/${id}`, job);
+      const response = await axios.put(`/api/job/${job._id}`, job);
       const data = response.data;
       return data;
     }catch(error){

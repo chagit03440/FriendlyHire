@@ -35,9 +35,9 @@ const Dashboard = () => {
 
   if (!isAuthenticated) {
     return (
-      <p>
+      <div>
         <LoadSpinner />
-      </p>
+      </div>
     );
   }
 

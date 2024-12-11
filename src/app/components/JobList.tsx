@@ -1,13 +1,15 @@
-"use client";
+"use client"
 import React, { useState } from "react";
 import IJob from "../types/job";
 import JobCard from "./JobCard";
 import CandidateJobCard from "./CandidateJobCard";
 import { useUser } from "../store/UserContext";
 import JobEmployeePopUp from "./JobEmployeePopUp";
+import EditJobForm from "./EditJobForm "; 
 import { getJobApplications } from "../services/applicationServices";
 import IApplication from "../types/application";
 import { JobActionsProvider, useJobActions } from "../store/JobActionsContext";
+import { updateJob } from "../services/jobServices";
 
 interface JobListProps {
   jobs: IJob[]; // Accept jobs as a prop
@@ -18,11 +20,15 @@ const JobList: React.FC<JobListProps> = ({ jobs }) => {
   const [selectedJob, setSelectedJob] = useState<IJob | null>(null);
   const [jobApplications, setJobApplications] = useState<IApplication[]>([]);
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
+  const [isEditPopUpOpen, setIsEditPopUpOpen] = useState(false); // Track if the edit pop-up is open
 
   const { handleSendJob } = useJobActions();
-  const handleEditJob = async (job: IJob) => {
+
+  const handleEditJob = (job: IJob) => {
     setSelectedJob(job); // Set the selected job
-  }
+    setIsEditPopUpOpen(true); // Open the edit popup
+  };
+
   const handleOpenPopUp = async (job: IJob) => {
     setSelectedJob(job); // Set the selected job
     try {
@@ -40,6 +46,13 @@ const JobList: React.FC<JobListProps> = ({ jobs }) => {
     setSelectedJob(null);
     setJobApplications([]);
     setIsPopUpOpen(false);
+    setIsEditPopUpOpen(false); // Close the edit popup
+  };
+
+  const handleJobUpdate = (updatedJob: IJob) => {
+    console.log("Updated Job:", updatedJob);
+    updateJob(updatedJob)
+    setIsEditPopUpOpen(false); // Close the edit pop-up after submission
   };
 
   if (!jobs || jobs.length === 0) {
@@ -68,15 +81,25 @@ const JobList: React.FC<JobListProps> = ({ jobs }) => {
           )}
         </div>
 
-        {/* Render the popup only if the role is employee and the popup is open */}
+        {/* Render the application popup */}
         {role === "employee" && isPopUpOpen && selectedJob && (
           <JobEmployeePopUp
             job={selectedJob}
             applications={jobApplications} // Pass the fetched applications
             onClose={handleClosePopUp}
             onUpdateStatus={(applicationId) => {
+              console.log(`Updated application ${applicationId}`);
               handleSendJob(applicationId);
             }}
+          />
+        )}
+
+        {/* Render the edit job popup */}
+        {role === "employee" && isEditPopUpOpen && selectedJob && (
+          <EditJobForm
+            job={selectedJob}
+            onClose={handleClosePopUp}
+            onUpdate={handleJobUpdate}
           />
         )}
       </div>
