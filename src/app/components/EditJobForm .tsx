@@ -18,16 +18,8 @@ const EditJobForm: React.FC<EditJobFormProps> = ({ job, onClose, onUpdate }) => 
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-  
-    // Special handling for the 'experience' field to convert it to a number
-    if (name === "experience") {
-      setJobDetails((prev) => ({
-        ...prev,
-        [name]: value ? parseInt(value) : 0, // Parse as integer or set to 0 if empty
-      } as IJob));
-    } else {
-      setJobDetails({ ...jobDetails, [name]: value } as IJob);
-    }
+
+    setJobDetails({ ...jobDetails, [name]: value } as IJob);
   };
   
 
