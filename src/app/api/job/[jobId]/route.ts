@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import connect from "@/app/lib/db/mongodb";
 import Job from "@/app/lib/models/Job"; // Update to use the Job model
+import IJob from "@/app/types/job";
 
 // GET a specific job
 export async function GET(
@@ -34,14 +35,14 @@ export async function PUT(
   { params }: { params: { jobId: string } }
 ) {
   const { jobId } = params;
-  const { title, company, location, description, salary, postedDate } =
+  const job:IJob =
     await req.json();
 
   try {
     await connect(); // Connect to MongoDB
     const updatedJob = await Job.findByIdAndUpdate(
       jobId,
-      { title, company, location, description, salary, postedDate },
+      job,
       { new: true } // Return the updated document
     );
     if (!updatedJob)
