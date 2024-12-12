@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import connect from "@/app/lib/db/mongodb";
 import Application from "@/app/lib/models/Application"; 
-import Job from "@/app/lib/models/Job"; 
 import jwt from "jsonwebtoken";
 
 // GET all applications for the specific user (candidate or employee)
@@ -58,15 +57,42 @@ export async function GET(req: NextRequest) {
   }
 }
 
-// POST a new application
+// POST a new application (only candidates can apply)
 export async function POST(req: NextRequest) {
+  const token = req.cookies.get("token")?.value;
+
+  if (!token) {
+    return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+  }
+
   try {
+    const secret = process.env.JWT_SECRET;
+    if (!secret) {
+      throw new Error("JWT secret is not defined in environment variables.");
+    }
+
+    // Verify and decode the token to extract the role
+    const decoded = jwt.verify(token, secret) as { role: string, email: string };
+    const role = decoded.role;
+
+    // Check if the user has the 'candidate' role
+    if (role !== "candidate") {
+      return NextResponse.json(
+        { message: "Permission denied. Only candidates can post applications." },
+        { status: 403 }
+      );
+    }
+
+    // Parse the application data from the request body
     const applicationData = await req.json();
 
     // Connect to MongoDB
     await connect();
-    const newApplication = new Application(applicationData); // Create a new Application
+
+    // Create a new Application
+    const newApplication = new Application(applicationData);
     await newApplication.save();
+
     return NextResponse.json(newApplication, { status: 201 });
   } catch (error) {
     return NextResponse.json(
@@ -75,3 +101,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
