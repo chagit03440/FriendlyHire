@@ -1,3 +1,4 @@
+"use client"
 import { fetchProtectedData } from "@/app/services/loginServices";
 
 const checkAccess = async () => {
