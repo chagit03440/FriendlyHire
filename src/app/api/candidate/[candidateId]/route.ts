@@ -1,18 +1,16 @@
 import { NextRequest, NextResponse } from "next/server";
 import connect from "@/app/lib/db/mongodb";
 import Candidate from "@/app/lib/models/Candidate"; // Update to use the Candidate model
-
 // GET a specific candidate
 export async function GET(
   req: NextRequest,
   { params }: { params: { candidateId: string } }
 ) {
-  const { candidateId } = params; 
-
+  const { candidateId } = await params;
 
   try {
-    await connect(); 
-    const candidate = await Candidate.findOne(  {email:candidateId} ); 
+    await connect();
+    const candidate = await Candidate.findOne({ email: candidateId });
     if (!candidate) {
       return NextResponse.json(
         { message: "Candidate not found" },
@@ -87,3 +85,4 @@ export async function DELETE(
     );
   }
 }
+//C:\Full Stack\FriendlyHire\src\app\api

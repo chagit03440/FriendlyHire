@@ -3,25 +3,23 @@ import toast, { Toaster } from "react-hot-toast";
 // import { updateCandidate } from "../services/candidateServices";
 import IUser from "../types/user";
 import ICandidate from "../types/candidate";
-import IEmployee from "../types/employee";
-// import { useUser } from "../store/UserContext";
+import { updateCandidate, uploadResume } from "../services/candidateServices";
+
 
 type Props = {
-    user: IUser & ICandidate | IUser & IEmployee
-    | null;
+    user: (IUser & ICandidate) | null;
 };
 const UploadPdf: React.FC<Props> = ({ user }) => {
-    
+
     const [file, setFile] = useState<File | null>(null);
     const [profileData, setProfileData] = useState(user);
-    // const { mail } = useUser(); 
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files) {
             const selectedFile = event.target.files[0];
             setFile(selectedFile);
             console.log("Selected file:", selectedFile)
-            setProfileData({ ...profileData, fileUrl: selectedFile } as (IUser & ICandidate));
+
 
         }
     };
@@ -31,19 +29,25 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
             alert("Please select a file");
             return;
         }
-
         const formData = new FormData();
         formData.append("file", file);
 
         try {
-            console.log("resumeeeeeeeeeeeeeee", profileData)
-            // const response = await updateCandidate(mail, profileData);
-            // if (response) {
-            //     toast.success("Resume added succesfully!");
-            // } else {
-            //     toast.error("Error uploading file.");
-            // }
-            toast.success("Resume added succesfully!");
+            if (profileData) {
+
+                const resumeUrl = await uploadResume(file);
+                console.log("resume url", resumeUrl)
+                const updatedProfileData={ ...profileData, fileUrl: resumeUrl } as (IUser & ICandidate);
+                setProfileData(updatedProfileData);
+                console.log("profile data: ", updatedProfileData)
+                const response = await updateCandidate(updatedProfileData.email, updatedProfileData);
+                if (response) {
+                    toast.success("Resume added succesfully!");
+                } else {
+                    toast.error("Error uploading file.");
+                }
+                // toast.success("Resume added succesfully!");
+            }
         } catch (error) {
             console.error("Error uploading file:", error);
         }

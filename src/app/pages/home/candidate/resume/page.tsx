@@ -12,11 +12,12 @@ import UploadPdf from "@/app/components/UploadPdf";
 
 const Page = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<IUser & ICandidate
-  | null>(null);
+  const [user, setUser] = useState<
+    (IUser & ICandidate) | null
+  >(null);
   const router = useRouter();
-  const { mail } = useUser(); 
-  
+  const { mail } = useUser();
+
 
   useEffect(() => {
     const validateAccess = async () => {
@@ -41,10 +42,10 @@ const Page = () => {
   }, [router]);
 
   if (!isAuthenticated) {
-    return <div> <LoadSpinner/> </div>;
+    return <div> <LoadSpinner /> </div>;
   }
 
-  return <div><UploadPdf user={user}/></div>;
+  return <div><UploadPdf user={user} /></div>;
 };
 
 export default Page;
