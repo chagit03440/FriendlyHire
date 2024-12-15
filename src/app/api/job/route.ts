@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken";
 
 // GET all jobs
 export async function GET(req: NextRequest) {
+  
   const token = req.cookies.get("token")?.value;
 
   if (!token) {
