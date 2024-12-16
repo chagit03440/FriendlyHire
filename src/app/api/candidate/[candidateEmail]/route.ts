@@ -66,9 +66,9 @@ export async function GET(
 // PUT to update an existing candidate
 export async function PUT(
   req: NextRequest,
-  { params }: { params: {Email: string } }
+  { params }: { params: {candidateEmail: string } }
 ) {
-  const {Email } = params;
+  const {candidateEmail } = params;
   const { name, email, password, profile, experience, skills, fileUrl } =
     await req.json();
 
@@ -97,7 +97,7 @@ export async function PUT(
     const { role, email: tokenEmail } = decoded as { role: string; email: string };
 
     // Allow admin or the specific candidate
-    if (role !== "admin" && tokenEmail !==Email) {
+    if (role !== "admin" && tokenEmail !==candidateEmail) {
       return NextResponse.json(
         { message: "Access denied" },
         { status: 403 }
@@ -105,7 +105,7 @@ export async function PUT(
     }
 
     const updatedCandidate = await Candidate.findOneAndUpdate(
-      { email:Email },
+      { email:candidateEmail },
       { name, email, password, role, profile, experience, skills, fileUrl },
       { new: true } // Return the updated document
     );
