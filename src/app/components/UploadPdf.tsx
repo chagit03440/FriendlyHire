@@ -4,6 +4,7 @@ import toast, { Toaster } from "react-hot-toast";
 import IUser from "../types/user";
 import ICandidate from "../types/candidate";
 import { updateCandidate, uploadResume } from "../services/candidateServices";
+import { parseResumeFromPdf } from "../lib/parseResumeFromPdf";
 
 
 type Props = {
@@ -20,8 +21,6 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
             const selectedFile = event.target.files[0];
             setFile(selectedFile);
             console.log("Selected file:", selectedFile)
-
-
         }
     };
 
@@ -46,7 +45,9 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
                         toast.success("Resume added succesfully!");
                     } else {
                         toast.error("Error uploading file.");
-                    }
+                    }              
+                const resume = await parseResumeFromPdf(resumeUrl);//This row is checking for parse data
+                console.log("rrrrrrr", resume);
                 }
                 else {
                     toast.error("Error getting url of file.");
