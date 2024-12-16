@@ -1,5 +1,4 @@
-declare module "pdfjs-dist/build/pdf.worker.entry" {
-    const pdfjsWorker: string;
-    export default pdfjsWorker;
-  }
-  
+declare module "pdfjs-dist/legacy/build/pdf.worker.entry" {
+  const workerSrc: string;
+  export default workerSrc;
+}
