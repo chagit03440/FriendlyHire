@@ -31,12 +31,12 @@ export async function GET(
       decoded = jwt.verify(token, SECRET_KEY);
     } catch (error) {
       return NextResponse.json(
-        { message: "Invalid or expired token" },
+        { message: "Invalid or expired token" ,error},
         { status: 401 }
       );
     }
 
-    const { role, id ,email} = decoded as { role: string; id: string , email: string };
+    const { role ,email} = decoded as { role: string, email: string };
 
     // Only allow admin or the specific employee
     if (role !== "admin" && email !== employeeEmail) {
@@ -70,7 +70,7 @@ export async function PUT(
   { params }: { params: { employeeEmail: string } }
 ) {
   const { employeeEmail } = params;
-  const { name, email, password, role, profile, company, position } = await req.json();
+  const { name, password, profile, company, position } = await req.json();
 
   try {
     await connect(); // Connect to MongoDB
@@ -89,12 +89,12 @@ export async function PUT(
       decoded = jwt.verify(token, SECRET_KEY);
     } catch (error) {
       return NextResponse.json(
-        { message: "Invalid or expired token" },
+        { message: "Invalid or expired token",error },
         { status: 401 }
       );
     }
 
-    const { role, id ,email} = decoded as { role: string; id: string , email: string };
+    const { role ,email} = decoded as { role: string, email: string };
 
     // Only allow admin or the specific employee
     if (role !== "admin" && email !== employeeEmail) {
@@ -150,12 +150,12 @@ export async function DELETE(
       decoded = jwt.verify(token, SECRET_KEY);
     } catch (error) {
       return NextResponse.json(
-        { message: "Invalid or expired token" },
+        { message: "Invalid or expired token",error },
         { status: 401 }
       );
     }
 
-    const { role, id ,email} = decoded as { role: string; id: string , email: string };
+    const { role} = decoded as { role: string;};
 
     // Only allow admin to delete an employee
     if (role !== "admin") {

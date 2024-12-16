@@ -30,7 +30,7 @@ export async function GET(
       decoded = jwt.verify(token, SECRET_KEY);
     } catch (error) {
       return NextResponse.json(
-        { message: "Invalid or expired token" },
+        { message: "Invalid or expired token",error },
         { status: 401 }
       );
     }
@@ -69,7 +69,7 @@ export async function PUT(
   { params }: { params: {Email: string } }
 ) {
   const {Email } = params;
-  const { name, email, password, role, profile, experience, skills, fileUrl } =
+  const { name, email, password, profile, experience, skills, fileUrl } =
     await req.json();
 
   try {
@@ -89,7 +89,7 @@ export async function PUT(
       decoded = jwt.verify(token, SECRET_KEY);
     } catch (error) {
       return NextResponse.json(
-        { message: "Invalid or expired token" },
+        { message: "Invalid or expired token" ,error},
         { status: 401 }
       );
     }
@@ -151,7 +151,7 @@ export async function DELETE(
       decoded = jwt.verify(token, SECRET_KEY);
     } catch (error) {
       return NextResponse.json(
-        { message: "Invalid or expired token" },
+        { message: "Invalid or expired token" ,error},
         { status: 401 }
       );
     }
