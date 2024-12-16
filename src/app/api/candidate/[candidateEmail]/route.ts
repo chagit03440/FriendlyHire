@@ -9,9 +9,9 @@ const SECRET_KEY = process.env.JWT_SECRET || "your_secret_key";
 // GET a specific candidate
 export async function GET(
   req: NextRequest,
-  { params }: { params: { candidateId: string } }
+  { params }: { params: { candidateEmail: string } }
 ) {
-  const { candidateId } = params;
+  const {candidateEmail } = await params;
 
   try {
     await connect(); // Connect to MongoDB
@@ -38,14 +38,14 @@ export async function GET(
     const { role, email } = decoded as { role: string; email: string };
 
     // Allow admin or the specific candidate
-    if (role !== "admin" && email !== candidateId) {
+    if (role !== "admin" && email !==candidateEmail) {
       return NextResponse.json(
         { message: "Access denied" },
         { status: 403 }
       );
     }
 
-    const candidate = await Candidate.findOne({ email: candidateId });
+    const candidate = await Candidate.findOne({ email:candidateEmail });
     if (!candidate) {
       return NextResponse.json(
         { message: "Candidate not found" },
@@ -66,9 +66,9 @@ export async function GET(
 // PUT to update an existing candidate
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { candidateId: string } }
+  { params }: { params: {Email: string } }
 ) {
-  const { candidateId } = params;
+  const {Email } = params;
   const { name, email, password, role, profile, experience, skills, fileUrl } =
     await req.json();
 
@@ -97,7 +97,7 @@ export async function PUT(
     const { role, email: tokenEmail } = decoded as { role: string; email: string };
 
     // Allow admin or the specific candidate
-    if (role !== "admin" && tokenEmail !== candidateId) {
+    if (role !== "admin" && tokenEmail !==Email) {
       return NextResponse.json(
         { message: "Access denied" },
         { status: 403 }
@@ -105,7 +105,7 @@ export async function PUT(
     }
 
     const updatedCandidate = await Candidate.findOneAndUpdate(
-      { email: candidateId },
+      { email:Email },
       { name, email, password, role, profile, experience, skills, fileUrl },
       { new: true } // Return the updated document
     );
@@ -130,9 +130,9 @@ export async function PUT(
 // DELETE a candidate
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { candidateId: string } }
+  { params }: { params: {candidateEmail: string } }
 ) {
-  const { candidateId } = params;
+  const {candidateEmail } = params;
 
   try {
     await connect(); // Connect to MongoDB
@@ -166,7 +166,7 @@ export async function DELETE(
       );
     }
 
-    const deletedCandidate = await Candidate.findByIdAndDelete(candidateId);
+    const deletedCandidate = await Candidate.findByIdAndDelete(candidateEmail);
     if (!deletedCandidate) {
       return NextResponse.json(
         { message: "Candidate not found" },

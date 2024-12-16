@@ -9,9 +9,9 @@ const SECRET_KEY = process.env.JWT_SECRET || "your_secret_key";
 // GET a specific employee
 export async function GET(
   req: NextRequest,
-  { params }: { params: { employeeId: string } }
+  { params }: { params: { employeeEmail: string } }
 ) {
-  const { employeeId } = params;
+  const { employeeEmail } = params;
 
   try {
     await connect(); // Connect to MongoDB
@@ -39,14 +39,14 @@ export async function GET(
     const { role, id ,email} = decoded as { role: string; id: string , email: string };
 
     // Only allow admin or the specific employee
-    if (role !== "admin" && email !== employeeId) {
+    if (role !== "admin" && email !== employeeEmail) {
       return NextResponse.json(
         { message: "Access denied" },
         { status: 403 }
       );
     }
 
-    const employee = await Employee.findOne({ email: employeeId });
+    const employee = await Employee.findOne({ email: employeeEmail });
     if (!employee) {
       return NextResponse.json(
         { message: "Employee not found" },
@@ -67,9 +67,9 @@ export async function GET(
 // PUT to update an existing employee
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { employeeId: string } }
+  { params }: { params: { employeeEmail: string } }
 ) {
-  const { employeeId } = params;
+  const { employeeEmail } = params;
   const { name, email, password, role, profile, company, position } = await req.json();
 
   try {
@@ -97,7 +97,7 @@ export async function PUT(
     const { role, id ,email} = decoded as { role: string; id: string , email: string };
 
     // Only allow admin or the specific employee
-    if (role !== "admin" && email !== employeeId) {
+    if (role !== "admin" && email !== employeeEmail) {
       return NextResponse.json(
         { message: "Access denied" },
         { status: 403 }
@@ -105,7 +105,7 @@ export async function PUT(
     }
 
     const updatedEmployee = await Employee.findOneAndUpdate(
-      { email: employeeId },
+      { email: employeeEmail },
       { name, email, password, role, profile, company, position },
       { new: true } // Return the updated document
     );
@@ -129,9 +129,9 @@ export async function PUT(
 // DELETE an employee
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { employeeId: string } }
+  { params }: { params: { employeeEmail: string } }
 ) {
-  const { employeeId } = params;
+  const { employeeEmail } = params;
 
   try {
     await connect(); // Connect to MongoDB
@@ -165,7 +165,7 @@ export async function DELETE(
       );
     }
 
-    const deletedEmployee = await Employee.findByIdAndDelete(employeeId);
+    const deletedEmployee = await Employee.findByIdAndDelete(employeeEmail);
     if (!deletedEmployee) {
       return NextResponse.json(
         { message: "Employee not found" },
