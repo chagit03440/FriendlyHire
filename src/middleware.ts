@@ -57,6 +57,5 @@ export const config = {
     "/api/application:path*",  
     "/api/job:path*", 
     "/api/role:path*",  
-    "/api/sendEmail:path*",  
   ],
 };

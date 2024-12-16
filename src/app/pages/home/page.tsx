@@ -6,6 +6,7 @@ import CandidateDashboard from "@/app/components/CandidateDashboard";
 import { useUser } from "@/app/store/UserContext";
 import checkAccess from "@/app/utils/checkAccess";
 import LoadSpinner from "@/app/components/LoadSpinner";
+import AdminDashboard from "@/app/components/admin/AdminDashboard";
 
 const Dashboard = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -42,17 +43,17 @@ const Dashboard = () => {
   }
 
   return (
-    <div className="">
-      <div>
-        {role === "employee" ? (
-          <EmployeeDashboard />
-        ) : role === "candidate" ? (
-          <CandidateDashboard />
-        ) : (
-          <p>תפקיד לא מזוהה</p> // Default message if role is undefined
-        )}
-      </div>
-    </div>
+    <div>
+      {role === "employee" ? (
+        <EmployeeDashboard />
+      ) : role === "candidate" ? (
+        <CandidateDashboard />
+      ) : role === "admin" ? ( // Add condition for admin role
+        <AdminDashboard />
+      ) : (
+        <p>תפקיד לא מזוהה</p> // Default message if role is undefined
+      )}
+  </div>
   );
 };
 
