@@ -1,9 +1,7 @@
 "use client";
-import React from "react";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import checkAccess from "@/app/utils/checkAccess";
-import { useUser } from "@/app/store/UserContext";
 import ProfilePage from "@/app/components/Profile";
 import LoadSpinner from "@/app/components/LoadSpinner";
 import { getCandidate } from "@/app/services/candidateServices";
@@ -11,27 +9,31 @@ import { getEmployee } from "@/app/services/employeeServices";
 import IUser from "@/app/types/user";
 import ICandidate from "@/app/types/candidate";
 import IEmployee from "@/app/types/employee";
+import { useUser } from "@/app/store/UserContext";
 
 const Page = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<
-    (IUser & ICandidate) | (IUser & IEmployee) | null
-  >(null);
+  const [user, setUser] = useState<(IUser & ICandidate) | (IUser & IEmployee) | null>(null);
   const [loading, setLoading] = useState(true);
-  const { role, mail } = useUser();
+  const { mail, role, setRole, setMail } = useUser();
+
+
   const router = useRouter();
 
   useEffect(() => {
     const validateAccess = async () => {
       try {
-        const userData = await checkAccess();
-        if (!userData.hasAccess) {
+        const accessData = await checkAccess();
+
+        if (!accessData.hasAccess) {
           router.push("/pages/login");
         } else {
           setIsAuthenticated(true);
+          setRole(accessData.role.toLowerCase());
+          setMail(accessData.email);
         }
       } catch (error) {
-        console.error(error);
+        console.error("Validation error:", error);
         router.push("/pages/login");
       }
     };
