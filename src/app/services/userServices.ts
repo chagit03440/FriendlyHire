@@ -13,6 +13,8 @@ export const getUsers=async()=>{
 
 export const createUser = async (user: IUser) => {
   try {
+    console.log(user);
+    
     const response = await axios.post("/api/signup", user);
     const data = response.data;
 
@@ -60,3 +62,24 @@ export async function getRoleFromToken() {
     return { success: false, role: null };
   }
 }
+
+export const addUser = async (user: IUser) => {
+  try {
+    console.log(user);
+    
+    const response = await axios.post("/api/user", user);
+    const data = response.data;
+
+    if (data.message === "User created successfully") {
+      return { success: true, message: data.message };
+    } else {
+      return { success: false, message: data.message };
+    }
+  } catch (error) {
+    console.error("Error creating user:", error);
+    return {
+      success: false,
+      message: "User with this username or email already exists",
+    };
+  }
+};

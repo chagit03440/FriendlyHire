@@ -14,7 +14,7 @@ const Signup = () => {
     const validateAccess = async () => {
       try {
         const userData = await checkAccess();
-        if (userData.hasAccess&& userData.role!=="admin") {
+        if (userData.hasAccess) {
           router.push("/pages/home");
         }
       } catch (error) {

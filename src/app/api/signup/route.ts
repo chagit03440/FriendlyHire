@@ -5,10 +5,9 @@ import connect from "@/app/lib/db/mongodb";
 import User from "@/app/lib/models/User"; 
 
 export async function POST(req: NextRequest) {
-  console.log("userrr",req.body);
   try {
     const { name, role, email, password, profile } = await req.json();
-
+    
     // Ensure all required fields are provided
     if (!name || !email || !password || !role || !profile) {
       return NextResponse.json(
@@ -16,7 +15,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-
+    
     // Validate role input
     if (!["employee", "candidate"].includes(role.toLowerCase())) {
       return NextResponse.json(
@@ -24,10 +23,10 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-
+    
     // Connect to MongoDB
     await connect();
-
+    
     // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {

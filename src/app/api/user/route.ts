@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import connect from "@/app/lib/db/mongodb";
 import User from "@/app/lib/models/User";
 
@@ -61,3 +62,73 @@ export async function GET(req: NextRequest) {
     );
   }
 }
+export async function POST(req: NextRequest) {
+  try {
+    const { name, role, email, password, profile } = await req.json();
+    
+    // Ensure all required fields are provided
+    if (!name || !email || !password || !role || !profile) {
+      return NextResponse.json(
+        { message: "Name, role, email, and password are required" },
+        { status: 400 }
+      );
+    }
+    
+    // Validate role input
+    if (!["employee", "candidate"].includes(role.toLowerCase())) {
+      return NextResponse.json(
+        { message: "Role must be either 'employee' or 'candidate'" },
+        { status: 400 }
+      );
+    }
+    
+    // Connect to MongoDB
+    await connect();
+    
+    // Check if the user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return NextResponse.json(
+        { message: "User already exists" },
+        { status: 409 }
+      );
+    }
+
+    // Hash the password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create a new user
+    const newUser = new User({
+      name,
+      role: role.toLowerCase(), // Save the role in lowercase for consistency
+      email,
+      password: hashedPassword,
+      profile,
+    });
+
+    await newUser.save();
+
+    
+    // Return success response
+    return NextResponse.json(
+      {
+        message: "Create User successful",
+        user: {
+          id: newUser._id,
+          name: newUser.name,
+          email: newUser.email,
+          role: newUser.role,
+          profile: newUser.profile,
+        },
+      },
+      { status: 201 }
+    );
+  } catch (error) {
+    console.error("Error during create user:", error);
+    return NextResponse.json(
+      { message: "Internal server error", error },
+      { status: 500 }
+    );
+  }
+}
+
