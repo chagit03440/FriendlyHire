@@ -4,25 +4,6 @@ import User from "@/app/lib/models/User";
 import PasswordReset from "@/app/lib/models/PasswordReset";
 import { NextResponse } from "next/server";
 
-/*
- This route is responsible for updating the user's password once the reset code is verified.
-
-Input:
-The user provides their email (email), the reset code (code), and a new password (newPassword) in the request body.
-Process:
-Looks up the reset code and expiration time for the given email in the database (mockDB).
-Verifies that:
-The email exists in the database.
-The code matches the one stored in the database.
-The code has not expired.
-Hashes the new password using bcrypt for secure storage.
-Updates the password in the database (for now, it just logs the password update; in production, it should update the real user database).
-Removes the reset code from the database to ensure it cannot be reused.
-Output:
-Returns a success message if the password is updated successfully.
-Returns an error message if the reset code is invalid, expired, or the request is incomplete.
-*/
-
 export async function POST(req: Request) {
   try {
     if (req.method !== "POST") {
@@ -55,15 +36,9 @@ export async function POST(req: Request) {
       );
     }
 
-    const { resetCode, resetCodeExpires } = record;
+    const { resetCode } = record;
 
     console.log(`reset code from the db: ${resetCode}`);
-    if (Date.now() > resetCodeExpires) {
-      return NextResponse.json(
-        { message: "Reset code has expired" },
-        { status: 400 }
-      );
-    }
 
     if (resetCode !== code) {
       return NextResponse.json(
@@ -71,8 +46,6 @@ export async function POST(req: Request) {
         { status: 400 }
       );
     }
-
-    // Save the hashed password to the database
 
     // Check if the user exists
     const existingUser = await User.findOne({ email });
@@ -86,6 +59,7 @@ export async function POST(req: Request) {
     // Update the user's password
     await User.updateOne({ email }, { $set: { password: hashedPassword } });
 
+    // Remove the reset code from the database after successful password reset
     await PasswordReset.deleteOne({ email });
 
     return NextResponse.json(

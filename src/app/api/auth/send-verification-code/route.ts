@@ -1,8 +1,10 @@
-import PasswordReset from "@/app/lib/models/PasswordReset";
+import EmailVerification from "@/app/lib/models/EmailVerification";
+import User from "@/app/lib/models/User";
 import { NextResponse } from "next/server";
 import connect from "@/app/lib/db/mongodb";
 
 export async function POST(req: Request) {
+  console.log(`in send-verification-code`);
   if (req.method !== "POST") {
     return NextResponse.json(
       { message: "Method Not Allowed" },
@@ -16,17 +18,26 @@ export async function POST(req: Request) {
     return NextResponse.json({ message: "Email is required" }, { status: 400 });
   }
 
-  const resetCode = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit code
+  // Check if a user with this email already exists
+  await connect();
+  const existingUser = await User.findOne({ email });
+  if (existingUser) {
+    return NextResponse.json(
+      { message: "Email already registered" },
+      { status: 400 }
+    );
+  }
+console.log(`111111111111`);
+  const verificationCode = Math.floor(
+    100000 + Math.random() * 900000
+  ).toString(); // 6-digit code
 
   try {
-    // Connect to MongoDB
-    await connect();
-
-    // Save the reset code and expiration time in the database
-    await PasswordReset.findOneAndUpdate(
+    // Save the verification code in the database
+    await EmailVerification.findOneAndUpdate(
       { email }, // Query to find an existing document with the same email
       {
-        resetCode,
+        verificationCode,
         createdAt: new Date(), // Add current timestamp for expiration
       },
       {
@@ -34,7 +45,7 @@ export async function POST(req: Request) {
         new: true,
       }
     );
-
+console.log(`2222222222222222`);
     // Dynamically build the base URL from the request
     const baseUrl = `${
       req.headers.get("x-forwarded-proto") || "http"
@@ -49,14 +60,14 @@ export async function POST(req: Request) {
       },
       body: JSON.stringify({
         to: email,
-        subject: "Password Reset Code",
-        htmlContent: `<p>Your password reset code is: <strong>${resetCode}</strong></p><p>This code will expire in 15 minutes.</p>`,
+        subject: "Email Verification Code",
+        htmlContent: `<p>Your email verification code is: <strong>${verificationCode}</strong></p><p>This code will expire in 15 minutes.</p>`,
       }),
     });
-
+console.log(`333333333333333`);
     if (emailResponse.ok) {
       return NextResponse.json(
-        { message: "Reset code sent successfully" },
+        { message: "Verification code sent successfully" },
         { status: 200 }
       );
     } else {
