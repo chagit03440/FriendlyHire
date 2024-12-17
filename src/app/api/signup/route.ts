@@ -2,16 +2,25 @@ import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import connect from "@/app/lib/db/mongodb";
-import User from "@/app/lib/models/User"; 
+import User from "@/app/lib/models/User";
+import EmailVerification from "@/app/lib/models/EmailVerification";
 
 export async function POST(req: NextRequest) {
   try {
-    const { name, role, email, password, profile } = await req.json();
+    const { name, role, email, password, profile, verificationCode } =
+      await req.json();
 
     // Ensure all required fields are provided
-    if (!name || !email || !password || !role || !profile) {
+    if (
+      !name ||
+      !email ||
+      !password ||
+      !role ||
+      !profile ||
+      !verificationCode
+    ) {
       return NextResponse.json(
-        { message: "Name, role, email, and password are required" },
+        { message: "All fields including verification code are required" },
         { status: 400 }
       );
     }
@@ -36,6 +45,23 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Verify the email verification code
+    const verificationRecord = await EmailVerification.findOne({ email });
+    if (!verificationRecord) {
+      return NextResponse.json(
+        { message: "Verification code expired or not found" },
+        { status: 400 }
+      );
+    }
+
+    // Check if the verification code matches
+    if (verificationRecord.verificationCode !== verificationCode) {
+      return NextResponse.json(
+        { message: "Invalid verification code" },
+        { status: 400 }
+      );
+    }
+
     // Hash the password
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -49,6 +75,9 @@ export async function POST(req: NextRequest) {
     });
     console.log("userrrrrrr", newUser)
     await newUser.save();
+
+    // Remove the verification code from the database
+    await EmailVerification.deleteOne({ email });
 
     // Generate a token for the new user
     const token = jwt.sign(
@@ -64,7 +93,6 @@ export async function POST(req: NextRequest) {
 
     // Set the token as a cookie
     const headers = new Headers();
-    // Modify your login route to set the cookie without HttpOnly
     headers.append(
       "Set-Cookie",
       `token=${token}; path=/; secure; SameSite=Strict`

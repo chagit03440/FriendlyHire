@@ -1,21 +1,36 @@
 import axios from "axios";
 import IUser from "../types/user";
 
-export const createUser = async (user: IUser) => {
+interface CreateUserParams {
+  userData: IUser;
+  verificationCode: string;
+}
+
+export const createUser = async (userDataAndCode: CreateUserParams) => {
   try {
-    const response = await axios.post("/api/signup", user);
+    const response = await axios.post("/api/signup", {
+      ...userDataAndCode.userData,
+      verificationCode: userDataAndCode.verificationCode,
+    });
     const data = response.data;
 
-    if (data.message === "User created successfully") {
-      return { success: true, message: data.message };
+    if (data.message === "Sign-up successful") {
+      return {
+        success: true,
+        message: data.message,
+        user: data.user,
+      };
     } else {
-      return { success: false, message: data.message };
+      return {
+        success: false,
+        message: data.message,
+      };
     }
   } catch (error) {
     console.error("Error creating user:", error);
     return {
       success: false,
-      message: "User with this username or email already exists",
+      message: "User creation failed",
     };
   }
 };

@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as SibApiV3Sdk from "@sendinblue/client";
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 export async function POST(req: NextRequest) {
 
   // Parse the request body

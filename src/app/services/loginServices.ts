@@ -6,7 +6,6 @@ export async function fetchProtectedData() {
       withCredentials: true, 
     });
     const data = response.data;
-
     return data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
