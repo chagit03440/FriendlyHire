@@ -47,6 +47,7 @@ export async function POST(req: NextRequest) {
       password: hashedPassword,
       profile,
     });
+    console.log("userrrrrrr", newUser)
     await newUser.save();
 
     // Generate a token for the new user

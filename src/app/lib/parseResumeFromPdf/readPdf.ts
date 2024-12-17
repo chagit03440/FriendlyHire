@@ -1,5 +1,7 @@
 // Getting pdfjs to work is tricky. The following 3 lines would make it work
 // https://stackoverflow.com/a/63486898/7699841
+// Disable usage of the `canvas` module in pdf.js
+(global as typeof global & { CanvasRenderingContext2D?: unknown }).CanvasRenderingContext2D = undefined as unknown as { new (): CanvasRenderingContext2D; prototype: CanvasRenderingContext2D; };
 import * as pdfjs from "pdfjs-dist/legacy/build/pdf";
 import pdfjsWorker from "pdfjs-dist/legacy/build/pdf.worker.entry";
 pdfjs.GlobalWorkerOptions.workerSrc = pdfjsWorker;
