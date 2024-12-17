@@ -7,7 +7,8 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import React from 'react'
 
-const page = () => {
+const Page = () => {
+
     const router = useRouter();
 
     const noValidationErrors = {
@@ -218,4 +219,4 @@ const page = () => {
     );
 };
     
-export default page
+export default Page
