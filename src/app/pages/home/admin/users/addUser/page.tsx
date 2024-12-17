@@ -50,12 +50,12 @@ const page = () => {
           if (validateForm()) {
             const response = await addUser(userData);
             if (response) {
-              toast.success("נרשמת בהצלחה!");
+              toast.success("משתמש נוסף בהצלחה!");
               setTimeout(() => {
-                router.push("/pages/home");
+                router.back();
               }, 2000);
             } else {
-              setError("היתה בעיה בהרשמה. נסה שוב.");
+              setError("היתה בעיה בהוספה. נסה שוב.");
             }
           }
         } catch (error) {

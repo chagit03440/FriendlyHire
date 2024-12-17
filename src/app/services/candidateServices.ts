@@ -39,7 +39,6 @@ export const updateCandidate = async (
   candidate: (IUser & ICandidate) | (IUser & IEmployee) | null
 ) => {
   try {
-    console.log("cccccccc", candidate);
     const response = await axios.put(`/api/candidate/${email}`, candidate);
     const data = response.data;
     return data;
@@ -66,7 +65,6 @@ export const uploadResume = async (file: File): Promise<string | null> => {
       return null;
     }
    
-    console.log('Public URL:', publicUrlData, "hii");
     return publicUrlData.publicUrl;
   }
   return null;

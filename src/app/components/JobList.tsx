@@ -51,9 +51,7 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
 
   const handleJobUpdate = async (updatedJob: IJob) => {
     try {
-      console.log("Received Updated Job:", updatedJob); // Check this log
       const updated = await updateJob(updatedJob); // Call the server to update the job
-      console.log("Updated Job:", updated); 
       setJobs((prevJobs) =>
         prevJobs.map((job) => (job._id === updated._id ? updated : job)) // Update the local state
       );
@@ -127,7 +125,6 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
             applications={jobApplications} // Pass the fetched applications
             onClose={handleClosePopUp}
             onUpdateStatus={(applicationId) => {
-              console.log(`Updated application ${applicationId}`);
               handleSendJob(applicationId);
             }}
           />

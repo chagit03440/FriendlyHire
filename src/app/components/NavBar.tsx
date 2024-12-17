@@ -105,8 +105,9 @@ const NavBar: React.FC = () => {
         <Image
           src="/logo.jpg" // Path to the logo in the public folder
           alt="FriendlyHire Logo"
-          width={50}  // Adjust width as per your design
+          width={50} // Adjust width as per your design
           height={50} // Adjust height as per your design
+          style={{ width: "auto", height: "auto" }}
           className="mr-3" // Margin right for spacing
         />
         <h1 className="text-2xl font-bold">FriendlyHire</h1>

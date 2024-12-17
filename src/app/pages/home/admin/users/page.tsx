@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getUsers, deleteUser } from "@/app/services/userServices";
+import { getUsers, deleteUser, getUser } from "@/app/services/userServices";
 import IUser from "@/app/types/user";
 import ProfilePage from "@/app/components/Profile";
 import { useRouter } from "next/navigation";
@@ -29,13 +29,14 @@ const Page = () => {
         router.push("users/addUser");
     };
 
-    const handleEditUser = (user: IUser & (ICandidate | IEmployee)) => {
-        setSelectedUser(user);
+    const handleEditUser = async (user: IUser & (ICandidate | IEmployee)) => {
+        const thisUser = await getUser(user.email);
+        setSelectedUser(thisUser);
         setIsModalOpen(true);
     };
 
-    const handleDeleteUser = (id: number) => {
-        deleteUser(id);
+    const handleDeleteUser = (mail:string) => {
+        deleteUser(mail);
     };
 
     const closeModal = () => {

@@ -10,6 +10,7 @@ import IUser from "@/app/types/user";
 import ICandidate from "@/app/types/candidate";
 import IEmployee from "@/app/types/employee";
 import { useUser } from "@/app/store/UserContext";
+import { getUser } from "@/app/services/userServices";
 
 const Page = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -52,9 +53,13 @@ const Page = () => {
         if (role === "employee") {
           const thisUser = await getEmployee(mail);
           setUser(thisUser);
-        } else {
+        } else if (role === "candidate") {
           const thisUser = await getCandidate(mail);
           setUser(thisUser);
+        } else if (role === "admin"){
+          const thisUser = await getUser(mail);
+          setUser(thisUser);
+          console.log("user",thisUser);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);

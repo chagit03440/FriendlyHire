@@ -7,7 +7,6 @@ import JobList from "./JobList";
 import { useUser } from "../store/UserContext";
 import IJob from "../types/job";
 import { JobActionsProvider } from "../store/JobActionsContext";
-console.log("");
 
 const EmployeeDashboard = () => {
   const router = useRouter(); // Initialize useRouter

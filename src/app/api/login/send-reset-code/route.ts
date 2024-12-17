@@ -17,7 +17,6 @@ export async function POST(req: Request) {
   }
 
   const resetCode = Math.floor(100000 + Math.random() * 900000).toString(); // 6-digit code
-  const expirationTime = Date.now() + 15 * 60 * 1000; // 15 minutes
 
   try {
     // Connect to MongoDB
@@ -26,10 +25,16 @@ export async function POST(req: Request) {
     // Save the reset code and expiration time in the database
     await PasswordReset.findOneAndUpdate(
       { email }, // Query to find an existing document with the same email
-      { resetCode, expirationTime }, // Data to update
-      { upsert: true, new: true } // Options: upsert creates a new document if none is found
+      {
+        resetCode,
+        createdAt: new Date(), // Add current timestamp for expiration
+      },
+      {
+        upsert: true,
+        new: true,
+      }
     );
-    
+
     // Dynamically build the base URL from the request
     const baseUrl = `${
       req.headers.get("x-forwarded-proto") || "http"
@@ -45,7 +50,7 @@ export async function POST(req: Request) {
       body: JSON.stringify({
         to: email,
         subject: "Password Reset Code",
-        htmlContent: `<p>Your password reset code is: <strong>${resetCode}</strong></p>`,
+        htmlContent: `<p>Your password reset code is: <strong>${resetCode}</strong></p><p>This code will expire in 15 minutes.</p>`,
       }),
     });
 

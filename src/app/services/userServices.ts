@@ -1,6 +1,11 @@
 import axios from "axios";
 import IUser from "../types/user";
 
+interface CreateUserParams {
+  userData: IUser;
+  verificationCode: string;
+}
+
 export const getUsers=async()=>{
   try{
     const response = await axios.get('/api/user');
@@ -11,30 +16,38 @@ export const getUsers=async()=>{
   }
 }
 
-export const createUser = async (user: IUser) => {
+export const createUser = async (userDataAndCode:CreateUserParams) => {
   try {
-    console.log(user);
-    
-    const response = await axios.post("/api/signup", user);
+    const response = await axios.post("/api/signup", {
+      ...userDataAndCode.userData,
+      verificationCode: userDataAndCode.verificationCode,
+    });
     const data = response.data;
 
-    if (data.message === "User created successfully") {
-      return { success: true, message: data.message };
+    if (data.message === "Sign-up successful") {
+      return {
+        success: true,
+        message: data.message,
+        user: data.user,
+      };
     } else {
-      return { success: false, message: data.message };
+      return {
+        success: false,
+        message: data.message,
+      };
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error creating user:", error);
     return {
       success: false,
-      message: "User with this username or email already exists",
+      message: error.response?.data?.message || "User creation failed",
     };
   }
 };
 
-export const deleteUser = async (userId: number) => {
+export const deleteUser = async (userEmail: string) => {
   try {
-    const response = await axios.delete(`/api/user/${userId}`);
+    const response = await axios.delete(`/api/user/${userEmail}`);
     return {
       success: true,
       message: "User deleted successfully",
@@ -48,6 +61,7 @@ export const deleteUser = async (userId: number) => {
     };
   }
 };
+
 
 export async function getRoleFromToken() {
   try {
@@ -81,5 +95,17 @@ export const addUser = async (user: IUser) => {
       success: false,
       message: "User with this username or email already exists",
     };
+  }
+};
+
+// New function: Get user by ID
+export const getUser = async (userEmail: string) => {
+  try {
+    const response = await axios.get(`/api/user/${userEmail}`);
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error("Error getting User:", error);
+    throw error;
   }
 };
