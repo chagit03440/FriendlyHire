@@ -10,21 +10,25 @@ import AdminDashboard from "@/app/components/admin/AdminDashboard";
 
 const Dashboard = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  // const [userRole, setUserRole] = useState<string | null>(null);
+  const [localRole, setLocalRole] = useState<string | null>(null); // Temporary role state
   const router = useRouter();
-  const { role, setRole, setMail } = useUser();
+  const { setRole, setMail } = useUser();
 
   useEffect(() => {
     const validateAccess = async () => {
       try {
         const userData = await checkAccess();
+
         if (!userData.hasAccess) {
           router.push("/pages/login");
-        } else {
-          setIsAuthenticated(true);
-          setRole(userData.role.toLowerCase());
-          setMail(userData.email);
+          return;
         }
+
+        // Update states after successful validation
+        setLocalRole(userData.role.toLowerCase());
+        setMail(userData.email);
+        setRole(userData.role.toLowerCase());
+        setIsAuthenticated(true);
       } catch (error) {
         console.error(error);
         router.push("/pages/login");
@@ -32,7 +36,7 @@ const Dashboard = () => {
     };
 
     validateAccess();
-  }, [router]);
+  }, [router, setRole, setMail]);
 
   if (!isAuthenticated) {
     return (
@@ -44,16 +48,16 @@ const Dashboard = () => {
 
   return (
     <div>
-      {role === "employee" ? (
+      {localRole === "employee" ? (
         <EmployeeDashboard />
-      ) : role === "candidate" ? (
+      ) : localRole === "candidate" ? (
         <CandidateDashboard />
-      ) : role === "admin" ? ( // Add condition for admin role
+      ) : localRole === "admin" ? (
         <AdminDashboard />
       ) : (
         <p>תפקיד לא מזוהה</p> // Default message if role is undefined
       )}
-  </div>
+    </div>
   );
 };
 

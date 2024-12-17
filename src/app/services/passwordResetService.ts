@@ -9,7 +9,7 @@ export const sendResetPasswordCode = async (
   email: string
 ): Promise<ApiResponse> => {
   try {
-    const response = await axios.post(`/api/auth/send-reset-code`, {
+    const response = await axios.post(`/api/login/send-reset-code`, {
       email,
     });
     return { success: true, message: response.data.message };
@@ -35,7 +35,7 @@ export const resetPassword = async (
     };
   }
   try {
-    const response = await axios.post(`/api/auth/reset-password`, {
+    const response = await axios.post(`/api/login/reset-password`, {
       email,
       code,
       newPassword,

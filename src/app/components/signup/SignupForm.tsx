@@ -2,13 +2,14 @@
 import { useState } from "react";
 import { UserSchema } from "@/app/types/userZod";
 import IUser from "@/app/types/user";
-import toast from "react-hot-toast";
 
+// Define the props interface for the SignupForm component
 interface SignupFormProps {
   onSignupSuccess: (userData: IUser) => void;
 }
 
 const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
+  // Initial state for validation errors - empty strings for all fields
   const noValidationErrors = {
     name: "",
     email: "",
@@ -17,36 +18,51 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
     profile: "",
   };
 
+  // State management for form fields
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [role, setRole] = useState("");
   const [profile, setProfile] = useState("");
+
+  // State for tracking validation errors and general error messages
   const [validationErrors, setValidationErrors] = useState(noValidationErrors);
   const [error, setError] = useState<string | null>(null);
 
+  // Compile user data from current state
   const userData: IUser = { name, email, password, role, profile } as IUser;
 
+  // Validate form using Zod schema
   const validateForm = () => {
+    // Use Zod's safeParse to validate the entire user object
     const parsed = UserSchema.safeParse(userData);
+
     if (parsed.success) {
+      // If validation passes, clear any previous errors
       setValidationErrors(noValidationErrors);
       return true;
     } else {
+      // If validation fails, map errors to specific fields
       const newErrors = { ...noValidationErrors };
       parsed.error.errors.forEach((err) => {
         const field = err.path[0] as keyof typeof newErrors;
         newErrors[field] = err.message;
       });
+
+      // Update validation errors state
       setValidationErrors(newErrors);
       return false;
     }
   };
 
+  // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
+    // Prevent default form submission behavior
     e.preventDefault();
 
+    // Validate form before proceeding
     if (validateForm()) {
+      // Call the success handler passed from parent component
       onSignupSuccess(userData);
     }
   };

@@ -29,7 +29,6 @@ export const createJob=async(job:{title: string;
   }
 
   export const updateJob=async(job:IJob)=>{
-    console.log("Updated Job:", job); 
 
     try{
       const response = await axios.put(`/api/job/${job._id}`, job);

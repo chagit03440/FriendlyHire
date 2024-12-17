@@ -15,10 +15,12 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
   userData,
   onBack,
 }) => {
+  // State for verification code and error handling
   const [verificationCode, setVerificationCode] = useState("");
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
+  // Resend verification code handler
   const handleSendVerificationCode = async () => {
     const response = await sendVerificationCode(userData.email);
     if (response.success) {
@@ -28,25 +30,30 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
     }
   };
 
+  // Handle email verification and user creation
   const handleVerification = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
+      // Attempt to create user with verification code
       const response = await createUser({
         userData,
         verificationCode,
       });
 
       if (response.success) {
+        // Success: show toast and redirect
         toast.success("נרשמת בהצלחה!");
         setTimeout(() => {
           router.push("/pages/home");
         }, 2000);
       } else {
+        // Handle creation failure
         setError(response.message || "ההרשמה נכשלה");
         toast.error(response.message || "ההרשמה נכשלה");
       }
     } catch (error) {
+      // Handle unexpected errors
       console.error(error);
       setError("אירעה שגיאה. אנא נסה שוב.");
       toast.error("אירעה שגיאה. אנא נסה שוב.");
@@ -58,8 +65,9 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
       <h2 className="text-2xl font-bold text-center mb-6">אימות דוא״ל</h2>
 
       <p className="text-center mb-6">
-        קוד אימות נשלח לכתובת הדוא״ל {userData.email}. אנא הזן את הקוד שקיבלת.
+        .{userData.email} קוד אימות נשלח לכתובת הדוא״ל
       </p>
+      <p className="text-center mb-6">.אנא הזן את הקוד שקיבלת</p>
 
       {error && <p className="text-red-500 text-center mb-6">{error}</p>}
 

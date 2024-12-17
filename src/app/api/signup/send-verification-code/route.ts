@@ -4,7 +4,6 @@ import { NextResponse } from "next/server";
 import connect from "@/app/lib/db/mongodb";
 
 export async function POST(req: Request) {
-  console.log(`in send-verification-code`);
   if (req.method !== "POST") {
     return NextResponse.json(
       { message: "Method Not Allowed" },
@@ -27,7 +26,6 @@ export async function POST(req: Request) {
       { status: 400 }
     );
   }
-console.log(`111111111111`);
   const verificationCode = Math.floor(
     100000 + Math.random() * 900000
   ).toString(); // 6-digit code
@@ -45,7 +43,6 @@ console.log(`111111111111`);
         new: true,
       }
     );
-console.log(`2222222222222222`);
     // Dynamically build the base URL from the request
     const baseUrl = `${
       req.headers.get("x-forwarded-proto") || "http"
@@ -64,7 +61,6 @@ console.log(`2222222222222222`);
         htmlContent: `<p>Your email verification code is: <strong>${verificationCode}</strong></p><p>This code will expire in 15 minutes.</p>`,
       }),
     });
-console.log(`333333333333333`);
     if (emailResponse.ok) {
       return NextResponse.json(
         { message: "Verification code sent successfully" },

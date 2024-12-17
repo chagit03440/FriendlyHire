@@ -1,14 +1,17 @@
 import axios from "axios";
 import IUser from "../types/user";
 
-interface CreateUserParams{
-  userData: IUser,
+interface CreateUserParams {
+  userData: IUser;
   verificationCode: string;
 }
 
-export const createUser = async (userData: CreateUserParams) => {
+export const createUser = async (userDataAndCode: CreateUserParams) => {
   try {
-    const response = await axios.post("/api/signup", userData);
+    const response = await axios.post("/api/signup", {
+      ...userDataAndCode.userData,
+      verificationCode: userDataAndCode.verificationCode,
+    });
     const data = response.data;
 
     if (data.message === "Sign-up successful") {

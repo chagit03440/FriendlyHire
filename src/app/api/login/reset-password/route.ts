@@ -15,8 +15,6 @@ export async function POST(req: Request) {
 
     const { email, code, newPassword } = await req.json();
 
-    console.log(`email: ${email}, reset code from the user: ${code}`);
-
     if (!email || !code || !newPassword) {
       return NextResponse.json(
         { message: "All fields are required" },
@@ -37,8 +35,6 @@ export async function POST(req: Request) {
     }
 
     const { resetCode } = record;
-
-    console.log(`reset code from the db: ${resetCode}`);
 
     if (resetCode !== code) {
       return NextResponse.json(
