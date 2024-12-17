@@ -36,11 +36,11 @@ export const createUser = async (userDataAndCode:CreateUserParams) => {
         message: data.message,
       };
     }
-  } catch (error: any) {
+  } catch (error) {
     console.error("Error creating user:", error);
     return {
       success: false,
-      message: error.response?.data?.message || "User creation failed",
+      message: "User creation failed",
     };
   }
 };

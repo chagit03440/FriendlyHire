@@ -13,11 +13,11 @@ export const sendVerificationCode = async (
       email,
     });
     return { success: true, message: response.data.message };
-  } catch (error: any) {
+  } catch (error) {
     console.error("Send verification code error:", error);
     return {
       success: false,
-      message: error.response?.data?.message || "שליחת קוד אימות נכשל",
+      message: "שליחת קוד אימות נכשל",
     };
   }
 };
