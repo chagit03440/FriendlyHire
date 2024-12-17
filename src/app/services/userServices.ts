@@ -6,7 +6,17 @@ interface CreateUserParams {
   verificationCode: string;
 }
 
-export const createUser = async (userDataAndCode: CreateUserParams) => {
+export const getUsers=async()=>{
+  try{
+    const response = await axios.get('/api/user');
+    const data = response.data;
+    return data;
+  }catch(error){
+    console.error('Error get applications:', error);
+  }
+}
+
+export const createUser = async (userDataAndCode:CreateUserParams) => {
   try {
     const response = await axios.post("/api/signup", {
       ...userDataAndCode.userData,
@@ -35,6 +45,24 @@ export const createUser = async (userDataAndCode: CreateUserParams) => {
   }
 };
 
+export const deleteUser = async (userEmail: string) => {
+  try {
+    const response = await axios.delete(`/api/user/${userEmail}`);
+    return {
+      success: true,
+      message: "User deleted successfully",
+      data: response.data,
+    };
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    return {
+      success: false,
+      message: "Failed to delete user",
+    };
+  }
+};
+
+
 export async function getRoleFromToken() {
   try {
     const response = await axios.get("/api/role");
@@ -48,3 +76,36 @@ export async function getRoleFromToken() {
     return { success: false, role: null };
   }
 }
+
+export const addUser = async (user: IUser) => {
+  try {
+    console.log(user);
+    
+    const response = await axios.post("/api/user", user);
+    const data = response.data;
+
+    if (data.message === "User created successfully") {
+      return { success: true, message: data.message };
+    } else {
+      return { success: false, message: data.message };
+    }
+  } catch (error) {
+    console.error("Error creating user:", error);
+    return {
+      success: false,
+      message: "User with this username or email already exists",
+    };
+  }
+};
+
+// New function: Get user by ID
+export const getUser = async (userEmail: string) => {
+  try {
+    const response = await axios.get(`/api/user/${userEmail}`);
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error("Error getting User:", error);
+    throw error;
+  }
+};

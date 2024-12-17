@@ -12,6 +12,15 @@ const NavBar: React.FC = () => {
   const { role, setRole } = useUser();
   const router = useRouter();
 
+  const adminOptions = [
+    { label: "Profile", onClick: () => router.push("/pages/home/profile") },
+    {
+      label: "Logout",
+      onClick: () => handleLogout(),
+      style: "text-red-500 hover:bg-red-100",
+    },
+  ];
+
   const employeeOptions = [
     { label: "Profile", onClick: () => router.push("/pages/home/profile") },
     {
@@ -112,6 +121,9 @@ const NavBar: React.FC = () => {
       )}
       {isPopupOpen && role === "candidate" && (
         <PopupList options={candidateOptions} />
+      )}
+       {isPopupOpen && role === "admin" && (
+        <PopupList options={adminOptions} />
       )}
     </nav>
   );

@@ -8,4 +8,4 @@ const UserSchema = z.object({
   profile: z.string().min(1, "Profile is required"),
 });
   
-  export { UserSchema };
+export { UserSchema };

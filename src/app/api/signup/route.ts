@@ -24,7 +24,7 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-
+    
     // Validate role input
     if (!["employee", "candidate"].includes(role.toLowerCase())) {
       return NextResponse.json(
@@ -32,10 +32,10 @@ export async function POST(req: NextRequest) {
         { status: 400 }
       );
     }
-
+    
     // Connect to MongoDB
     await connect();
-
+    
     // Check if the user already exists
     const existingUser = await User.findOne({ email });
     if (existingUser) {
@@ -73,7 +73,7 @@ export async function POST(req: NextRequest) {
       password: hashedPassword,
       profile,
     });
-    console.log("userrrrrrr", newUser)
+
     await newUser.save();
 
     // Remove the verification code from the database
