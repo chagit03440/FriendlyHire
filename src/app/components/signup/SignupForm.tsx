@@ -65,6 +65,9 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
       // Call the success handler passed from parent component
       onSignupSuccess(userData);
     }
+    else {
+      setError("error");
+    }
   };
 
   return (
