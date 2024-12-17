@@ -1,6 +1,16 @@
 import axios from "axios";
 import IUser from "../types/user";
 
+export const getUsers=async()=>{
+  try{
+    const response = await axios.get('/api/user');
+    const data = response.data;
+    return data;
+  }catch(error){
+    console.error('Error get applications:', error);
+  }
+}
+
 export const createUser = async (user: IUser) => {
   try {
     const response = await axios.post("/api/signup", user);
@@ -16,6 +26,23 @@ export const createUser = async (user: IUser) => {
     return {
       success: false,
       message: "User with this username or email already exists",
+    };
+  }
+};
+
+export const deleteUser = async (userId: number) => {
+  try {
+    const response = await axios.delete(`/api/user/${userId}`);
+    return {
+      success: true,
+      message: "User deleted successfully",
+      data: response.data,
+    };
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    return {
+      success: false,
+      message: "Failed to delete user",
     };
   }
 };

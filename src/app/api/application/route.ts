@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import connect from "@/app/lib/db/mongodb";
-import Application from "@/app/lib/models/Application"; 
+import Application from "@/app/lib/models/Application";
 import jwt from "jsonwebtoken";
 
-// GET all applications for the specific user (candidate or employee)
+// GET all applications for the specific user (candidate, employee, or admin)
 export async function GET(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
 
@@ -18,7 +18,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Verify and decode the token to extract the email and role
-    const decoded = jwt.verify(token, secret) as { role: string, email: string }; 
+    const decoded = jwt.verify(token, secret) as { role: string; email: string };
     const email = decoded.email; // Get the email from the decoded token
     const role = decoded.role;
 
@@ -32,23 +32,28 @@ export async function GET(req: NextRequest) {
 
     if (role === "candidate") {
       // Fetch applications for the candidate (filter by email)
-      applications = await Application.find({ "userEmail": email })
-        .populate("jobId", "title company");
+      applications = await Application.find({ userEmail: email }).populate(
+        "jobId",
+        "title company"
+      );
     } else if (role === "employee") {
-      // Fetch applications for the employee (filter by job created by employee)
-      applications = await Application.find()
-        .populate({
-          path: "jobId",
-          select: "title company createdBy",
-          match: { createdBy: email } 
-        });
+      // Fetch applications for the employee (filter by jobs created by employee)
+      applications = await Application.find().populate({
+        path: "jobId",
+        select: "title company createdBy",
+        match: { createdBy: email }, // Filter jobs created by the employee
+      });
 
-      // Filter out any applications where the job is not created by the employee
+      // Remove applications where the job is not created by the employee
       applications = applications.filter((application) => application.jobId !== null);
+    } else if (role === "admin") {
+      // Admins can fetch all applications
+      applications = await Application.find().populate("jobId", "title company createdBy");
+    } else {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
     }
 
     return NextResponse.json(applications, { status: 200 });
-
   } catch (error) {
     return NextResponse.json(
       { message: "Error fetching applications", error },
@@ -72,7 +77,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Verify and decode the token to extract the role
-    const decoded = jwt.verify(token, secret) as { role: string, email: string };
+    const decoded = jwt.verify(token, secret) as { role: string; email: string };
     const role = decoded.role;
 
     // Check if the user has the 'candidate' role
@@ -101,4 +106,3 @@ export async function POST(req: NextRequest) {
     );
   }
 }
-

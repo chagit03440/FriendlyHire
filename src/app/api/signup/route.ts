@@ -5,6 +5,7 @@ import connect from "@/app/lib/db/mongodb";
 import User from "@/app/lib/models/User"; 
 
 export async function POST(req: NextRequest) {
+  console.log("userrr",req.body);
   try {
     const { name, role, email, password, profile } = await req.json();
 
@@ -47,6 +48,7 @@ export async function POST(req: NextRequest) {
       password: hashedPassword,
       profile,
     });
+
     await newUser.save();
 
     // Generate a token for the new user

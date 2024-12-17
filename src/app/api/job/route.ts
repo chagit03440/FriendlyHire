@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import connect from "@/app/lib/db/mongodb";
-import Job from "@/app/lib/models/Job"; // Update to use the Job model
+import Job from "@/app/lib/models/Job"; // Job model
 import jwt from "jsonwebtoken";
 
 // GET all jobs
 export async function GET(req: NextRequest) {
-  
   const token = req.cookies.get("token")?.value;
 
   if (!token) {
@@ -19,7 +18,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Verify and decode the token to extract the email and role
-    const decoded = jwt.verify(token, secret) as { role: string, email: string };
+    const decoded = jwt.verify(token, secret) as { role: string; email: string };
     const role = decoded.role;
     const email = decoded.email;
 
@@ -37,6 +36,9 @@ export async function GET(req: NextRequest) {
     } else if (role === "employee") {
       // Fetch jobs created by the employee
       jobs = await Job.find({ createdBy: email });
+    } else if (role === "admin") {
+      // Admins can view all jobs
+      jobs = await Job.find(); // Admin gets all jobs with full details
     } else {
       return NextResponse.json({ message: "Invalid role" }, { status: 403 });
     }
@@ -49,9 +51,9 @@ export async function GET(req: NextRequest) {
     );
   }
 }
+
 // POST a new job
 export async function POST(req: NextRequest) {
-
   const token = req.cookies.get("token")?.value;
 
   if (!token) {
@@ -59,14 +61,13 @@ export async function POST(req: NextRequest) {
   }
 
   try {
-
     const secret = process.env.JWT_SECRET;
     if (!secret) {
       throw new Error("JWT secret is not defined in environment variables.");
     }
 
     // Verify and decode the token to extract the role
-    const decoded = jwt.verify(token, secret) as { role: string, email: string };
+    const decoded = jwt.verify(token, secret) as { role: string; email: string };
     const role = decoded.role;
 
     // Only allow employees to create jobs
@@ -83,6 +84,7 @@ export async function POST(req: NextRequest) {
     await connect();
     const newJob = new Job(jobData); // Create a new Job
     await newJob.save();
+
     return NextResponse.json(newJob, { status: 201 });
   } catch (error) {
     return NextResponse.json(
