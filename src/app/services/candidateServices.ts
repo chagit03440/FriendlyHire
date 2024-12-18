@@ -52,9 +52,10 @@ export const uploadResume = async (
   profileData: IUser & ICandidate
 ): Promise<string | null> => {
   const fileName = `${Date.now()}-${file.name}`;
-  const oldFileUrl = profileData.fileUrl; // Assuming filePath is saved in MongoDB
-
+  const oldFileUrl = profileData.fileUrl; 
+  //checking if existing old resume
   if (oldFileUrl) {
+    //getting path file of old resume
     const bucketName = "resumes";
     const encodedFilePath = oldFileUrl.split(`${bucketName}/`)[1];
     const oldFilePath = decodeURIComponent(encodedFilePath);
