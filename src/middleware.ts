@@ -21,6 +21,9 @@ export async function middleware(req: NextRequest) {
         // Check roles
         const userRole = payload.role;
 
+        if (pathname.startsWith("/admin") && userRole !== "admin") {
+            return NextResponse.redirect(new URL("/", req.url));
+        }
 
         if (pathname.startsWith("/candidate") && userRole === "employee") {
             return NextResponse.redirect(new URL("/", req.url));
@@ -51,6 +54,7 @@ export const config = {
   matcher: [
     "/pages/home/candidate/:path*", // Candidate pages
     "/pages/home/employee/:path*", // Employee pages
+    "/pages/home/admin/:path*", 
     "/pages/home/profile/:path*", 
     "/api/candidate/:path*",  // Candidate-related APIs
     "/api/employee/:path*",   // Employee-related APIs

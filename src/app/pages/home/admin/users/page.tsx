@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUsers, deleteUser, getUser } from "@/app/services/userServices";
 import IUser from "@/app/types/user";
 import ProfilePage from "@/app/components/Profile";
@@ -10,6 +10,8 @@ import IEmployee from "@/app/types/employee";
 
 const Page = () => {
     const router = useRouter();
+    const queryClient = useQueryClient();
+
     
     const { data: users = [], isLoading, error } = useQuery<IUser[]>({
         queryKey: ["users"],
@@ -31,15 +33,26 @@ const Page = () => {
 
     const handleEditUser = async (user: IUser & (ICandidate | IEmployee)) => {
         const thisUser = await getUser(user.email);
+        console.log("user",thisUser);
         setSelectedUser(thisUser);
         setIsModalOpen(true);
     };
 
-    const handleDeleteUser = (mail:string) => {
-        deleteUser(mail);
+    
+    const handleDeleteUser = async (mail: string) => {
+        try {
+            await deleteUser(mail); // Wait for deletion
+            await queryClient.invalidateQueries({queryKey:["users"]}); // Trigger a refetch
+        } catch (error) {
+            console.error("Error deleting user:", error);
+        }
     };
+    
 
-    const closeModal = () => {
+    const closeModal = async () => {
+
+        await queryClient.invalidateQueries({queryKey:["users"]}); // Trigger a refetch
+        
         setIsModalOpen(false);
         setSelectedUser(null);
     };
@@ -85,7 +98,7 @@ const Page = () => {
                         Edit
                     </button>
                     <button
-                        onClick={() => handleDeleteUser(user.id)}
+                        onClick={() => handleDeleteUser(user.email)}
                         className="bg-red-500 text-white px-2 py-1 rounded"
                     >
                         Delete
@@ -121,7 +134,7 @@ const Page = () => {
                         Edit
                     </button>
                     <button
-                        onClick={() => handleDeleteUser(user.id)}
+                        onClick={() => handleDeleteUser(user.email)}
                         className="bg-red-500 text-white px-2 py-1 rounded"
                     >
                         Delete

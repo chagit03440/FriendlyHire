@@ -1,5 +1,6 @@
 import axios from "axios";
 import IUser from "../types/user";
+import { use } from "react";
 
 interface CreateUserParams {
   userData: IUser;
@@ -109,3 +110,18 @@ export const getUser = async (userEmail: string) => {
     throw error;
   }
 };
+
+export const updateUser = async (
+  email: string,
+  user: IUser
+  ) => {
+  try {
+    const response = await axios.put(`/api/user/${email}`, user);
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error("Error updating employee:", error);
+  }
+};
+
+

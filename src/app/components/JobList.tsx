@@ -88,7 +88,7 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
       <div className="w-full max-w-4xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {jobs.map((job) =>
-            role === "employee" ? (
+            role === "employee" || role === "admin" ?  (
               <div key={job._id}>
                 <JobCard job={job} />
                 <button
@@ -119,7 +119,7 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
         </div>
 
         {/* Render the application popup */}
-        {role === "employee" && isPopUpOpen && selectedJob && (
+        {(role === "employee" || role === "admin") && isPopUpOpen && selectedJob && (
           <JobEmployeePopUp
             job={selectedJob}
             applications={jobApplications} // Pass the fetched applications
@@ -131,7 +131,7 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
         )}
 
         {/* Render the edit job popup */}
-        {role === "employee" && isEditPopUpOpen && selectedJob && (
+        {(role === "employee" || role === "admin") && isEditPopUpOpen && selectedJob && (
           <EditJobForm
             job={selectedJob}
             onClose={handleClosePopUp}

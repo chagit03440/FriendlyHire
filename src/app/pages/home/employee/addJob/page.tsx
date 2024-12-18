@@ -27,6 +27,7 @@ const AddJob = () => {
   const [requirements, setRequirements] = useState("");
   const [location, setLocation] = useState("");
   const [status, setStatus] = useState<"Open" | "Closed">("Open");
+  const {role}= useUser();
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   // State for validation and error handling
@@ -43,7 +44,7 @@ const AddJob = () => {
         const userData = await checkAccess();
         if (!userData.hasAccess) {
           router.push("/pages/login");
-        } else if (userData.role.toLowerCase() !== "employee") {
+        } else if (userData.role.toLowerCase() !== "employee" && userData.role.toLowerCase() !== "admin") {
           router.push("/pages/home");
         } else {
           setIsAuthenticated(true);
@@ -91,7 +92,6 @@ const AddJob = () => {
     }
   };
 
-  // Submit handler
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
@@ -99,10 +99,14 @@ const AddJob = () => {
         const response = await createJob(jobData);
         if (response) {
           toast.success("המשרה נוספה בהצלחה!");
+  
           setTimeout(() => {
-            router.push("/pages/home"); // Redirect after showing the toast
+            if (role === "admin") {
+              router.push("/pages/home/admin/jobs"); // Redirect to admin jobs page for admin users
+            } else {
+              router.push("/pages/home"); // Redirect to home for non-admin users
+            }
           }, 2000); // Wait for 2 seconds
-
         } else {
           setError("היתה בעיה ביצירת המשרה. נסה שוב.");
         }
@@ -112,6 +116,7 @@ const AddJob = () => {
       setError("אירעה שגיאה. אנא נסה שוב.");
     }
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">

@@ -1,7 +1,7 @@
 
 export enum ApplicationStatus {
     Saved = "Saved",
-    Applied = "Applyed",
+    Applied = "Applied",
     Sent = "Sent",
     Archived = "Archived",
   }
