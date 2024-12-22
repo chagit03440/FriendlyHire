@@ -37,7 +37,7 @@ const NavBar: React.FC = () => {
     },
     {
       label: "Resume",
-      onClick: () => router.push("/pages/home/candidate/resume"),
+      onClick: () => router.push("/pages/home/candidate/uploadResume"),
     },
     {
       label: "My Jobs",

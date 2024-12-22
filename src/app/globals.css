@@ -28,6 +28,8 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --top-nav-bar-height: 3.5rem;
+  --resume-padding: 1.5rem;
 }
 
 @media (prefers-color-scheme: dark) {
