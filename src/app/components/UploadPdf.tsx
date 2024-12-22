@@ -36,7 +36,7 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
 
         try {
             if (profileData) {
-                const resumeUrl = await uploadResume(file);
+                const resumeUrl = await uploadResume(file, profileData);
                 if (resumeUrl) {
                     const updatedProfileData = { ...profileData, fileUrl: resumeUrl } as (IUser & ICandidate);
                     setProfileData(updatedProfileData);
