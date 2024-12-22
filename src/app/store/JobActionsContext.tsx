@@ -9,6 +9,7 @@ import {
 import { useUser } from "@/app/store/UserContext";
 import IApplication from "../types/application";
 import { ApplicationStatus } from "../types/enums";
+import { deleteJob } from "../services/jobServices";
 // import { sendEmail } from "../utils/email";
 
 interface JobActionsContextProps {
@@ -16,6 +17,7 @@ interface JobActionsContextProps {
   handleApplyJob: (jobId: string) => Promise<void>;
   handleArchiveJob: (jobId: string) => Promise<void>;
   handleSendJob: (jobId: string) => Promise<void>;
+  handleDeleteJob:  (jobId: string) => Promise<void>;
 }
 
 const JobActionsContext = createContext<JobActionsContextProps | undefined>(
@@ -175,13 +177,31 @@ export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
+  const handleDeleteJob = async (jobId: string) => {
+    if (!mail) {
+      console.error("User email is required to delete the job.");
+      return;
+    }
+  
+    try {
+      // Call the service to delete the job
+      await deleteJob(jobId);
+  
+      // Invalidate query cache related to jobs
+      queryClient.invalidateQueries({ queryKey: ["jobs"] });
+    } catch (error) {
+      console.error("Error deleting the job:", error);
+    }
+  };
+
   return (
     <JobActionsContext.Provider
       value={{
         handleSaveJob,
         handleApplyJob,
         handleArchiveJob,
-        handleSendJob, // Include handleSendJob in the provider
+        handleSendJob,
+        handleDeleteJob,
       }}
     >
       {children}

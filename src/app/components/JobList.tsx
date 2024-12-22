@@ -22,7 +22,13 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const [isEditPopUpOpen, setIsEditPopUpOpen] = useState(false); // Track if the edit pop-up is open
 
-  const { handleSendJob } = useJobActions();
+  const { handleSendJob ,handleDeleteJob} = useJobActions();
+
+  const onDeleteJob = async (jobId: string) => {
+    if (confirm("Are you sure you want to delete this job?")) {
+      await handleDeleteJob(jobId);
+    }
+  };
 
   const handleEditJob = (job: IJob) => {
     setSelectedJob(job); // Set the selected job
@@ -111,6 +117,15 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
                 >
                   Close Job
                 </button>
+                {/* Delete button for admin */}
+                {role === "admin" && (
+                  <button
+                    onClick={() => onDeleteJob(job._id)}
+                    className="mt-2 px-4 py-2 bg-red-700 text-white rounded hover:bg-red-800"
+                  >
+                    Delete
+                  </button>
+                )}
               </div>
             ) : (
               <CandidateJobCard key={job._id} job={job} />
