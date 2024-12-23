@@ -12,7 +12,7 @@ import { updateJob } from "../services/jobServices";
 import ReactPaginate from 'react-paginate';
 
 interface JobListProps {
-  jobs: IJob[]; // Accept jobs as a prop
+  jobs: IJob[]; // Accept jobs as a 0yyyyprop
 }
 
 const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
