@@ -71,9 +71,9 @@ export async function POST(req: NextRequest) {
     const role = decoded.role;
 
     // Only allow employees to create jobs
-    if (role !== "employee") {
+    if (role !== "employee" && role !== "admin" ) {
       return NextResponse.json(
-        { message: "Permission denied. Only employees can create jobs." },
+        { message: "Permission denied. Only employees and admin can create jobs." },
         { status: 403 }
       );
     }

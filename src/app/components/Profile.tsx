@@ -5,6 +5,7 @@ import IEmployee from "../types/employee";
 import ICandidate from "../types/candidate";
 import { updateCandidate } from "../services/candidateServices";
 import { updateEmployee } from "../services/employeeServices";
+import { updateUser } from "../services/userServices";
 
 type Props = {
   user: IUser & (IEmployee | ICandidate);
@@ -28,6 +29,9 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
       }
       if (profileData.role === "employee") {
         await updateEmployee(profileData.email, profileData);
+      }
+      if (profileData.role === "admin") {
+        await updateUser(profileData.email, profileData);
       }
       setIsEditing(false);
     } catch (error) {
@@ -125,7 +129,7 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
               <label className="block text-sm font-medium text-gray-700">Skills</label>
               <textarea
                 name="skills"
-                value={(profileData as ICandidate).skills.join(", ")}
+                value={(profileData as ICandidate).skills?.length ? (profileData as ICandidate).skills.join(", ") : ""}
                 onChange={handleInputChange}
                 disabled={!isEditing}
                 className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${isEditing ? "bg-white border-gray-300" : "bg-gray-100 border-gray-200"

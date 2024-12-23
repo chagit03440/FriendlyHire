@@ -65,6 +65,68 @@ export async function GET(
   }
 }
 
+// PUT to update an existing user
+export async function PUT(
+  req: NextRequest,
+  { params }: { params: { userEmail: string } }
+) {
+  const { userEmail } = params;
+  const { name, password, profile } = await req.json();
+
+  try {
+    await connect(); // Connect to MongoDB
+
+    // Extract and verify token
+    const token = req.cookies.get("token")?.value;    
+    if (!token) {
+      return NextResponse.json(
+        { message: "Authorization token is required" },
+        { status: 401 }
+      );
+    }
+
+    let decoded;
+    try {
+      decoded = jwt.verify(token, SECRET_KEY);
+    } catch (error) {
+      return NextResponse.json(
+        { message: "Invalid or expired token",error },
+        { status: 401 }
+      );
+    }
+
+    const { role ,email} = decoded as { role: string, email: string };
+
+    // Only allow admin or the specific employee
+    if (role !== "admin" && email !== userEmail) {
+      return NextResponse.json(
+        { message: "Access denied" },
+        { status: 403 }
+      );
+    }
+
+    const updatedUser = await User.findOneAndUpdate(
+      { email: userEmail },
+      { name, email, password, role, profile},
+      { new: true } // Return the updated document
+    );
+    if (!updatedUser) {
+      return NextResponse.json(
+        { message: "User not found" },
+        { status: 404 }
+      );
+    }
+
+    return NextResponse.json(updatedUser, { status: 200 });
+  } catch (error) {
+    console.error("Error updating User:", error);
+    return NextResponse.json(
+      { message: "Error updating User", error },
+      { status: 500 }
+    );
+  }
+}
+
 // DELETE an employee
 export async function DELETE(
     req: NextRequest,
@@ -105,7 +167,7 @@ export async function DELETE(
         );
       }
   
-      const deletedUser = await User.findOne({ email: userEmail });
+      const deletedUser = await User.findOneAndDelete({ email: userEmail });
       if (!deletedUser) {
         return NextResponse.json(
           { message: "User not found" },

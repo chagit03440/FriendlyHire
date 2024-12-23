@@ -49,6 +49,7 @@ export async function GET(req: NextRequest) {
     } else if (role === "admin") {
       // Admins can fetch all applications
       applications = await Application.find().populate("jobId", "title company createdBy");
+      console.log("Applications with populated jobs:", applications);
     } else {
       return NextResponse.json({ message: "Unauthorized" }, { status: 403 });
     }
