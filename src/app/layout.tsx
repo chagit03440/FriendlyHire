@@ -10,7 +10,7 @@ import checkAccess from "./utils/checkAccess";
 
 const LayoutContent: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [queryClient] = useState(() => new QueryClient());
-  const [setIsAuthenticated] = useState(false);
+  //const [setIsAuthenticated] = useState(false);
   const {setRole, setMail } = useUser();
   const router = useRouter();
 
