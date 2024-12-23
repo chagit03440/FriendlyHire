@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import EditApplicationForm from "@/app/components/admin/EditApplicationForm";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { deleteApplication, getApplicationById, getApplications } from "@/app/services/applicationServices";
 import IApplication from "@/app/types/application";
 

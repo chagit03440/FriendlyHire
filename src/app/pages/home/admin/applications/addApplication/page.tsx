@@ -1,6 +1,5 @@
 "use client";
 import { createApplication } from "@/app/services/applicationServices"; // Ensure you have an addApplication service
-import IApplication from "@/app/types/application";
 import { ApplicationStatus } from "@/app/types/enums";
 import toast, { Toaster } from "react-hot-toast";
 import { useState } from "react";
