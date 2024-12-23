@@ -9,6 +9,7 @@ import { getUserApplications } from "../services/applicationServices";
 import { JobActionsProvider } from "@/app/store/JobActionsContext";
 import IJob from "../types/job";
 import IApplication from "../types/application";
+import LoadSpinner from "./LoadSpinner";
 
 const CandidateDashboard: React.FC = () => {
  const { mail } = useUser();
@@ -35,7 +36,7 @@ const CandidateDashboard: React.FC = () => {
   });
 
   // Handle loading and error states
-  if (isJobsLoading || isApplicationsLoading) return <div>Loading...</div>;
+  if (isJobsLoading || isApplicationsLoading) return <div><LoadSpinner/></div>;
   if (jobsError || applicationsError) return <div>Error loading data</div>;
 
   // Filter out jobs that the user has already applied for

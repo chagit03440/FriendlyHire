@@ -7,6 +7,7 @@ import ProfilePage from "@/app/components/Profile";
 import { useRouter } from "next/navigation";
 import ICandidate from "@/app/types/candidate";
 import IEmployee from "@/app/types/employee";
+import LoadSpinner from "@/app/components/LoadSpinner";
 
 const Page = () => {
     const router = useRouter();
@@ -57,7 +58,7 @@ const Page = () => {
         setSelectedUser(null);
     };
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <div><LoadSpinner/></div>;
     if (error instanceof Error) return <div>Error: {error.message}</div>;
 
     return (

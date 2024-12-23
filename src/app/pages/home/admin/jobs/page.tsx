@@ -1,5 +1,6 @@
 "use client";
 import JobList from '@/app/components/JobList'
+import LoadSpinner from '@/app/components/LoadSpinner';
 import { getJobs } from '@/app/services/jobServices';
 import { JobActionsProvider } from '@/app/store/JobActionsContext';
 import IJob from '@/app/types/job';
@@ -22,7 +23,7 @@ const Page = () => {
     await queryClient.invalidateQueries({queryKey:["applications"]});
 };
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <div><LoadSpinner/></div>;
   if (error instanceof Error) return <div>Error: {error.message}</div>;
 
   return (
