@@ -5,6 +5,7 @@ import { ResumeForm } from "@/app/components/resumeForm/ResumeForm";
 import { Resume } from "@/app/components/resume/Resume";
 
 export default function Create() {
+  console.log("storeeeee",store);
   return (
     <Provider store={store}>
       <main className="relative h-full w-full overflow-hidden bg-gray-50">
