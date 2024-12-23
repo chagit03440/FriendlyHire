@@ -1,6 +1,5 @@
 import axios from "axios";
 import IUser from "../types/user";
-import { use } from "react";
 
 interface CreateUserParams {
   userData: IUser;
