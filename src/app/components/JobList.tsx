@@ -22,11 +22,11 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
   const [jobApplications, setJobApplications] = useState<IApplication[]>([]);
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const [isEditPopUpOpen, setIsEditPopUpOpen] = useState(false); // Track if the edit pop-up is open
+  const [currentPage, setCurrentPage] = useState(0);
 
   const { handleSendJob ,handleDeleteJob} = useJobActions();
 
   const jobsPerPage = 4;
-  const [currentPage, setCurrentPage] = useState(0);
 
   const startIndex = currentPage * jobsPerPage;
   const endIndex = startIndex + jobsPerPage;
@@ -106,7 +106,6 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
 
   const handlePageClick = (selectedItem: { selected: number }) => {
     setCurrentPage(selectedItem.selected);
-    console.log("r",role)
   };
 
   if (!jobs || jobs.length === 0) {

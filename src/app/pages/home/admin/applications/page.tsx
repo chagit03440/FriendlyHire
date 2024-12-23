@@ -82,7 +82,7 @@ const Page = () => {
               {applications.map((application) => (
                 <tr key={application._id}>
                   <td className="border p-2">{application.userEmail}</td>
-                  {/* <td className="border px-4 py-2">
+                  <td className="border px-4 py-2">
                     {typeof application.jobId === "object" && "title" in application.jobId
                       ? application.jobId.title
                       : "N/A"}
@@ -91,7 +91,7 @@ const Page = () => {
                     {typeof application.jobId === "object" && "company" in application.jobId
                       ? application.jobId.company
                       : "N/A"}
-                  </td> */}
+                  </td>
                   <td className="border p-2">{application.status}</td>
                   <td className="border p-2">{application.fileUrl}</td>
                   <td className="border p-2 flex">
