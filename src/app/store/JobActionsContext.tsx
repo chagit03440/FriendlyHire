@@ -9,7 +9,11 @@ import {
 import { useUser } from "@/app/store/UserContext";
 import IApplication from "../types/application";
 import { ApplicationStatus } from "../types/enums";
-import { deleteJob } from "../services/jobServices";
+import { deleteJob, getJobById } from "../services/jobServices";
+import { sendEmail } from "../services/sendEmail";
+import IJob from "../types/job";
+import { getUser } from "../services/userServices";
+import IUser from "../types/user";
 // import { sendEmail } from "../utils/email";
 
 interface JobActionsContextProps {
@@ -82,52 +86,82 @@ export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  const handleApplyJob = async (jobId: string) => {
-    if (!mail) {
-      console.error("User email is required to apply for the job.");
-      return;
-    }
+  const createApplicationEmailBody = (userName: string, jobTitle: string) => `
+  <p>Dear Employee,</p>
+  <p>We are excited to inform you that <strong>${userName}</strong> has applied for the <strong>${jobTitle}</strong> position you posted.</p>
+  <p>The candidate has submitted their application and is eagerly looking forward to the next steps.</p>
+  <p>If you would like to review their application or require further information, please feel free to reach out to us.</p>
+  <p>Best regards,</p>
+  <p>Friendly Hire Team</p>
+`;
 
-    const existingApplication = await doesApplicationExist(jobId);
-    if (existingApplication) {
-      existingApplication.status = ApplicationStatus.Applied;
+const handleApplyJob = async (jobId: string) => {
+  if (!mail) {
+    console.error("User email is required to apply for the job.");
+    return;
+  }
 
-      try {
-        await updateApplication(existingApplication);
-        queryClient.invalidateQueries({ queryKey: ["userApplications", mail] });
-      } catch (error) {
-        console.error("Error updating the job status:", error);
-      }
+  let user: IUser;
 
-      //send email
-      // try {
-      //         await sendEmail(
-      //           userApplication.email,
-      //           "Someone applied to the job you've published",
-      //           `
-      //   <p>Dear employee,</p>
-      //   <p>someone want you to send his application to you'r boss for the <strong>${userApplication.title} position</strong> has </p>
-      //   `
-      //         );
-      // } catch (error) {
-      //   console.error(error);
-      // }
-
-      return;
-    }
+  const existingApplication = await doesApplicationExist(jobId);
+  if (existingApplication) {
+    existingApplication.status = ApplicationStatus.Applied;
+    user = await getUser(existingApplication.userEmail);
 
     try {
-      await createApplication({
-        userEmail: mail,
-        jobId,
-        fileUrl: "file:///C:/path/to/your/CV.pdf",
-        status: ApplicationStatus.Applied,
-      });
+      await updateApplication(existingApplication);
       queryClient.invalidateQueries({ queryKey: ["userApplications", mail] });
     } catch (error) {
-      console.error("Error applying for the job:", error);
+      console.error("Error updating the job status:", error);
     }
-  };
+
+    // Send email to the job creator
+    try {
+      const job: IJob = await getJobById(jobId);
+      const userName = user.name || "A candidate"; // Fallback if name is unavailable
+      const emailBody = createApplicationEmailBody(userName, job.title);
+
+      await sendEmail(
+        job.createdBy,
+        "New Application Received for Your Job Posting",
+        emailBody
+      );
+    } catch (error) {
+      console.error("Error sending notification email:", error);
+    }
+
+    return;
+  }
+
+  try {
+    user = await getUser(mail);
+    await createApplication({
+      userEmail: mail,
+      jobId,
+      fileUrl: "file:///C:/path/to/your/CV.pdf",
+      status: ApplicationStatus.Applied,
+    });
+
+    // Send email to the job creator
+    try {
+      const job: IJob = await getJobById(jobId);
+      const userName = user.name || "A candidate"; // Fallback if name is unavailable
+      const emailBody = createApplicationEmailBody(userName, job.title);
+
+      await sendEmail(
+        job.createdBy,
+        "New Application Received for Your Job Posting",
+        emailBody
+      );
+    } catch (error) {
+      console.error("Error sending notification email:", error);
+    }
+
+    queryClient.invalidateQueries({ queryKey: ["userApplications", mail] });
+  } catch (error) {
+    console.error("Error applying for the job:", error);
+  }
+};
 
   const handleArchiveJob = async (jobId: string) => {
     if (!mail) {

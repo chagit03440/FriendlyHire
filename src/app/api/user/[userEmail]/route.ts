@@ -39,7 +39,7 @@ export async function GET(
     const { role } = decoded as { role: string };
 
     // Optionally restrict access to admins for certain actions
-    if (role !== "admin") {
+    if (role !== "admin" && role !== "candidate") {
       return NextResponse.json(
         { message: "Only admins can retrieve user details" },
         { status: 403 }

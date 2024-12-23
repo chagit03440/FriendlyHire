@@ -11,6 +11,16 @@ export const getJobs=async()=>{
   }
 }
 
+export const getJobById = async (jobId: string) => {
+  try {
+    const response = await axios.get(`/api/job/${jobId}`);
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error(error)
+  }
+};
+
 export const createJob=async(job:{title: string;
     description: string;
     experience: number;
