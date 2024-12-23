@@ -37,6 +37,7 @@ export const useSetInitialStore = () => {
   const dispatch = useAppDispatch();
   useEffect(() => {
     const state = loadStateFromLocalStorage();
+    console.log("stateeeee" ,state.resume);
     if (!state) return;
     if (state.resume) {
       // We merge the initial state with the stored state to ensure
