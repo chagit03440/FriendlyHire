@@ -24,7 +24,7 @@ import { TextItem, TextItems } from "./types";
  *     const textItems = await readPdf(fileUrl);
  * }
  */
-export const readPdf = async (fileUrl: string): Promise<TextItems> => {
+export const readPdf = async (fileUrl: string ): Promise<TextItems> => {
   const pdfFile = await pdfjs.getDocument(fileUrl).promise;
   let textItems: TextItems = [];
 

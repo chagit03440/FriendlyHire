@@ -11,7 +11,7 @@ import IJob from "../types/job";
 import IApplication from "../types/application";
 
 const CandidateDashboard: React.FC = () => {
-  const { mail } = useUser();
+ const { mail } = useUser();
 
   // Fetch all jobs using react-query
   const {
@@ -57,6 +57,7 @@ const CandidateDashboard: React.FC = () => {
         ) : (
           <div className="text-center text-gray-600">No jobs available</div>
         )}
+          <div>No jobs available</div>
       </div>
     </JobActionsProvider>
   );
