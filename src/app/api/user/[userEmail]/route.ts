@@ -45,7 +45,6 @@ export async function GET(
         { status: 403 }
       );
     }
-
     const user = await User.findOne({ email: userEmail });
     if (!user) {
       return NextResponse.json(
