@@ -27,6 +27,7 @@ export interface Settings {
     skills: boolean;
     custom: boolean;
   };
+  [key: string]: unknown;
 }
 
 export type ShowForm = keyof Settings["formToShow"];

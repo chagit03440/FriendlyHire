@@ -49,6 +49,7 @@ export interface ResumeProfile {
     projects: ResumeProject[];
     skills: ResumeSkills;
     custom: ResumeCustom;
+    [key: string]: unknown;
   }
   
   export type ResumeKey = keyof Resume;

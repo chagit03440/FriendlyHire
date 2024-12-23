@@ -9,8 +9,8 @@ import IJob from "../types/job";
 import { JobActionsProvider } from "../store/JobActionsContext";
 
 const EmployeeDashboard = () => {
-  const router = useRouter(); // Initialize useRouter
-  const { mail, role } = useUser(); // Get the current user's email and role
+  const router = useRouter();
+  const { mail, role } = useUser();
 
   // Fetch all jobs using react-query
   const {
@@ -28,32 +28,39 @@ const EmployeeDashboard = () => {
       ? jobs.filter((job: IJob) => job.createdBy === mail)
       : [];
 
-  // Navigate to the Add Job page
+  // Handle navigation to the Add Job page
   const handleAddJobClick = () => {
-    router.push("/pages/home/employee/addJob"); // Navigate to the Add Job page
+    router.push("/pages/home/employee/addJob");
   };
 
+  // Render loading state
   if (isLoading) return <div>Loading...</div>;
+
+  // Render error state
   if (error instanceof Error) return <div>Error: {error.message}</div>;
 
   return (
     <JobActionsProvider>
-      <div className="employee-page">
-        <h1 className="text-2xl font-bold mb-4">All the Employee Jobs</h1>
+      <div className="employee-page bg-gray-100 min-h-screen p-8">
+        <h1 className="text-4xl font-bold mb-6 text-center text-blue-800">
+          All the Employee Jobs
+        </h1>
 
         {/* Add Job button */}
-        <button
-          onClick={handleAddJobClick}
-          className="bg-blue-500 text-white px-4 py-2 rounded-md hover:bg-blue-600 transition duration-200 mb-4"
-        >
-          Add Job
-        </button>
+        <div className="flex justify-center mb-6">
+          <button
+            onClick={handleAddJobClick}
+            className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-8 py-2 rounded-full shadow-lg hover:from-blue-600 hover:to-purple-600 transition duration-200"
+          >
+            Add Job
+          </button>
+        </div>
 
         {/* Job list */}
         {filteredJobs.length > 0 ? (
-          <JobList jobs={filteredJobs} /> // Pass the filtered jobs to JobList
+          <JobList jobs={filteredJobs} />
         ) : (
-          <div>No jobs available</div> // Fallback for no jobs
+          <div className="text-center text-gray-600">No jobs available</div>
         )}
       </div>
     </JobActionsProvider>
