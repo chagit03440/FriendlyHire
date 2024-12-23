@@ -12,13 +12,6 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
     setShowDescription(!showDescription);
   };
 
-  const requirementsStyle = {
-    display: "flex",
-    flexWrap: "wrap",
-    gap: "10px",
-    justifyContent: "flex-start", // Align to the left (or center if preferred)
-  };
-
   const requirementItemStyle = {
     backgroundColor: "#f8f9fa",
     borderRadius: "4px",
@@ -58,7 +51,14 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
 
         <div className="mb-4">
           <span className="font-semibold">Requirements:</span>
-          <div style={requirementsStyle as any}>
+          <div
+            style={{
+              display: "flex",
+              flexWrap: "wrap",
+              gap: "10px",
+              justifyContent: "flex-start", // Align to the left (or center if preferred)
+            }}
+          >
             {job.requirements.length > 0
               ? job.requirements.map((req, index) => (
                   <div key={index} style={requirementItemStyle}>

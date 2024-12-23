@@ -24,7 +24,7 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
   const [isEditPopUpOpen, setIsEditPopUpOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
 
-  const { handleSendJob, handleDeleteJob } = useJobActions();
+  const { handleSendJob } = useJobActions();
 
   const jobsPerPage = 6; // Display 6 jobs per page
 
@@ -99,17 +99,6 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
     gap: "20px",
   };
 
-  const jobCardStyle = {
-    border: "1px solid #e0e0e0",
-    borderRadius: "8px",
-    padding: "16px",
-    backgroundColor: "#fff",
-    boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "space-between",
-  };
-
   const buttonContainerStyle = {
     marginTop: "auto", // Ensure buttons are at the bottom
   };
@@ -132,7 +121,19 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
         <div style={jobListStyle}>
           {currentJobs.map((job) =>
             role === "employee" ? (
-              <div key={job._id} style={jobCardStyle as any}>
+              <div
+                key={job._id}
+                style={{
+                  border: "1px solid #e0e0e0",
+                  borderRadius: "8px",
+                  padding: "16px",
+                  backgroundColor: "#fff",
+                  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                }}
+              >
                 <JobCard job={job} />
                 <div style={buttonContainerStyle}>
                   <button
