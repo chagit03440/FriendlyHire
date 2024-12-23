@@ -25,8 +25,6 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
             const selectedFile = event.target.files[0];
             setFile(selectedFile);
             console.log("Selected file:", selectedFile)
-
-
         }
     };
 
@@ -42,13 +40,14 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
             if (profileData) {
                 const resumeUrl = await uploadResume(file, profileData);
                 if (resumeUrl) {
+                    console.log("url new:", resumeUrl)
                     const updatedProfileData = { ...profileData, fileUrl: resumeUrl } as (IUser & ICandidate);
                     setProfileData(updatedProfileData);
                     const response = await updateCandidate(updatedProfileData.email, updatedProfileData);
                     if (response) {
                         toast.success("Resume added succesfully!");
                     } else {
-                        toast.error("Error uploading file.");
+                        toast.error("Error uploading file.", );
                     }
                 }
                 else {
