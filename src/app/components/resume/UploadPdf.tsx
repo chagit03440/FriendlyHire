@@ -3,12 +3,13 @@ import toast, { Toaster } from "react-hot-toast";
 // import { updateCandidate } from "../services/candidateServices";
 import IUser from "../../types/user";
 import ICandidate from "../../types/candidate";
-import { updateCandidate, uploadResume } from "../../services/candidateServices";
+import { updateCandidate } from "../../services/candidateServices";
 import { parseResumeFromPdf } from "../../lib/parseResumeFromPdf";
 import { deepClone } from "../../lib/deepClone";
 import { initialSettings, ShowForm } from "../../lib/redux/settingsSlice";
 import { getHasUsedAppBefore, saveStateToLocalStorage } from "../../lib/redux/local-storage";
 import { useRouter } from "next/navigation";
+import { uploadResume } from "@/app/services/resumeServices";
 
 type Props = {
     user: (IUser & ICandidate) | null;
@@ -56,7 +57,6 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
 
             }
 
-
         } catch (error) {
             console.error("Error uploading file:", error);
         }
@@ -64,7 +64,6 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
 
     const handleEdit = async () => {
         const resume = await parseResumeFromPdf(String(profileData?.fileUrl));
-        console.log("rrrrrrr", resume);
         const settings = deepClone(initialSettings);
         // Set formToShow settings based on uploaded resume if users have used the app before
         if (getHasUsedAppBefore()) {
