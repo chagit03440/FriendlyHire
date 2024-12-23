@@ -39,7 +39,6 @@ const CandidateApplications = () => {
     const value = event.target.value as ApplicationStatus | "all";
     setStatusFilter(value === "all" ? null : (value as ApplicationStatus));
   };
-
   if (isLoading) return <div><LoadSpinner/></div>;
   if (error instanceof Error) return <div>Error: {error.message}</div>;
 

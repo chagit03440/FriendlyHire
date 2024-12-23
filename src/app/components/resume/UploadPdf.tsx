@@ -64,6 +64,7 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
 
     const handleEdit = async () => {
         const resume = await parseResumeFromPdf(String(profileData?.fileUrl));
+        console.log("resumeee", resume)
         const settings = deepClone(initialSettings);
         // Set formToShow settings based on uploaded resume if users have used the app before
         if (getHasUsedAppBefore()) {
