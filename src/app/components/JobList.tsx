@@ -9,6 +9,7 @@ import { getJobApplications } from "../services/applicationServices";
 import IApplication from "../types/application";
 import { JobActionsProvider, useJobActions } from "../store/JobActionsContext";
 import { updateJob } from "../services/jobServices";
+import ReactPaginate from 'react-paginate';
 
 interface JobListProps {
   jobs: IJob[]; // Accept jobs as a prop
@@ -24,9 +25,25 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
 
   const { handleSendJob ,handleDeleteJob} = useJobActions();
 
+  const jobsPerPage = 4;
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const startIndex = currentPage * jobsPerPage;
+  const endIndex = startIndex + jobsPerPage;
+  const currentJobs = jobs.slice(startIndex, endIndex);
+
   const onDeleteJob = async (jobId: string) => {
     if (confirm("Are you sure you want to delete this job?")) {
-      await handleDeleteJob(jobId);
+      try{
+        await handleDeleteJob(jobId);
+
+      }
+      catch(error){
+        console.error("Failed to to delete job:", error);
+      }
+      setJobs((prevJobs) =>
+        prevJobs.filter((job) => (job._id !== jobId)) // Update the local state
+      );
     }
   };
 
@@ -85,6 +102,13 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
     }
   };
 
+  
+
+  const handlePageClick = (selectedItem: { selected: number }) => {
+    setCurrentPage(selectedItem.selected);
+    console.log("r",role)
+  };
+
   if (!jobs || jobs.length === 0) {
     return <div>No jobs available</div>;
   }
@@ -93,7 +117,7 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
     <JobActionsProvider>
       <div className="w-full max-w-4xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {jobs.map((job) =>
+          {currentJobs.map((job) =>
             role === "employee" || role === "admin" ?  (
               <div key={job._id}>
                 <JobCard job={job} />
@@ -154,6 +178,18 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
           />
         )}
       </div>
+      <ReactPaginate
+        previousLabel={'Previous'}
+        nextLabel={'Next'}
+        pageCount={Math.ceil(jobs.length / jobsPerPage)}
+        onPageChange={handlePageClick}
+        containerClassName={'pagination flex justify-center mt-8'}
+        pageClassName={'mx-2'}
+        activeClassName={'text-blue-500 font-bold'}
+        previousClassName={'mx-2'}
+        nextClassName={'mx-2'}
+        disabledClassName={'text-gray-400'}
+      />
     </JobActionsProvider>
   );
 };

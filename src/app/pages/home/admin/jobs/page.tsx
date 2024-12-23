@@ -17,8 +17,9 @@ const page = () => {
       queryFn: getJobs,
   });
 
-  const handleAddJob = () => {
+  const handleAddJob = async () => {
     router.push("/pages/home/employee/addJob"); // Navigate to the Add Job page
+    await queryClient.invalidateQueries({queryKey:["applications"]});
 };
 
   if (isLoading) return <div>Loading...</div>;
@@ -26,6 +27,7 @@ const page = () => {
 
   return (
     <JobActionsProvider>
+       <h2 className="text-xl font-semibold mb-4">Jobs Data</h2>
        {/* Add Job Button */}
        <div className="mb-6">
             <button

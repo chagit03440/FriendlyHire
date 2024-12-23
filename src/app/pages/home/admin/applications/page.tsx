@@ -7,7 +7,7 @@ import { deleteApplication, getApplicationById, getApplications } from "@/app/se
 import IApplication from "@/app/types/application";
 
 const Page = () => {
-    const router = useRouter();
+    //const router = useRouter();
     const queryClient = useQueryClient();
 
     
@@ -21,9 +21,9 @@ const Page = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
 
     
-    const handleAddApplication = () => {
-        router.push("applications/addApplication");
-    };
+    // const handleAddApplication = () => {
+    //     router.push("applications/addApplication");
+    // };
 
     const handleEditApplication = async (application: IApplication) => {
         const thisApplication = await getApplicationById(application._id);
@@ -56,21 +56,18 @@ const Page = () => {
     console.log("app",applications)
     return (
         <div className="p-4">
-        <h1 className="text-2xl font-bold mb-4">Admin Dashboard</h1>
-
         {/* Add Application Button */}
-        <div className="mb-6">
+        {/* <div className="mb-6">
             <button
             onClick={handleAddApplication}
             className="bg-green-500 text-white px-4 py-2 rounded"
             >
             Add Application
             </button>
-        </div>
-
+        </div> */}
         {/* Aplications Table */}
         <section className="mb-8">
-            <h2 className="text-xl font-semibold mb-4">Candidates</h2>
+            <h2 className="text-xl font-semibold mb-4">Applications Data</h2>
             <table className="min-w-full bg-white border border-gray-200">
             <thead>
                 <tr>
