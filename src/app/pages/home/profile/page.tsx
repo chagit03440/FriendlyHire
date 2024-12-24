@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import checkAccess from "@/app/utils/checkAccess";
 import ProfilePage from "@/app/components/Profile";
-import LoadSpinner from "@/app/components/LoadSpinner";
+import LoadSpinner from "@/app/components/common/LoadSpinner";
 import { getCandidate } from "@/app/services/candidateServices";
 import { getEmployee } from "@/app/services/employeeServices";
 import IUser from "@/app/types/user";
@@ -14,10 +14,11 @@ import { getUser } from "@/app/services/userServices";
 
 const Page = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<(IUser & ICandidate) | (IUser & IEmployee) | null>(null);
+  const [user, setUser] = useState<
+    (IUser & ICandidate) | (IUser & IEmployee) | null
+  >(null);
   const [loading, setLoading] = useState(true);
   const { mail, role, setRole, setMail } = useUser();
-
 
   const router = useRouter();
 
@@ -56,10 +57,10 @@ const Page = () => {
         } else if (role === "candidate") {
           const thisUser = await getCandidate(mail);
           setUser(thisUser);
-        } else if (role === "admin"){
+        } else if (role === "admin") {
           const thisUser = await getUser(mail);
           setUser(thisUser);
-          console.log("user",thisUser);
+          console.log("user", thisUser);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);

@@ -3,7 +3,7 @@ import React from "react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import checkAccess from "@/app/utils/checkAccess";
-import LoadSpinner from "@/app/components/LoadSpinner";
+import LoadSpinner from "@/app/components/common/LoadSpinner";
 import IUser from "@/app/types/user";
 import ICandidate from "@/app/types/candidate";
 import { useUser } from "@/app/store/UserContext";
@@ -12,12 +12,9 @@ import UploadPdf from "@/app/components/resume/UploadPdf";
 
 const Page = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState<
-    (IUser & ICandidate) | null
-  >(null);
+  const [user, setUser] = useState<(IUser & ICandidate) | null>(null);
   const router = useRouter();
   const { mail } = useUser();
-
 
   useEffect(() => {
     const validateAccess = async () => {
@@ -42,10 +39,19 @@ const Page = () => {
   }, [router]);
 
   if (!isAuthenticated) {
-    return <div> <LoadSpinner /> </div>;
+    return (
+      <div>
+        {" "}
+        <LoadSpinner />{" "}
+      </div>
+    );
   }
 
-  return <div><UploadPdf user={user} /></div>;
+  return (
+    <div>
+      <UploadPdf user={user} />
+    </div>
+  );
 };
 
 export default Page;

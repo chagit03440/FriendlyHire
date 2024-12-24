@@ -8,7 +8,7 @@ import ApplicationList from "@/app/components/ApplicationList";
 import IApplication from "@/app/types/application";
 import { JobActionsProvider } from "@/app/store/JobActionsContext";
 import { ApplicationStatus } from "@/app/types/enums";
-import LoadSpinner from "@/app/components/LoadSpinner";
+import LoadSpinner from "@/app/components/common/LoadSpinner";
 
 const CandidateApplications = () => {
   const { mail, role } = useUser();
@@ -40,7 +40,12 @@ const CandidateApplications = () => {
     setStatusFilter(value === "all" ? null : (value as ApplicationStatus));
   };
 
-  if (isLoading) return <div><LoadSpinner/></div>;
+  if (isLoading)
+    return (
+      <div>
+        <LoadSpinner />
+      </div>
+    );
   if (error instanceof Error) return <div>Error: {error.message}</div>;
 
   return (

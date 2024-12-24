@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import IJob from "../types/job";
+import IJob from "@/app/types/job";
 
 interface EditJobFormProps {
   job: IJob;

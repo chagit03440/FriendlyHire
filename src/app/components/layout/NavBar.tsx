@@ -1,7 +1,7 @@
 "use client";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useUser } from "../store/UserContext";
+import { useUser } from "../../store/UserContext";
 import { useMemo, useCallback } from "react";
 import { useState, useEffect } from "react";
 import Link from "next/link";

@@ -14,7 +14,7 @@ import {
   type GeneralSetting,
 } from "@/app/lib/redux/settingsSlice";
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
-import type { FontFamily } from "../../fonts/constants";
+import type { FontFamily } from "../../../fonts/constants";
 import { Cog6ToothIcon } from "@heroicons/react/24/outline";
 
 export const ThemeForm = () => {

@@ -1,5 +1,5 @@
 "use client";
-import CandidateDashboard from "@/app/components/CandidateDashboard";
+import CandidateDashboard from "@/app/components/candidate/CandidateDashboard";
 import React from "react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
