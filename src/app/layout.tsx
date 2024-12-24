@@ -8,10 +8,11 @@ import Footer from "./components/Footer";
 import { useRouter } from "next/navigation";
 import checkAccess from "./utils/checkAccess";
 
+import Script from "next/script";
+
 const LayoutContent: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [queryClient] = useState(() => new QueryClient());
-  //const [setIsAuthenticated] = useState(false);
-  const {setRole, setMail } = useUser();
+  const { setRole, setMail } = useUser();
   const router = useRouter();
 
   useEffect(() => {
@@ -22,7 +23,6 @@ const LayoutContent: React.FC<{ children: React.ReactNode }> = ({ children }) =>
         if (!accessData.hasAccess) {
           router.push("/pages/login");
         } else {
-          //setIsAuthenticated(true);
           setRole(accessData.role.toLowerCase());
           setMail(accessData.email);
         }
@@ -45,11 +45,15 @@ const LayoutContent: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             <Footer />
           </div>
         </QueryClientProvider>
-        <script src="https://cdn.enable.co.il/licenses/enable-L33736ao60vh5q9z-1124-66724/init.js"></script>
+        <Script
+          src="https://cdn.enable.co.il/licenses/enable-L33736ao60vh5q9z-1124-66724/init.js"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );
 };
+
 
 export default function RootLayout({
   children,
