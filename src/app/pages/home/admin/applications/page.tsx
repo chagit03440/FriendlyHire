@@ -5,6 +5,7 @@ import EditApplicationForm from "@/app/components/admin/EditApplicationForm";
 // import { useRouter } from "next/navigation";
 import { deleteApplication, getApplicationById, getApplications } from "@/app/services/applicationServices";
 import IApplication from "@/app/types/application";
+import LoadSpinner from "@/app/components/LoadSpinner";
 
 const Page = () => {
     //const router = useRouter();
@@ -50,7 +51,7 @@ const Page = () => {
         setSelectedApplication(null);
     };
 
-    if (isLoading) return <div>Loading...</div>;
+    if (isLoading) return <div><LoadSpinner/></div>;
     if (error instanceof Error) return <div>Error: {error.message}</div>;
 
     console.log("app",applications)
