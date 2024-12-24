@@ -24,10 +24,9 @@ export const loadStateFromLocalStorage = () => {
 export const saveStateToLocalStorage = (state: RootState) => {
   try {
     const stringifiedState = JSON.stringify(state);
-    console.log("data for saving: ", LOCAL_STORAGE_KEY, stringifiedState);   
     localStorage.setItem(LOCAL_STORAGE_KEY, stringifiedState);
-    const result= localStorage.getItem(LOCAL_STORAGE_KEY);
-    console.log(result);
+    // const result= localStorage.getItem(LOCAL_STORAGE_KEY);
+    // console.log(result);
   } catch (e) {
     console.error("Failed to load state from localStorage:", e);
     // Ignore
