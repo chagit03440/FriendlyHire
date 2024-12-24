@@ -79,6 +79,7 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
             for (const section of sections) {
                 settings.formToShow[section] = sectionToFormToShow[section];
             }
+            console.log("dataaaaaaaaa", resume, settings)
             saveStateToLocalStorage({ resume, settings });
         }
         router.push("/pages/home/candidate/buildResume");
