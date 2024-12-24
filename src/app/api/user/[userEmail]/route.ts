@@ -26,16 +26,6 @@ export async function GET(
       );
     }
 
-    let decoded;
-    try {
-      decoded = jwt.verify(token, SECRET_KEY);
-    } catch (error) {
-      return NextResponse.json(
-        { message: "Invalid or expired token", error },
-        { status: 401 }
-      );
-    }
-
     const user = await User.findOne({ email: userEmail });
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
