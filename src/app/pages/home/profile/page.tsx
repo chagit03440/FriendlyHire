@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import checkAccess from "@/app/utils/checkAccess";
-import ProfilePage from "@/app/components/Profile";
+import ProfilePage from "@/app/components/profile/Profile";
 import LoadSpinner from "@/app/components/common/LoadSpinner";
 import { getCandidate } from "@/app/services/candidateServices";
 import { getEmployee } from "@/app/services/employeeServices";
