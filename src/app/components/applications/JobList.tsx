@@ -145,6 +145,9 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
                 }}
               >
                 <JobCard job={job} />
+                <div className="mb-4">
+                  <span className="font-semibold">Status:</span> {job.status}
+                </div>
                 <div style={buttonContainerStyle}>
                   <button
                     onClick={() => handleOpenPopUp(job)}

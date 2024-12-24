@@ -91,11 +91,11 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
           {creatorName || "Loading..."} {/* Display creator's name */}
         </div>
 
-        {(role === "employee" || role === "admin") && (
+        {/* {(role === "employee" || role === "admin") && (
           <div className="mb-4">
             <span className="font-semibold">Status:</span> {job.status}
           </div>
-        )}
+        )} */}
       </div>
     </div>
   );
