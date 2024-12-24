@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUsers, deleteUser, getUser } from "@/app/services/userServices";
 import IUser from "@/app/types/user";
-import ProfilePage from "@/app/components/Profile";
+import ProfilePage from "@/app/components/profile/Profile";
 import { useRouter } from "next/navigation";
 import ICandidate from "@/app/types/candidate";
 import IEmployee from "@/app/types/employee";

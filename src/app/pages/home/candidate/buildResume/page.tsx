@@ -1,7 +1,7 @@
 "use client";
 import { Provider } from "react-redux";
 import { store } from "@/app/lib/redux/store";
-import { ResumeForm } from "@/app/components/resumeForm/ResumeForm";
+import { ResumeForm } from "@/app/components/resume/resumeForm/ResumeForm";
 import { Resume } from "@/app/components/resume/Resume";
 
 export default function Create() {

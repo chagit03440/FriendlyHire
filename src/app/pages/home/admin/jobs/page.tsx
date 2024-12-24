@@ -1,5 +1,5 @@
 "use client";
-import JobList from "@/app/components/JobList";
+import JobList from "@/app/components/applications/JobList";
 import LoadSpinner from "@/app/components/common/LoadSpinner";
 import { getJobs } from "@/app/services/jobServices";
 import { JobActionsProvider } from "@/app/store/JobActionsContext";
