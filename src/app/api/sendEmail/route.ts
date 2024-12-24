@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as SibApiV3Sdk from "@sendinblue/client";
-import fetch from "node-fetch";
+// import fetch from "node-fetch";
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
