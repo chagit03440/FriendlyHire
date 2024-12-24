@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import IJob from "../types/job";
+import IJob from "@/app/types/job";
 
 interface JobCardProps {
   job: IJob;

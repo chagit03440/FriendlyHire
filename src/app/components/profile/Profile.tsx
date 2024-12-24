@@ -1,11 +1,11 @@
 "use client"
 import React, { useState } from "react";
-import IUser from "../types/user";
-import IEmployee from "../types/employee";
-import ICandidate from "../types/candidate";
-import { updateCandidate } from "../services/candidateServices";
-import { updateEmployee } from "../services/employeeServices";
-import { updateUser } from "../services/userServices";
+import IUser from "@/app/types/user";
+import IEmployee from "@/app/types/employee";
+import ICandidate from "@/app/types/candidate";
+import { updateCandidate } from "@/app/services/candidateServices";
+import { updateEmployee } from "@/app/services/employeeServices";
+import { updateUser } from "@/app/services/userServices";
 
 type Props = {
   user: IUser & (IEmployee | ICandidate);

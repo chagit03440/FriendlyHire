@@ -1,6 +1,6 @@
 "use client";
-import IJob from "../types/job";
-import IApplication from "../types/application";
+import IJob from "@/app/types/job";
+import IApplication from "@/app/types/application";
 import { sendEmail } from "@/app/services/sendEmail";
 import React, { useState } from "react";
 

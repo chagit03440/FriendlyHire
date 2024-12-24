@@ -2,12 +2,12 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
-import { getJobs } from "../services/jobServices";
-import JobList from "./JobList";
-import { useUser } from "../store/UserContext";
-import IJob from "../types/job";
-import { JobActionsProvider } from "../store/JobActionsContext";
-import LoadSpinner from "./LoadSpinner";
+import { getJobs } from "../../services/jobServices";
+import JobList from "../applications/JobList";
+import { useUser } from "../../store/UserContext";
+import IJob from "../../types/job";
+import { JobActionsProvider } from "../../store/JobActionsContext";
+import LoadSpinner from "../common/LoadSpinner";
 
 const EmployeeDashboard = () => {
   const router = useRouter();
@@ -35,7 +35,12 @@ const EmployeeDashboard = () => {
   };
 
   // Render loading state
-  if (isLoading) return <div><LoadSpinner/></div>;
+  if (isLoading)
+    return (
+      <div>
+        <LoadSpinner />
+      </div>
+    );
 
   // Render error state
   if (error instanceof Error) return <div>Error: {error.message}</div>;

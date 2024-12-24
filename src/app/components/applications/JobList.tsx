@@ -1,14 +1,17 @@
 import React, { useState } from "react";
-import IJob from "../types/job";
+import IJob from "../../types/job";
 import JobCard from "./JobCard";
-import CandidateJobCard from "./CandidateJobCard";
-import { useUser } from "../store/UserContext";
+import CandidateJobCard from "../candidate/CandidateJobCard";
+import { useUser } from "../../store/UserContext";
 import JobEmployeePopUp from "./JobEmployeePopUp";
-import EditJobForm from "./EditJobForm ";
-import { getJobApplications } from "../services/applicationServices";
-import IApplication from "../types/application";
-import { JobActionsProvider, useJobActions } from "../store/JobActionsContext";
-import { updateJob } from "../services/jobServices";
+import EditJobForm from "../employee/EditJobForm ";
+import { getJobApplications } from "../../services/applicationServices";
+import IApplication from "../../types/application";
+import {
+  JobActionsProvider,
+  useJobActions,
+} from "../../store/JobActionsContext";
+import { updateJob } from "../../services/jobServices";
 import ReactPaginate from "react-paginate";
 
 interface JobListProps {

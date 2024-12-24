@@ -1,4 +1,4 @@
-import { IconButton } from "../../Button";
+import { IconButton } from "../../../common/Button";
 import {
   EyeIcon,
   EyeSlashIcon,
