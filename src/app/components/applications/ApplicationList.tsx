@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useJobActions } from "@/app/store/JobActionsContext";
-import IApplication from "../types/application";
+import IApplication from "@/app/types/application";
 
 interface Props {
   applications: IApplication[];

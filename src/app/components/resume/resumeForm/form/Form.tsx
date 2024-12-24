@@ -1,4 +1,4 @@
-import { ExpanderWithHeightTransition } from "../../ExpanderWithHeightTransition";
+import { ExpanderWithHeightTransition } from "../../../common/ExpanderWithHeightTransition";
 import {
   DeleteIconButton,
   MoveIconButton,

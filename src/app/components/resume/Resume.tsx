@@ -6,7 +6,7 @@ import {
   ResumeControlBarCSR,
   ResumeControlBarBorder,
 } from "./ResumeControlBar";
-import { FlexboxSpacer } from "../FlexboxSpacer";
+import { FlexboxSpacer } from "../common/FlexboxSpacer";
 import { useAppSelector } from "@/app/lib/redux/hooks";
 import { selectResume } from "@/app/lib/redux/resumeSlice";
 import { selectSettings } from "@/app/lib/redux/settingsSlice";

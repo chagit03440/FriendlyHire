@@ -1,16 +1,18 @@
 "use client";
 import "./globals.css";
-import NavBar from "./components/NavBar";
+import NavBar from "./components/layout/NavBar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { UserProvider, useUser } from "./store/UserContext";
-import Footer from "./components/Footer";
+import Footer from "./components/layout/Footer";
 import { useRouter } from "next/navigation";
 import checkAccess from "./utils/checkAccess";
 
 import Script from "next/script";
 
-const LayoutContent: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+const LayoutContent: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [queryClient] = useState(() => new QueryClient());
   const { setRole, setMail } = useUser();
   const router = useRouter();
@@ -53,7 +55,6 @@ const LayoutContent: React.FC<{ children: React.ReactNode }> = ({ children }) =>
     </html>
   );
 };
-
 
 export default function RootLayout({
   children,

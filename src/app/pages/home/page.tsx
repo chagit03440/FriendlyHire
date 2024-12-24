@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import EmployeeDashboard from "@/app/components/EmployeeDashboard ";
-import CandidateDashboard from "@/app/components/CandidateDashboard";
+import EmployeeDashboard from "@/app/components/employee/EmployeeDashboard ";
+import CandidateDashboard from "@/app/components/candidate/CandidateDashboard";
 import { useUser } from "@/app/store/UserContext";
 import checkAccess from "@/app/utils/checkAccess";
-import LoadSpinner from "@/app/components/LoadSpinner";
+import LoadSpinner from "@/app/components/common/LoadSpinner";
 import AdminDashboard from "@/app/components/admin/AdminDashboard";
 
 const Dashboard = () => {

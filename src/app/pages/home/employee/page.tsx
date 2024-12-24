@@ -1,5 +1,5 @@
 "use client";
-import EmployeeDashboard from "@/app/components/EmployeeDashboard ";
+import EmployeeDashboard from "@/app/components/employee/EmployeeDashboard ";
 import React from "react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";

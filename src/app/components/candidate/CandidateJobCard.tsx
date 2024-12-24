@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import IJob from "../types/job";
-import JobCard from "./JobCard";
+import IJob from "../../types/job";
+import JobCard from "../applications/JobCard";
 import { useJobActions } from "@/app/store/JobActionsContext"; // Import the context for job actions
 
 interface CandidateJobCardProps {

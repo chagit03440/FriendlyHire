@@ -2,17 +2,17 @@
 
 import React from "react";
 import { useQuery } from "@tanstack/react-query";
-import { getJobs } from "../services/jobServices";
-import JobList from "./JobList";
+import { getJobs } from "../../services/jobServices";
+import JobList from "../applications/JobList";
 import { useUser } from "@/app/store/UserContext";
-import { getUserApplications } from "../services/applicationServices";
+import { getUserApplications } from "../../services/applicationServices";
 import { JobActionsProvider } from "@/app/store/JobActionsContext";
-import IJob from "../types/job";
-import IApplication from "../types/application";
-import LoadSpinner from "./LoadSpinner";
+import IJob from "../../types/job";
+import IApplication from "../../types/application";
+import LoadSpinner from "../common/LoadSpinner";
 
 const CandidateDashboard: React.FC = () => {
- const { mail } = useUser();
+  const { mail } = useUser();
 
   // Fetch all jobs using react-query
   const {
@@ -36,7 +36,12 @@ const CandidateDashboard: React.FC = () => {
   });
 
   // Handle loading and error states
-  if (isJobsLoading || isApplicationsLoading) return <div><LoadSpinner/></div>;
+  if (isJobsLoading || isApplicationsLoading)
+    return (
+      <div>
+        <LoadSpinner />
+      </div>
+    );
   if (jobsError || applicationsError) return <div>Error loading data</div>;
 
   // Filter out jobs that the user has already applied for
@@ -58,7 +63,6 @@ const CandidateDashboard: React.FC = () => {
         ) : (
           <div className="text-center text-gray-600">No jobs available</div>
         )}
-          <div>No jobs available</div>
       </div>
     </JobActionsProvider>
   );

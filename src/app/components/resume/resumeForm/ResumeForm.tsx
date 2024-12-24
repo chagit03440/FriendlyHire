@@ -14,7 +14,7 @@ import { SkillsForm } from "./SkillsForm";
 import { ThemeForm } from "./themeForm/ThemeForm";
 import { CustomForm } from "./CustomForm";
 import { cx } from "@/app/lib/cx";
-import { FlexboxSpacer } from "../FlexboxSpacer";
+import { FlexboxSpacer } from "../../common/FlexboxSpacer";
 
 const formTypeToComponent: { [type in ShowForm]: () => JSX.Element } = {
   workExperiences: WorkExperiencesForm,
@@ -23,6 +23,7 @@ const formTypeToComponent: { [type in ShowForm]: () => JSX.Element } = {
   skills: SkillsForm,
   custom: CustomForm,
 };
+console.log(formTypeToComponent.workExperiences);
 
 export const ResumeForm = () => {
   useSetInitialStore();
@@ -48,11 +49,8 @@ export const ResumeForm = () => {
         })}
         <ThemeForm />
         <br />
-      </section> 
+      </section>
       <FlexboxSpacer maxWidth={50} className="hidden md:block" />
-
-      
     </div>
-    
   );
 };
