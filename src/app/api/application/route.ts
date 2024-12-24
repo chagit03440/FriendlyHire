@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import connect from "@/app/lib/db/mongodb";
-import Application from "@/app/lib/models/Application";
 import jwt from "jsonwebtoken";
+import Application from "@/app/lib/models/Application";
 
 // GET all applications for the specific user (candidate, employee, or admin)
 export async function GET(req: NextRequest) {
@@ -56,6 +56,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(applications, { status: 200 });
   } catch (error) {
+    console.log(error)
     return NextResponse.json(
       { message: "Error fetching applications", error },
       { status: 500 }

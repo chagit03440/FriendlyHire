@@ -120,7 +120,7 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
       <div className="w-full max-w-5xl mx-auto px-4">
         <div style={jobListStyle}>
           {currentJobs.map((job) =>
-            role === "employee" ? (
+            role === "employee" || role==="admin" ? (
               <div
                 key={job._id}
                 style={{
@@ -177,7 +177,7 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
           )}
         </div>
 
-        {role === "employee" && isPopUpOpen && selectedJob && (
+        {(role === "employee" || role==="admin") && isPopUpOpen && selectedJob && (
           <JobEmployeePopUp
             job={selectedJob}
             applications={jobApplications}
@@ -188,7 +188,7 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
           />
         )}
 
-        {role === "employee" && isEditPopUpOpen && selectedJob && (
+        {(role === "employee" || role==="admin") && isEditPopUpOpen && selectedJob && (
           <EditJobForm
             job={selectedJob}
             onClose={handleClosePopUp}

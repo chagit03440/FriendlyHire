@@ -27,14 +27,13 @@ const AddJob = () => {
   const [requirements, setRequirements] = useState("");
   const [location, setLocation] = useState("");
   const [status, setStatus] = useState<"Open" | "Closed">("Open");
-  const {role}= useUser();
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   // State for validation and error handling
   const [validationErrors, setValidationErrors] = useState(noValidationErrors);
   const [error, setError] = useState<string | null>(null);
 
-  const { mail } = useUser();
+  const { mail, role} = useUser();
 
   const router = useRouter();
 
