@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import IJob from "../types/job";
+import { useUser } from "../store/UserContext";
 
 interface JobCardProps {
   job: IJob;
@@ -7,6 +8,7 @@ interface JobCardProps {
 
 const JobCard: React.FC<JobCardProps> = ({ job }) => {
   const [showDescription, setShowDescription] = useState(false);
+  const { role } = useUser();
 
   const toggleDescription = () => {
     setShowDescription(!showDescription);
@@ -68,14 +70,12 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
               : null}
           </div>
         </div>
-
-        <div className="mb-4">
-          <span className="font-semibold">Status:</span> {job.status}
-        </div>
-      </div>
-
-      <div className="text-right text-sm text-gray-400 mt-auto">
-        <span className="font-semibold">Posted by:</span> {job.createdBy}
+        {(role === "employee" || role==="admin")&&(
+        <><div className="mb-4">
+            <span className="font-semibold">Status:</span> {job.status}
+          </div><div className="text-left text-sm text-gray-400 mt-auto">
+              <span className="font-semibold">Posted by:</span> {job.createdBy}
+            </div></>)}
       </div>
     </div>
   );

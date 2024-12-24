@@ -18,6 +18,7 @@ interface JobListProps {
 const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
   const { role } = useUser();
   const [jobs, setJobs] = useState<IJob[]>(initialJobs);
+  const [savedOrAppliedJobIds, setSavedOrAppliedJobIds] = useState<string[]>([]);
   const [selectedJob, setSelectedJob] = useState<IJob | null>(null);
   const [jobApplications, setJobApplications] = useState<IApplication[]>([]);
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
@@ -31,6 +32,12 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
   const startIndex = currentPage * jobsPerPage;
   const endIndex = startIndex + jobsPerPage;
   const currentJobs = jobs.slice(startIndex, endIndex);
+
+  const handleJobAction = (jobId: string) => {
+    setSavedOrAppliedJobIds((prev) => [...prev, jobId]);
+    setJobs((prevJobs) => prevJobs.filter((job) => job._id !== jobId));
+  };
+  
 
   const handlePageClick = (selectedItem: { selected: number }) => {
     setCurrentPage(selectedItem.selected);
@@ -172,7 +179,7 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
                 </div>
               </div>
             ) : (
-              <CandidateJobCard key={job._id} job={job} />
+              <CandidateJobCard key={job._id} job={job} onJobAction={handleJobAction} />
             )
           )}
         </div>
