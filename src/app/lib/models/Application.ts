@@ -14,7 +14,7 @@ const applicationSchema: Schema<IApplication> = new Schema({
     },
   });
   
-  const application: Model<IApplication> =
+  const Application: Model<IApplication> =
     mongoose.models.application || mongoose.model<IApplication>("application", applicationSchema);
-  export default application;
+  export default Application;
   

@@ -45,6 +45,7 @@ const LayoutContent: React.FC<{ children: React.ReactNode }> = ({ children }) =>
             <Footer />
           </div>
         </QueryClientProvider>
+        <script src="https://cdn.enable.co.il/licenses/enable-L33736ao60vh5q9z-1124-66724/init.js"></script>
       </body>
     </html>
   );
