@@ -1,3 +1,4 @@
+import { initialSettings } from "./settingsSlice";
 import type { RootState } from "./store";
 
 // Reference: https://dev.to/igorovic/simplest-way-to-persist-redux-state-to-localstorage-e67
@@ -7,7 +8,12 @@ const LOCAL_STORAGE_KEY = "open-resume-state";
 export const loadStateFromLocalStorage = () => {
   try {
     const stringifiedState = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (!stringifiedState) return undefined;
+    if (!stringifiedState) {
+      return {
+        resume: null,
+        settings: initialSettings,
+      };
+    }
     return JSON.parse(stringifiedState);
   } catch (e) {
     console.error("Failed to load state from localStorage:", e);
