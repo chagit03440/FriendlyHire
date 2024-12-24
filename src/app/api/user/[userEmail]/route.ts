@@ -36,8 +36,6 @@ export async function GET(
       );
     }
 
-    const { role } = decoded as { role: string };
-
     const user = await User.findOne({ email: userEmail });
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
