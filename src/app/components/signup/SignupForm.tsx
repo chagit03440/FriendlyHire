@@ -182,7 +182,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
           htmlFor="profile"
           className="block text-md font-medium text-gray-700 mb-2"
         >
-          Profile
+          Tell us a little about yourself
         </label>
         <input
           type="text"
