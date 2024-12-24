@@ -26,7 +26,23 @@ export async function POST(req: NextRequest) {
     );
 
     // Initialize email data
-    const emailData: any = {
+    interface EmailData {
+      sender: {
+        name: string;
+        email: string;
+      };
+      to: {
+        email: string;
+      }[];
+      subject: string;
+      htmlContent: string;
+      attachment?: {
+        name: string;
+        content: string;
+      }[];
+    }
+
+    const emailData: EmailData = {
       sender: {
         name: "Friendly Hire",
         email: "viderracheli@gmail.com",
@@ -36,7 +52,7 @@ export async function POST(req: NextRequest) {
       htmlContent,
     };
 
-    // If there's an attachment URL, fetch the file and add it as an attachment
+    // Add attachment if provided
     if (attachmentUrl) {
       console.log(`found attachmentUrl ${attachmentUrl}`);
       try {
