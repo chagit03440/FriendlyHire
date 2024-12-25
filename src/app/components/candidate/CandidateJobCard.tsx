@@ -6,6 +6,13 @@ import { useUser } from "@/app/store/UserContext";
 import { getUser } from "@/app/services/userServices";
 import { calculateSkillsMatch } from "./calculateSkillsMatch";
 
+// Define IUser interface to match the user data structure
+interface IUser {
+  skills: string[]; // Adjust the type of skills as needed
+  experience: number;
+  // Add any other properties from user data if necessary
+}
+
 interface CandidateJobCardProps {
   job: IJob;
   onJobAction: (jobId: string) => void; // Callback for job actions
@@ -16,7 +23,7 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
   onJobAction,
 }) => {
   const [isSaved, setIsSaved] = useState(false);
-  const [user, setUser] = useState<any>(null); // State to hold user data
+  const [user, setUser] = useState<IUser | null>(null); // Use IUser type here
   const { handleSaveJob, handleApplyJob } = useJobActions();
   const { mail } = useUser(); // Assume useUser provides the mail value
 
