@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import IJob from "@/app/types/job";
+import { getUser } from "@/app/services/userServices"; // Adjust the path as necessary
 
 interface JobCardProps {
   job: IJob;
@@ -7,6 +8,21 @@ interface JobCardProps {
 
 const JobCard: React.FC<JobCardProps> = ({ job }) => {
   const [showDescription, setShowDescription] = useState(false);
+  const [creatorName, setCreatorName] = useState<string | null>(null); // State for creator's name
+
+  useEffect(() => {
+    const fetchCreatorName = async () => {
+      try {
+        const user = await getUser(job.createdBy);
+        setCreatorName(user?.name || "Unknown"); // Fallback to "Unknown" if no name is found
+      } catch (error) {
+        console.error("Failed to fetch creator's name:", error);
+        setCreatorName("Error fetching name");
+      }
+    };
+
+    fetchCreatorName();
+  }, [job.createdBy]);
 
   const toggleDescription = () => {
     setShowDescription(!showDescription);
@@ -17,9 +33,9 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
     borderRadius: "4px",
     padding: "5px 10px",
     margin: "5px 0",
-    fontSize: "12px", // Smaller font size
-    width: "calc(50% - 10px)", // Forces two items per row with space for the gap
-    boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)", // Optional, adds a subtle shadow
+    fontSize: "12px",
+    width: "calc(50% - 10px)",
+    boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)",
   };
 
   return (
@@ -56,7 +72,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
               display: "flex",
               flexWrap: "wrap",
               gap: "10px",
-              justifyContent: "flex-start", // Align to the left (or center if preferred)
+              justifyContent: "flex-start",
             }}
           >
             {job.requirements.length > 0
@@ -68,14 +84,10 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
               : null}
           </div>
         </div>
-
-        <div className="mb-4">
-          <span className="font-semibold">Status:</span> {job.status}
+        <div className="text-left text-sm text-gray-400 mt-auto">
+          <span className="font-semibold">Posted by:</span>{" "}
+          {creatorName || "Loading..."} {/* Display creator's name */}
         </div>
-      </div>
-
-      <div className="text-right text-sm text-gray-400 mt-auto">
-        <span className="font-semibold">Posted by:</span> {job.createdBy}
       </div>
     </div>
   );

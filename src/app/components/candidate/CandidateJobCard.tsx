@@ -5,19 +5,22 @@ import { useJobActions } from "@/app/store/JobActionsContext"; // Import the con
 
 interface CandidateJobCardProps {
   job: IJob;
+  onJobAction: (jobId: string) => void; // Callback for job actions
 }
 
-const CandidateJobCard: React.FC<CandidateJobCardProps> = ({ job }) => {
+const CandidateJobCard: React.FC<CandidateJobCardProps> = ({ job, onJobAction }) => {
   const [isSaved, setIsSaved] = useState(false);
-  const { handleSaveJob, handleApplyJob } = useJobActions(); // Access the job actions from context
+  const { handleSaveJob, handleApplyJob } = useJobActions();
 
   const onSaveJob = () => {
-    handleSaveJob(job._id); // Save the job using the context method
-    setIsSaved(true); // Update UI state to indicate the job is saved
+    handleSaveJob(job._id);
+    setIsSaved(true);
+    onJobAction(job._id); // Notify parent
   };
 
   const onApplyJob = () => {
-    handleApplyJob(job._id); // Apply for the job using the context method
+    handleApplyJob(job._id);
+    onJobAction(job._id); // Notify parent
   };
 
   return (
@@ -41,5 +44,6 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({ job }) => {
     </div>
   );
 };
+
 
 export default CandidateJobCard;
