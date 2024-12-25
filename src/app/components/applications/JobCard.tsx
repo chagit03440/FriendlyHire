@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import IJob from "@/app/types/job";
-import { useUser } from "@/app/store/UserContext";
 import { getUser } from "@/app/services/userServices"; // Adjust the path as necessary
 
 interface JobCardProps {
