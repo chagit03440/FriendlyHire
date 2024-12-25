@@ -3,7 +3,6 @@ import IJob from "../../types/job";
 import JobCard from "./JobCard";
 import CandidateJobCard from "../candidate/CandidateJobCard";
 import { useUser } from "../../store/UserContext";
-import JobEmployeePopUp from "./JobEmployeePopUp";
 import EditJobForm from "../employee/EditJobForm ";
 import { getJobApplications } from "../../services/applicationServices";
 import IApplication from "../../types/application";
@@ -13,6 +12,7 @@ import {
 } from "../../store/JobActionsContext";
 import { updateJob } from "../../services/jobServices";
 import ReactPaginate from "react-paginate";
+import JobEmployeePopUp from "./JobEmployeePopUp";
 
 interface JobListProps {
   jobs: IJob[];
@@ -34,6 +34,11 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
   const startIndex = currentPage * jobsPerPage;
   const endIndex = startIndex + jobsPerPage;
   const currentJobs = jobs.slice(startIndex, endIndex);
+
+  const handleJobAction = (jobId: string) => {
+    setJobs((prevJobs) => prevJobs.filter((job) => job._id !== jobId));
+  };
+  
 
   const handlePageClick = (selectedItem: { selected: number }) => {
     setCurrentPage(selectedItem.selected);
@@ -138,6 +143,9 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
                 }}
               >
                 <JobCard job={job} />
+                <div className="mb-4">
+                  <span className="font-semibold">Status:</span> {job.status}
+                </div>
                 <div style={buttonContainerStyle}>
                   <button
                     onClick={() => handleOpenPopUp(job)}
@@ -175,7 +183,7 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
                 </div>
               </div>
             ) : (
-              <CandidateJobCard key={job._id} job={job} />
+              <CandidateJobCard key={job._id} job={job} onJobAction={handleJobAction} />
             )
           )}
         </div>

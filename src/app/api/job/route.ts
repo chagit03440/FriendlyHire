@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
 
     if (role === "candidate") {
       // Fetch all open jobs and exclude "status" and "createdBy" fields
-      jobs = await Job.find({ status: "Open" }).select("-status -createdBy");
+      jobs = await Job.find({ status: "Open" }).select("-status");
     } else if (role === "employee") {
       // Fetch jobs created by the employee
       jobs = await Job.find({ createdBy: email });

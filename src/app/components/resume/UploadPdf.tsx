@@ -48,7 +48,7 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
                     if (response) {
                         toast.success("Resume added succesfully!");
                     } else {
-                        toast.error("Error uploading file.", );
+                        toast.error("Error uploading file.",);
                     }
                 }
                 else {
@@ -92,108 +92,107 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
           className={`w-full max-w-md rounded-lg border-2 border-dashed 
             ${isHoveredOnDropzone ? "border-sky-400" : "border-gray-300"} 
             p-6 flex flex-col items-center space-y-4 text-center bg-white shadow-md`}
-          onDragOver={(event) => {
-            event.preventDefault();
-            setIsHoveredOnDropzone(true);
-          }}
-          onDragLeave={() => setIsHoveredOnDropzone(false)}
-          onDrop={(event) => {
-            event.preventDefault();
-            const newFile = event.dataTransfer.files[0];
-            if (newFile && newFile.type === "application/pdf") {
-              setFile(newFile);
-              toast.success("File added successfully!");
-            } else {
-              toast.error("Only PDF files are supported.");
-            }
-            setIsHoveredOnDropzone(false);
-          }}
-        >
-          <h1 className="text-xl font-semibold">Upload Your Resume</h1>
-          {!file ? (
-            <>
-              <p className="text-gray-600">Drag and drop a PDF file here, or</p>
-              <label className="cursor-pointer inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-                Browse File
-                <input
-                  type="file"
-                  accept="application/pdf"
-                  onChange={handleFileChange}
-                  className="hidden"
-                />
-              </label>
-            </>
-          ) : (
-            <div className="flex items-center justify-between w-full">
-              <span className="truncate">{file.name}</span>
-              <button
-                type="button"
-                className="text-red-500 hover:text-red-700"
-                onClick={() => setFile(null)}
-              >
-                Remove
-              </button>
+                onDragOver={(event) => {
+                    event.preventDefault();
+                    setIsHoveredOnDropzone(true);
+                }}
+                onDragLeave={() => setIsHoveredOnDropzone(false)}
+                onDrop={(event) => {
+                    event.preventDefault();
+                    const newFile = event.dataTransfer.files[0];
+                    if (newFile && newFile.type === "application/pdf") {
+                        setFile(newFile);
+                        toast.success("File added successfully!");
+                    } else {
+                        toast.error("Only PDF files are supported.");
+                    }
+                    setIsHoveredOnDropzone(false);
+                }}
+            >
+                <h1 className="text-xl font-semibold">Upload Your Resume</h1>
+                {!file ? (
+                    <>
+                        <p className="text-gray-600">Drag and drop a PDF file here, or</p>
+                        <label className="cursor-pointer inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                            Browse File
+                            <input
+                                type="file"
+                                accept="application/pdf"
+                                onChange={handleFileChange}
+                                className="hidden"
+                            />
+                        </label>
+                    </>
+                ) : (
+                    <div className="flex items-center justify-between w-full">
+                        <span className="truncate">{file.name}</span>
+                        <button
+                            type="button"
+                            className="text-red-500 hover:text-red-700"
+                            onClick={() => setFile(null)}
+                        >
+                            Remove
+                        </button>
+                    </div>
+                )}
             </div>
-          )}
-        </div>
-        {file && (
-          <button
-            onClick={handleSubmit}
-            className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
-          >
-            Upload Resume
-          </button>
-        )}
-        {profileData?.fileUrl && (
-          <div className="mt-6">
-            <h2 className="text-xl font-semibold mb-2">Your Resume</h2>
-            <div className="border p-4 rounded-md shadow-sm">
-              <p className="mb-2">
-                <strong>File:</strong>{" "}
-                {(() => {
-                  //return the name of file
-                  const encodedFileName = profileData.fileUrl.split("/").pop();
-                  if (encodedFileName) {
-                    // Decode the URL-encoded string and replace spaces with hyphens
-                    const decodedFileName = decodeURIComponent(encodedFileName);
-                    return decodedFileName
-                      .replace(/ /g, "-")
-                      .split("-")
-                      .slice(1)
-                      .join("-");
-                  }
-                  return "";
-                })()}
-              </p>
-              <div>
-                <a
-                  href={profileData.fileUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
-                >
-                  View or Download Resume
-                </a>
+            {file && (
                 <button
-                  onClick={handleEdit}
-                  className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+                    onClick={handleSubmit}
+                    className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
                 >
-                  Edit Resume
+                    Upload Resume
                 </button>
-              </div>
-              <div className="mt-4">
-                <iframe
-                  src={profileData.fileUrl}
-                  width="100%"
-                  height="500px"
-                  className="border"
-                  title="Resume Preview"
-                ></iframe>
-              </div>
-            </div>
-          </div>
-        )}
-      </div>
+            )}
+            {profileData?.fileUrl && (
+                <div className="mt-6">
+                    <h2 className="text-xl font-semibold mb-2">Your Resume</h2>
+                    <div className="border p-4 rounded-md shadow-sm">
+                        <p className="mb-2">
+                            <strong>File:</strong> {" "}
+                            {(() => {
+                                //return the name of file
+                                const encodedFileName = profileData.fileUrl.split("/").pop();
+                                if (encodedFileName) {
+                                    // Decode the URL-encoded string and replace spaces with hyphens
+                                    const decodedFileName = decodeURIComponent(encodedFileName);
+                                    const meaningfulPart = decodedFileName.split("-").slice(1).join(" ");
+                                    return meaningfulPart.replace(/ - /g, " -");
+                                }
+                                return "";
+                            })()}
+                        </p>
+                        <div>
+                            <a
+                                href={profileData.fileUrl}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-blue-600 hover:underline"
+                            >
+                                View or Download Resume
+                            </a>
+                            <button
+                                onClick={handleEdit}
+                                className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
+                            >
+                                Edit Resume
+                            </button>
+
+
+                        </div>
+                        <div className="mt-4">
+                            <iframe
+                                src={profileData.fileUrl}
+                                width="100%"
+                                height="500px"
+                                className="border"
+                                title="Resume Preview"
+                            ></iframe>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
     );
 }
 export default UploadPdf;

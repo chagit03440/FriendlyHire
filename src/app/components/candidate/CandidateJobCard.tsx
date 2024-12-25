@@ -8,12 +8,13 @@ import { calculateSkillsMatch } from "./calculateSkillsMatch";
 
 interface CandidateJobCardProps {
   job: IJob;
+  onJobAction: (jobId: string) => void; // Callback for job actions
 }
 
-const CandidateJobCard: React.FC<CandidateJobCardProps> = async ({ job }) => {
+const CandidateJobCard: React.FC<CandidateJobCardProps> = async ({ job, onJobAction }) => {
   const [isSaved, setIsSaved] = useState(false);
   const { handleSaveJob, handleApplyJob } = useJobActions();
-
+  useJobActions();
   const { mail } = useUser();
   const user = await getUser(mail as string);
   const userSkills = user.skills;
@@ -42,10 +43,12 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = async ({ job }) => {
   const onSaveJob = () => {
     handleSaveJob(job._id);
     setIsSaved(true);
+    onJobAction(job._id); // Notify parent
   };
 
   const onApplyJob = () => {
     handleApplyJob(job._id);
+    onJobAction(job._id); // Notify parent
   };
 
   return (
@@ -88,5 +91,6 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = async ({ job }) => {
     </div>
   );
 };
+
 
 export default CandidateJobCard;

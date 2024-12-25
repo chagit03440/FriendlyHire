@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import IJob from "@/app/types/job";
+import { getUser } from "@/app/services/userServices"; // Adjust the path as necessary
 
 interface JobCardProps {
   job: IJob;
@@ -8,6 +9,23 @@ interface JobCardProps {
 
 const JobCard: React.FC<JobCardProps> = ({ job, missingSkills }) => {
   const [showDescription, setShowDescription] = useState(false);
+  const [creatorName, setCreatorName] = useState<string | null>(null); // State for creator's name
+
+  useEffect(() => {
+    const fetchCreatorName = async () => {
+      try {
+        console.log(job.createdBy)
+        const user = await getUser(job.createdBy);
+        console.log(user)
+        setCreatorName(user?.name || "Unknown"); // Fallback to "Unknown" if no name is found
+      } catch (error) {
+        console.error("Failed to fetch creator's name:", error);
+        setCreatorName("Error fetching name");
+      }
+    };
+
+    fetchCreatorName();
+  }, [job.createdBy]);
 
   const toggleDescription = () => {
     setShowDescription(!showDescription);
@@ -79,12 +97,10 @@ const JobCard: React.FC<JobCardProps> = ({ job, missingSkills }) => {
               : null}
           </div>
         </div>
-        <div className="mb-4">
-          <span className="font-semibold">Status:</span> {job.status}
+        <div className="text-left text-sm text-gray-400 mt-auto">
+          <span className="font-semibold">Posted by:</span>{" "}
+          {creatorName || "Loading..."} {/* Display creator's name */}
         </div>
-      </div>
-      <div className="text-right text-sm text-gray-400 mt-auto">
-        <span className="font-semibold">Posted by:</span> {job.createdBy}
       </div>
     </div>
   );

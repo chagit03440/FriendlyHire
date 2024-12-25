@@ -12,7 +12,6 @@ export async function GET(
   { params }: { params: { userEmail: string } }
 ) {
   const { userEmail } = params;
-
   try {
     await connect(); // Connect to MongoDB
 
