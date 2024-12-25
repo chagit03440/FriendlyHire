@@ -1,4 +1,7 @@
 import mongoose from "mongoose";
+import "@/app/lib/models/Job"; // Ensure Job is registered
+import "@/app/lib/models/Application";
+
 const MONGODB_URI = process.env.MONGODB_URI || "";
 
 let isConnected = false;
