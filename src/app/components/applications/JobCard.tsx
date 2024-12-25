@@ -10,7 +10,6 @@ interface JobCardProps {
 const JobCard: React.FC<JobCardProps> = ({ job }) => {
   const [showDescription, setShowDescription] = useState(false);
   const [creatorName, setCreatorName] = useState<string | null>(null); // State for creator's name
-  const { role } = useUser();
 
   useEffect(() => {
     const fetchCreatorName = async () => {
@@ -90,12 +89,6 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
           <span className="font-semibold">Posted by:</span>{" "}
           {creatorName || "Loading..."} {/* Display creator's name */}
         </div>
-
-        {/* {(role === "employee" || role === "admin") && (
-          <div className="mb-4">
-            <span className="font-semibold">Status:</span> {job.status}
-          </div>
-        )} */}
       </div>
     </div>
   );

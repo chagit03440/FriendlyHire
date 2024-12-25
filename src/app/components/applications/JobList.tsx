@@ -3,7 +3,6 @@ import IJob from "../../types/job";
 import JobCard from "./JobCard";
 import CandidateJobCard from "../candidate/CandidateJobCard";
 import { useUser } from "../../store/UserContext";
-import JobEmployeePopUp from "./JobEmployeePopUp";
 import EditJobForm from "../employee/EditJobForm ";
 import { getJobApplications } from "../../services/applicationServices";
 import IApplication from "../../types/application";
@@ -13,6 +12,7 @@ import {
 } from "../../store/JobActionsContext";
 import { updateJob } from "../../services/jobServices";
 import ReactPaginate from "react-paginate";
+import JobEmployeePopUp from "./JobEmployeePopUp";
 
 interface JobListProps {
   jobs: IJob[];
@@ -21,7 +21,6 @@ interface JobListProps {
 const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
   const { role } = useUser();
   const [jobs, setJobs] = useState<IJob[]>(initialJobs);
-  const [savedOrAppliedJobIds, setSavedOrAppliedJobIds] = useState<string[]>([]);
   const [selectedJob, setSelectedJob] = useState<IJob | null>(null);
   const [jobApplications, setJobApplications] = useState<IApplication[]>([]);
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
@@ -37,7 +36,6 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
   const currentJobs = jobs.slice(startIndex, endIndex);
 
   const handleJobAction = (jobId: string) => {
-    setSavedOrAppliedJobIds((prev) => [...prev, jobId]);
     setJobs((prevJobs) => prevJobs.filter((job) => job._id !== jobId));
   };
   
