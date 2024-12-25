@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import IJob from "../../types/job";
 import JobCard from "../applications/JobCard";
 import { useJobActions } from "@/app/store/JobActionsContext";
@@ -11,20 +11,35 @@ interface CandidateJobCardProps {
   onJobAction: (jobId: string) => void; // Callback for job actions
 }
 
-const CandidateJobCard: React.FC<CandidateJobCardProps> = async ({ job, onJobAction }) => {
+const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
+  job,
+  onJobAction,
+}) => {
   const [isSaved, setIsSaved] = useState(false);
+  const [user, setUser] = useState<any>(null); // State to hold user data
   const { handleSaveJob, handleApplyJob } = useJobActions();
-  useJobActions();
-  const { mail } = useUser();
-  const user = await getUser(mail as string);
-  const userSkills = user.skills;
+  const { mail } = useUser(); // Assume useUser provides the mail value
 
-  let { matchPercentage, missingSkills } = calculateSkillsMatch(
-    userSkills,
-    job.requirements
-  );
+  // Fetch user data when the component mounts
+  useEffect(() => {
+    const fetchUserData = async () => {
+      const fetchedUser = await getUser(mail as string);
+      setUser(fetchedUser);
+    };
 
+    fetchUserData();
+  }, [mail]); // Dependency array, fetch user data when `mail` changes
+
+  if (!user) {
+    return <div>Loading...</div>; // Show loading state while the user data is being fetched
+  }
+
+  const { matchPercentage: skillsMatchPercentage, missingSkills } =
+    calculateSkillsMatch(user.skills, job.requirements);
+
+  let matchPercentage = skillsMatchPercentage;
   const experienceDiff = job.experience - user.experience;
+
   if (experienceDiff > 0) {
     if (experienceDiff === 1) matchPercentage *= 0.8;
     else if (experienceDiff === 2) matchPercentage *= 0.5;
@@ -91,6 +106,5 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = async ({ job, onJobAct
     </div>
   );
 };
-
 
 export default CandidateJobCard;
