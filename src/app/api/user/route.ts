@@ -37,7 +37,12 @@ export async function GET(req: NextRequest) {
     if (role === "admin") {
       // Admin can get all users
       const users = await User.find(); // Fetch all users
-      return NextResponse.json(users, { status: 200 });
+      return NextResponse.json(users, {
+        status: 200,
+        headers: {
+          "Cache-Control": "no-store", // Prevent caching
+        },
+      });
     } else if (role === "employee" || role === "candidate") {
       // Non-admins can only fetch their own data
       const user = await User.findById(id); // Fetch user by ID from token

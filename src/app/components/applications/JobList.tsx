@@ -26,17 +26,30 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const [isEditPopUpOpen, setIsEditPopUpOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(0);
+  const [searchQuery, setSearchQuery] = useState<string>("");
 
   const { handleSendJob } = useJobActions();
 
   const jobsPerPage = 6; // Display 6 jobs per page
 
+  const filteredJobs = jobs.filter((job) =>
+    job.title.toLowerCase().includes(searchQuery.toLowerCase()) // Filter jobs by title
+  );
+
+  // Calculate the total number of pages dynamically based on filtered jobs
+  const totalPageCount = Math.ceil(filteredJobs.length / jobsPerPage);
+
   const startIndex = currentPage * jobsPerPage;
   const endIndex = startIndex + jobsPerPage;
-  const currentJobs = jobs.slice(startIndex, endIndex);
+  const currentJobs = filteredJobs.slice(startIndex, endIndex);
 
   const handleJobAction = (jobId: string) => {
     setJobs((prevJobs) => prevJobs.filter((job) => job._id !== jobId));
+  };
+  
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(0); // Ensure the page resets to 1 when search changes
   };
   
 
@@ -126,6 +139,16 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
   return (
     <JobActionsProvider>
       <div className="w-full max-w-5xl mx-auto px-4">
+         {/* Search Input */}
+         <div className="mb-6">
+          <input
+            type="text"
+            placeholder="Search jobs by title"
+            value={searchQuery}
+            onChange={handleSearchChange}
+            className="w-full p-2 border border-gray-300 rounded"
+          />
+        </div>
         <div style={jobListStyle}>
           {currentJobs.map((job) =>
             role === "employee" || role==="admin" ? (
@@ -211,7 +234,7 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
       <ReactPaginate
         previousLabel={"Previous"}
         nextLabel={"Next"}
-        pageCount={Math.ceil(jobs.length / jobsPerPage)}
+        pageCount={totalPageCount}
         onPageChange={handlePageClick}
         containerClassName={"pagination flex justify-center mt-8"}
         pageClassName={"mx-2"}
@@ -219,7 +242,8 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
         previousClassName={"mx-2"}
         nextClassName={"mx-2"}
         disabledClassName={"text-gray-400"}
-      />
+        forcePage={currentPage}  // Add this line to force page reset on search
+        />
     </JobActionsProvider>
   );
 };

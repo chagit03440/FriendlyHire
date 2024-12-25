@@ -13,9 +13,7 @@ const JobCard: React.FC<JobCardProps> = ({ job }) => {
   useEffect(() => {
     const fetchCreatorName = async () => {
       try {
-        console.log(job.createdBy)
         const user = await getUser(job.createdBy);
-        console.log(user)
         setCreatorName(user?.name || "Unknown"); // Fallback to "Unknown" if no name is found
       } catch (error) {
         console.error("Failed to fetch creator's name:", error);
