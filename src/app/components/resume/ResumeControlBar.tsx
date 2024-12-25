@@ -48,6 +48,8 @@ const ResumeControlBar = ({
       return;
     }
     try {
+      console.log("nameeeee", fileName);
+      
       const file = new File([instance.blob], fileName, { type: instance.blob.type });
 
       const formData = new FormData();
