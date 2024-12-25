@@ -109,7 +109,7 @@ const NavBar: React.FC = () => {
     if (!isOpen) return null;
 
     return (
-      <div className="absolute right-0 top-12 bg-white rounded-md shadow-lg py-2 min-w-[160px]">
+      <div className="absolute right-0 top-12 bg-white rounded-md shadow-lg py-2 min-w-[160px] z-50">
         {options.map((option, index) => (
           <button
             key={index}
