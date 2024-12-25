@@ -48,7 +48,7 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
                     if (response) {
                         toast.success("Resume added succesfully!");
                     } else {
-                        toast.error("Error uploading file.", );
+                        toast.error("Error uploading file.",);
                     }
                 }
                 else {
@@ -86,9 +86,10 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
     }
 
     return (
-        <div className="p-6 flex flex-col items-center justify-center space-y-4 bg-gray-50 min-h-screen">
-            <Toaster />
-            <div className={`w-full max-w-md rounded-lg border-2 border-dashed 
+      <div className="p-6 flex flex-col items-center justify-center space-y-4 bg-gray-50 min-h-screen">
+        <Toaster />
+        <div
+          className={`w-full max-w-md rounded-lg border-2 border-dashed 
             ${isHoveredOnDropzone ? "border-sky-400" : "border-gray-300"} 
             p-6 flex flex-col items-center space-y-4 text-center bg-white shadow-md`}
                 onDragOver={(event) => {
@@ -155,7 +156,8 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
                                 if (encodedFileName) {
                                     // Decode the URL-encoded string and replace spaces with hyphens
                                     const decodedFileName = decodeURIComponent(encodedFileName);
-                                    return decodedFileName.replace(/ /g, "-").split("-").slice(1).join("-");
+                                    const meaningfulPart = decodedFileName.split("-").slice(1).join(" ");
+                                    return meaningfulPart.replace(/ - /g, " -");
                                 }
                                 return "";
                             })()}

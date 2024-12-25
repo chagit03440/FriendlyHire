@@ -3,6 +3,8 @@ import IJob from "@/app/types/job";
 import IApplication from "@/app/types/application";
 import { sendEmail } from "@/app/services/sendEmail";
 import React, { useState } from "react";
+import { getUser } from "@/app/services/userServices";
+import { getCandidateEmailTemplate } from "./CandidateEmailTemplate";
 
 interface Props {
   job: IJob; // The job for which we are showing applicants
@@ -26,19 +28,16 @@ const JobEmployeePopUp: React.FC<Props> = ({
   ) => {
     onUpdateStatus(applicationId, "Sent");
 
+    const candidate = await getUser(userEmail);
+    console.log(
+      `the candidate email and name is: ${candidate.email} ${candidate.name}`
+    );
     //send email to the user
     try {
       await sendEmail(
         userEmail,
-        "Your Job Application Has Been Sent to Company",
-        `
-  <p>Dear candidate,</p>
-  <p>We wanted to let you know that your application for the position of <strong>${job.title}</strong> has been reviewed by our team. Your resume and details have now been shared with the hiring manager for further consideration.</p>
-  <p>If there are any updates or additional steps required, we will be sure to reach out to you promptly.</p>
-  <p>Thank you for your interest in joining our team. We appreciate the time and effort you put into your application.</p>
-  <p>Best regards,</p>
-  <p>The [Company Name] Hiring Team</p>
-  `
+        `Your Job Application for ${job.title} Has Been Sent to ${job.company}`,
+        getCandidateEmailTemplate({ candidate: candidate.name, job: job.title })
       );
     } catch (error) {
       console.error(error);

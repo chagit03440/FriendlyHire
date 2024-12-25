@@ -18,7 +18,7 @@ export async function GET(
 
     // Get the token from cookies
     const token = req.cookies.get("token")?.value;
-    
+
     if (!token) {
       return NextResponse.json(
         { message: "Authorization token is required" },
@@ -26,35 +26,12 @@ export async function GET(
       );
     }
 
-    let decoded;
-    try {
-      decoded = jwt.verify(token, SECRET_KEY);
-    } catch (error) {
-      return NextResponse.json(
-        { message: "Invalid or expired token", error },
-        { status: 401 }
-      );
-    }
-
-    const { role } = decoded as { role: string };
-
-    // Optionally restrict access to admins for certain actions
-    if (role !== "admin" && role !== "candidate") {
-      return NextResponse.json(
-        { message: "Only admins can retrieve user details" },
-        { status: 403 }
-      );
-    }
     const user = await User.findOne({ email: userEmail });
     if (!user) {
-      return NextResponse.json(
-        { message: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
     return NextResponse.json(user, { status: 200 });
-
   } catch (error) {
     console.error("Error retrieving user:", error);
     return NextResponse.json(
@@ -76,7 +53,7 @@ export async function PUT(
     await connect(); // Connect to MongoDB
 
     // Extract and verify token
-    const token = req.cookies.get("token")?.value;    
+    const token = req.cookies.get("token")?.value;
     if (!token) {
       return NextResponse.json(
         { message: "Authorization token is required" },
@@ -89,31 +66,28 @@ export async function PUT(
       decoded = jwt.verify(token, SECRET_KEY);
     } catch (error) {
       return NextResponse.json(
-        { message: "Invalid or expired token",error },
+        { message: "Invalid or expired token", error },
         { status: 401 }
       );
     }
 
-    const { role ,email} = decoded as { role: string, email: string };
+    const { role, email } = decoded as { role: string; email: string };
 
-    // Only allow admin or the specific employee
-    if (role !== "admin" && email !== userEmail) {
-      return NextResponse.json(
-        { message: "Access denied" },
-        { status: 403 }
-      );
-    }
+    // // Only allow admin or the specific employee
+    // if (role !== "admin" && email !== userEmail) {
+    //   return NextResponse.json(
+    //     { message: "Access denied" },
+    //     { status: 403 }
+    //   );
+    // }
 
     const updatedUser = await User.findOneAndUpdate(
       { email: userEmail },
-      { name, email, password, role, profile},
+      { name, email, password, role, profile },
       { new: true } // Return the updated document
     );
     if (!updatedUser) {
-      return NextResponse.json(
-        { message: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
     return NextResponse.json(updatedUser, { status: 200 });
@@ -128,62 +102,58 @@ export async function PUT(
 
 // DELETE an employee
 export async function DELETE(
-    req: NextRequest,
-    { params }: { params: { userEmail: string } }
-  ) {
-    const { userEmail } = params;
-  
-    try {
-      await connect(); // Connect to MongoDB
-  
-      // Get the token from cookies
-      const token = req.cookies.get("token")?.value;
+  req: NextRequest,
+  { params }: { params: { userEmail: string } }
+) {
+  const { userEmail } = params;
 
-      if (!token) {
-        return NextResponse.json(
-          { message: "Authorization token is required" },
-          { status: 401 }
-        );
-      }
-  
-      let decoded;
-      try {
-        decoded = jwt.verify(token, SECRET_KEY);
-      } catch (error) {
-        return NextResponse.json(
-          { message: "Invalid or expired token",error },
-          { status: 401 }
-        );
-      }
-  
-      const { role} = decoded as { role: string;};
-  
-      // Only allow admin to delete an employee
-      if (role !== "admin") {
-        return NextResponse.json(
-          { message: "Only admins can delete employees" },
-          { status: 403 }
-        );
-      }
-  
-      const deletedUser = await User.findOneAndDelete({ email: userEmail });
-      if (!deletedUser) {
-        return NextResponse.json(
-          { message: "User not found" },
-          { status: 404 }
-        );
-      }
-  
+  try {
+    await connect(); // Connect to MongoDB
+
+    // Get the token from cookies
+    const token = req.cookies.get("token")?.value;
+
+    if (!token) {
       return NextResponse.json(
-        { message: "User deleted successfully" },
-        { status: 200 }
-      );
-    } catch (error) {
-      console.error("Error deleting user:", error);
-      return NextResponse.json(
-        { message: "Error deleting user", error },
-        { status: 500 }
+        { message: "Authorization token is required" },
+        { status: 401 }
       );
     }
+
+    let decoded;
+    try {
+      decoded = jwt.verify(token, SECRET_KEY);
+    } catch (error) {
+      return NextResponse.json(
+        { message: "Invalid or expired token", error },
+        { status: 401 }
+      );
+    }
+
+    const { role } = decoded as { role: string };
+
+    // Only allow admin to delete an employee
+    if (role !== "admin") {
+      return NextResponse.json(
+        { message: "Only admins can delete employees" },
+        { status: 403 }
+      );
+    }
+
+    const deletedUser = await User.findOneAndDelete({ email: userEmail });
+    if (!deletedUser) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(
+      { message: "User deleted successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    return NextResponse.json(
+      { message: "Error deleting user", error },
+      { status: 500 }
+    );
   }
-  
+}
