@@ -156,7 +156,8 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
                                 if (encodedFileName) {
                                     // Decode the URL-encoded string and replace spaces with hyphens
                                     const decodedFileName = decodeURIComponent(encodedFileName);
-                                    return decodedFileName.replace(/ /g, "-").split("-").slice(1).join("-");
+                                    const meaningfulPart = decodedFileName.split("-").slice(1).join(" ");
+                                    return meaningfulPart.replace(/ - /g, " -");
                                 }
                                 return "";
                             })()}
