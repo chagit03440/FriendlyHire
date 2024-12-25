@@ -1,8 +1,10 @@
 export async function sendEmail(
   to: string,
   subject: string,
-  htmlContent: string
+  htmlContent: string,
+  attachmentUrl?: string
 ) {
+  console.log(`in the servise, the file url is: ${attachmentUrl}`);
   try {
     const response = await fetch("/api/sendEmail", {
       method: "POST",
@@ -13,6 +15,7 @@ export async function sendEmail(
         to,
         subject,
         htmlContent,
+        attachmentUrl, // Pass the URL of the file
       }),
     });
 

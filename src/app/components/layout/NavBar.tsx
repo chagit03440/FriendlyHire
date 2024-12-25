@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useUser } from "../../store/UserContext";
 import { useMemo, useCallback } from "react";
 import { useState, useEffect } from "react";
@@ -31,6 +31,13 @@ const NavButton: React.FC<{ href: string; text: string }> = ({
 const NavBar: React.FC = () => {
   const { role, setRole } = useUser();
   const router = useRouter();
+  const pathname = usePathname();
+  const [isOpen, setIsOpen] = useState(false);
+
+  // Close menu when route changes
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
 
   const roleOptions: RoleOptions = useMemo(
     () => ({
@@ -90,6 +97,7 @@ const NavBar: React.FC = () => {
       document.cookie = option;
     });
 
+    setIsOpen(false); // Close menu before logout
     setRole(null);
     router.push("/pages/login");
   }, [setRole, router]);
@@ -105,7 +113,10 @@ const NavBar: React.FC = () => {
         {options.map((option, index) => (
           <button
             key={index}
-            onClick={option.onClick}
+            onClick={() => {
+              setIsOpen(false); // Close menu after clicking any option
+              option.onClick();
+            }}
             className={`w-full text-left px-4 py-2 hover:bg-gray-100 ${
               option.style || "text-gray-700"
             }`}
@@ -133,7 +144,6 @@ const NavBar: React.FC = () => {
     </button>
   );
 
-  const [isOpen, setIsOpen] = useState(false);
   const toggleMenu = useCallback(() => setIsOpen((prev) => !prev), []);
 
   useEffect(() => {
