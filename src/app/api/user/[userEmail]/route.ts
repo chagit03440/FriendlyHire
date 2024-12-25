@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import connect from "@/app/lib/db/mongodb";
 import User from "@/app/lib/models/User";
-import { use } from "react";
 
 // Secret key for JWT verification
 const SECRET_KEY = process.env.JWT_SECRET || "your_secret_key";
