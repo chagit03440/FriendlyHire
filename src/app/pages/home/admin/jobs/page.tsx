@@ -5,7 +5,7 @@ import { getJobs } from "@/app/services/jobServices";
 import { JobActionsProvider } from "@/app/store/JobActionsContext";
 // import { useUser } from "@/app/store/UserContext";
 // import IJob from "@/app/types/job";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 
