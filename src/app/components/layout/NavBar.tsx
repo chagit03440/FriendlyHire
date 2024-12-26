@@ -34,7 +34,6 @@ const NavBar: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const queryClient = useQueryClient(); 
 
   // Close menu when route changes
   useEffect(() => {
