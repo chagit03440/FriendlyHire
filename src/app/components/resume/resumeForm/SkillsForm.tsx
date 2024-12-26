@@ -12,6 +12,8 @@ import {
   changeShowBulletPoints,
   selectThemeColor,
 } from "@/app/lib/redux/settingsSlice";
+import { getCandidate, updateCandidate } from "@/app/services/candidateServices";
+import { useUser } from "@/app/store/UserContext";
 
 export const SkillsForm = () => {
   const skills = useAppSelector(selectSkills);
@@ -20,6 +22,7 @@ export const SkillsForm = () => {
   const form = "skills";
   const showBulletPoints = useAppSelector(selectShowBulletPoints(form));
   const themeColor = useAppSelector(selectThemeColor) || "#38bdf8";
+  const { mail } = useUser();
 
   const handleSkillsChange = (field: "descriptions", value: string[]) => {
     dispatch(changeSkills({ field, value }));
@@ -34,6 +37,29 @@ export const SkillsForm = () => {
   const handleShowBulletPoints = (value: boolean) => {
     dispatch(changeShowBulletPoints({ field: form, value }));
   };
+  const handleAddSkillsToProfile = async () => {
+    try {
+      const thisUser = await getCandidate(mail);
+      if (!thisUser || !thisUser.skills) {
+        console.error("User or skills not found");
+        return;
+      }
+      console.log("old skills", descriptions);
+      console.log("new skills", thisUser.skills);
+      const mergedSkills = Array.from(
+        new Set([...thisUser.skills, ...descriptions])
+      );
+      const updatedUser = {
+        ...thisUser,
+        skills: mergedSkills,
+      };
+      await updateCandidate(String(mail), updatedUser);
+      console.log("Skills successfully updated:", mergedSkills);
+    } catch (error) {
+      console.error("Error adding skills to profile:", error);
+    }
+
+  }
 
   return (
     <Form form={form}>
@@ -53,6 +79,15 @@ export const SkillsForm = () => {
               showBulletPoints={showBulletPoints}
               onClick={handleShowBulletPoints}
             />
+          </div>
+          <div className="mt-4 flex justify-start">
+            <a
+              href="#"
+              className="text-blue-600 underline hover:text-blue-800"
+              onClick={handleAddSkillsToProfile}
+            >
+              Would you like to add these skills to your profile?
+            </a>
           </div>
         </div>
         <div className="col-span-full mb-4 mt-6 border-t-2 border-dotted border-gray-200" />
