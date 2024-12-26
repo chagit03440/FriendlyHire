@@ -206,9 +206,9 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
                   </button>
                 </div>
               </div>
-            ) : (
+            ) : role=="candidate"?(
               <CandidateJobCard key={job._id} job={job} onJobAction={handleJobAction} />
-            )
+            ):<></>
           )}
         </div>
 

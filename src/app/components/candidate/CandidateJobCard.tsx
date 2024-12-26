@@ -30,6 +30,7 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
   // Fetch user data when the component mounts
   useEffect(() => {
     const fetchUserData = async () => {
+      console.log("dddddddddddddddddddddddddd")
       const fetchedUser = await getUser(mail as string);
       setUser(fetchedUser);
     };

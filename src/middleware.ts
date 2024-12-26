@@ -5,7 +5,7 @@ import type { NextRequest } from "next/server";
 const secretKey = new TextEncoder().encode(process.env.JWT_SECRET);
 
 export async function middleware(req: NextRequest) {
-    const { pathname } = req.nextUrl;
+    const { pathname } = await req.nextUrl;
     
     const token = req.cookies.get("token")?.value;
 

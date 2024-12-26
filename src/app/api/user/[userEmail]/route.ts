@@ -16,7 +16,7 @@ export async function GET(
     await connect(); // Connect to MongoDB
 
     // Get the token from cookies
-    const token = req.cookies.get("token")?.value;
+    const token = await req.cookies.get("token")?.value;
 
     if (!token) {
       return NextResponse.json(

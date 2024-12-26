@@ -29,7 +29,7 @@ const NavButton: React.FC<{ href: string; text: string }> = ({
 );
 
 const NavBar: React.FC = () => {
-  const { role, setRole } = useUser();
+  const { role, setRole , setMail} = useUser();
   const router = useRouter();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
@@ -87,7 +87,6 @@ const NavBar: React.FC = () => {
   );
 
   const handleLogout = useCallback(() => {
-
     const cookieOptions = [
       "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;",
       "token=; max-age=0; path=/;",
@@ -98,10 +97,13 @@ const NavBar: React.FC = () => {
       document.cookie = option;
     });
 
-    setIsOpen(false); // Close menu before logout
     setRole(null);
+    setMail(null);
+
     router.push("/pages/login");
+
   }, [setRole, router]);
+
 
   const UserMenu: React.FC<{ isOpen: boolean; options: NavOption[] }> = ({
     isOpen,
