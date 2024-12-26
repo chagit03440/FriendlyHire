@@ -87,6 +87,7 @@ const NavBar: React.FC = () => {
   );
 
   const handleLogout = useCallback(() => {
+
     const cookieOptions = [
       "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;",
       "token=; max-age=0; path=/;",

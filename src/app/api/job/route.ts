@@ -43,7 +43,13 @@ export async function GET(req: NextRequest) {
       return NextResponse.json({ message: "Invalid role" }, { status: 403 });
     }
 
-    return NextResponse.json(jobs, { status: 200 });
+    return NextResponse.json(jobs, {
+      status: 200,
+      headers: {
+        "Cache-Control": "no-store", // Prevent caching
+      },
+    });
+
   } catch (error) {
     return NextResponse.json(
       { message: "Error fetching jobs", error },
