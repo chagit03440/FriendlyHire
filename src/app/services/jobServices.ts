@@ -5,7 +5,6 @@ export const getJobs = async () => {
   try {
     const response = await axios.get('/api/job');
     const data = response.data;
-    console.log(data)
 
     return data;
   } catch (error) {
