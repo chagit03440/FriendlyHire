@@ -1,5 +1,4 @@
 "use client";
-import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { useUser } from "../../store/UserContext";
