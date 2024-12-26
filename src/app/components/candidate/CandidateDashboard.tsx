@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getJobs } from "../../services/jobServices";
 import JobList from "../applications/JobList";
@@ -14,15 +14,28 @@ import LoadSpinner from "../common/LoadSpinner";
 const CandidateDashboard: React.FC = () => {
   const { mail } = useUser();
 
-  // Fetch all jobs using react-query
-  const {
-    data: jobs = [],
-    isLoading: isJobsLoading,
-    error: jobsError,
-  } = useQuery({
-    queryKey: ["jobs"],
-    queryFn: getJobs,
-  });
+  const [jobs, setJobs] = useState([]); // State to store job data
+  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [error, setError] = useState<string | null>(null);
+
+ // Fetch jobs in useEffect
+ useEffect(() => {
+  const fetchJobs = async () => {
+    setIsLoading(true); // Set loading state
+    setError(null); // Reset error state
+    try {
+      const data = await getJobs(); // Call the API
+      setJobs(data || []); // Update state with fetched data
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setIsLoading(false); // Reset loading state
+    }
+  };
+
+
+fetchJobs(); // Trigger the function
+}, []); // Empty dependency array means it runs once on mount
 
   // Fetch user applications using react-query
   const {
@@ -35,14 +48,19 @@ const CandidateDashboard: React.FC = () => {
     enabled: !!mail,
   });
 
-  // Handle loading and error states
-  if (isJobsLoading || isApplicationsLoading)
+
+  if (isLoading || isApplicationsLoading)
     return (
       <div>
         <LoadSpinner />
       </div>
     );
-  if (jobsError || applicationsError) return <div>Error loading data</div>;
+    if (error || applicationsError)
+      return (
+        <div className="text-red-500">
+          Error: {error}
+        </div>
+      );
 
   // Filter out jobs that the user has already applied for
   const filteredJobs = jobs.filter(

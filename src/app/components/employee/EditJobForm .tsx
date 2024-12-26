@@ -18,9 +18,38 @@ const EditJobForm: React.FC<EditJobFormProps> = ({ job, onClose, onUpdate }) => 
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-
-    setJobDetails({ ...jobDetails, [name]: value } as IJob);
+  
+    if (name === "experience") {
+      const nativeEvent = e.nativeEvent as InputEvent;
+  
+      // Handle spinner button interactions
+      if (nativeEvent.inputType === "increment" || nativeEvent.inputType === "decrement") {
+        setJobDetails((prev) => ({
+          ...prev,
+          [name]: value === "" ? "" : Number(value),
+        } as IJob));
+        return;
+      }
+  
+      // Allow manual input for valid numbers
+      const numericValue = Number(value);
+      if (!isNaN(numericValue) && numericValue >= 0) {
+        setJobDetails((prev) => ({
+          ...prev,
+          [name]: numericValue,
+        } as IJob));
+      }
+  
+      return;
+    }
+  
+    // Generic handler for other fields
+    setJobDetails((prev) => ({
+      ...prev,
+      [name]: value,
+    } as IJob));
   };
+  
   
 
   const handleArrayChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
@@ -42,15 +71,24 @@ const EditJobForm: React.FC<EditJobFormProps> = ({ job, onClose, onUpdate }) => 
     setJobDetails((prev) => ({ ...prev, requirements: updatedRequirements } as IJob));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onUpdate(jobDetails); // Submit the updated job details
+    await onUpdate(jobDetails); // Submit the updated job details
     onClose(); // Close the popup after submission
   };
 
   return (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg max-h-full overflow-y-auto">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg max-h-full overflow-y-auto relative">
+        {/* Close Button */}
+        <button
+          type="button"
+          onClick={onClose}
+          className="absolute top-3 right-3 p-1 bg-gray-300 text-gray-700 rounded-full hover:bg-gray-400"
+          aria-label="Close"
+        >
+          ✕
+        </button>
         <h2 className="text-xl font-bold mb-4">Edit Job</h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -85,6 +123,7 @@ const EditJobForm: React.FC<EditJobFormProps> = ({ job, onClose, onUpdate }) => 
               name="experience"
               id="experience"
               type="number"
+              min={0}
               value={jobDetails.experience}
               onChange={handleChange}
               className="w-full mt-1 p-2 border border-gray-300 rounded-md"

@@ -1,50 +1,54 @@
 "use client";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useQuery } from "@tanstack/react-query";
 import { getJobs } from "../../services/jobServices";
 import JobList from "../applications/JobList";
-import { useUser } from "../../store/UserContext";
-import IJob from "../../types/job";
 import { JobActionsProvider } from "../../store/JobActionsContext";
 import LoadSpinner from "../common/LoadSpinner";
 
 const EmployeeDashboard = () => {
   const router = useRouter();
-  const { mail, role } = useUser();
+  const [jobs, setJobs] = useState([]); // State to store job data
+  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [error, setError] = useState<string | null>(null);
 
-  // Fetch all jobs using react-query
-  const {
-    data: jobs = [],
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["jobs"],
-    queryFn: getJobs,
-  });
+ // Fetch jobs in useEffect
+ useEffect(() => {
+  const fetchJobs = async () => {
+    setIsLoading(true); // Set loading state
+    setError(null); // Reset error state
+    try {
+      const data = await getJobs(); // Call the API
+      setJobs(data || []); // Update state with fetched data
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setIsLoading(false); // Reset loading state
+    }
+  };
+
+
+fetchJobs(); // Trigger the function
+}, []); // Empty dependency array means it runs once on mount
 
  
-  // Filter jobs based on the employee's email
-  const filteredJobs =
-    role === "employee"
-      ? jobs.filter((job: IJob) => job.createdBy === mail)
-      : [];
-
   // Handle navigation to the Add Job page
   const handleAddJobClick = () => {
     router.push("/pages/home/employee/addJob");
   };
 
-  // Render loading state
   if (isLoading)
     return (
       <div>
         <LoadSpinner />
       </div>
     );
-
-  // Render error state
-  if (error instanceof Error) return <div>Error: {error.message}</div>;
+    if (error)
+      return (
+        <div className="text-red-500">
+          Error: {error}
+        </div>
+      );
 
   return (
     <JobActionsProvider>
@@ -64,8 +68,8 @@ const EmployeeDashboard = () => {
         </div>
 
         {/* Job list */}
-        {filteredJobs.length > 0 ? (
-          <JobList jobs={filteredJobs} />
+        {jobs.length > 0 ? (
+          <JobList jobs={jobs} />
         ) : (
           <div className="text-center text-gray-600">No jobs available</div>
         )}

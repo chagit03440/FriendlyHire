@@ -83,6 +83,7 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
 
   const handleJobUpdate = async (updatedJob: IJob) => {
     try {
+      console.log("job",updatedJob)
       const updated = await updateJob(updatedJob);
       setJobs((prevJobs) =>
         prevJobs.map((job) => (job._id === updated._id ? updated : job))

@@ -5,20 +5,35 @@ import { getJobs } from "@/app/services/jobServices";
 import { JobActionsProvider } from "@/app/store/JobActionsContext";
 // import { useUser } from "@/app/store/UserContext";
 // import IJob from "@/app/types/job";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const Page = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
-  //const { role } = useUser();
-  
-  const { data: jobs = [], isLoading, error } = useQuery({
-    queryKey: ["jobs"],
-    queryFn: getJobs,
-  });
-console.log("jobss",jobs);
+  const [jobs, setJobs] = useState([]); // State to store job data
+  const [isLoading, setIsLoading] = useState(false); // Loading state
+  const [error, setError] = useState<string | null>(null);
+
+
+ // Fetch jobs in useEffect
+  useEffect(() => {
+    const fetchJobs = async () => {
+      setIsLoading(true); // Set loading state
+      setError(null); // Reset error state
+      try {
+        const data = await getJobs(); // Call the API
+        setJobs(data || []); // Update state with fetched data
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An error occurred");
+      } finally {
+        setIsLoading(false); // Reset loading state
+      }
+    };
+
+  fetchJobs(); // Trigger the function
+}, []); // Empty dependency array means it runs once on mount
 
   
   const handleAddJob = async () => {
@@ -32,8 +47,13 @@ console.log("jobss",jobs);
         <LoadSpinner />
       </div>
     );
-  if (error instanceof Error) return <div>Error: {error.message}</div>;
-
+    if (error)
+      return (
+        <div className="text-red-500">
+          Error: {error}
+        </div>
+      );
+      
   return (
     <JobActionsProvider>
       <h2 className="text-xl font-semibold mb-4">Jobs Data</h2>
