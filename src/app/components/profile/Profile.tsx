@@ -19,7 +19,15 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
+    if (name === "skills") {
+      // Split the skills string into an array
+      setProfileData((prevData) => ({
+        ...prevData,
+        skills: value.split(",").map((skill) => skill.trim()), 
+      }as (IUser & ICandidate) | (IUser & IEmployee)));
+    } else {
     setProfileData({ ...profileData, [name]: value } as (IUser & ICandidate) | (IUser & IEmployee));
+    }
   };
 
   const handleSave = async () => {
