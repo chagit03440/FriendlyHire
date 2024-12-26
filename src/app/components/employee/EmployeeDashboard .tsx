@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useQuery } from "@tanstack/react-query";
 import { getJobs } from "../../services/jobServices";
@@ -23,6 +23,7 @@ const EmployeeDashboard = () => {
     queryFn: getJobs,
   });
 
+ 
   // Filter jobs based on the employee's email
   const filteredJobs =
     role === "employee"

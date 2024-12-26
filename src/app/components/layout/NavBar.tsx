@@ -1,4 +1,5 @@
 "use client";
+import { useQueryClient } from "@tanstack/react-query";
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { useUser } from "../../store/UserContext";
@@ -33,6 +34,7 @@ const NavBar: React.FC = () => {
   const router = useRouter();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const queryClient = useQueryClient(); 
 
   // Close menu when route changes
   useEffect(() => {
@@ -87,6 +89,7 @@ const NavBar: React.FC = () => {
   );
 
   const handleLogout = useCallback(() => {
+
     const cookieOptions = [
       "token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;",
       "token=; max-age=0; path=/;",

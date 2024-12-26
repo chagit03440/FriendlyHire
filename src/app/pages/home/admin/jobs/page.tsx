@@ -3,7 +3,8 @@ import JobList from "@/app/components/applications/JobList";
 import LoadSpinner from "@/app/components/common/LoadSpinner";
 import { getJobs } from "@/app/services/jobServices";
 import { JobActionsProvider } from "@/app/store/JobActionsContext";
-import IJob from "@/app/types/job";
+// import { useUser } from "@/app/store/UserContext";
+// import IJob from "@/app/types/job";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import React from "react";
@@ -11,16 +12,15 @@ import React from "react";
 const Page = () => {
   const router = useRouter();
   const queryClient = useQueryClient();
-
-  const {
-    data: jobs = [],
-    isLoading,
-    error,
-  } = useQuery<IJob[]>({
+  //const { role } = useUser();
+  
+  const { data: jobs = [], isLoading, error } = useQuery({
     queryKey: ["jobs"],
     queryFn: getJobs,
   });
+console.log("jobss",jobs);
 
+  
   const handleAddJob = async () => {
     router.push("/pages/home/employee/addJob"); // Navigate to the Add Job page
     await queryClient.invalidateQueries({ queryKey: ["applications"] });
