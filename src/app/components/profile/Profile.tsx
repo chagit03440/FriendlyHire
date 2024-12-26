@@ -13,6 +13,7 @@ type Props = {
 
 const ProfilePage: React.FC<Props> = ({ user }) => {
   const [isEditing, setIsEditing] = useState(false);
+  const [newSkill, setNewSkill] = useState<string>("");
   const [profileData, setProfileData] = useState(user);
 
   const handleEditToggle = () => setIsEditing((prev) => !prev);
@@ -23,10 +24,10 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
       // Split the skills string into an array
       setProfileData((prevData) => ({
         ...prevData,
-        skills: value.split(",").map((skill) => skill.trim()), 
-      }as (IUser & ICandidate) | (IUser & IEmployee)));
+        skills: value.split(",").map((skill) => skill.trim()),
+      } as (IUser & ICandidate) | (IUser & IEmployee)));
     } else {
-    setProfileData({ ...profileData, [name]: value } as (IUser & ICandidate) | (IUser & IEmployee));
+      setProfileData({ ...profileData, [name]: value } as (IUser & ICandidate) | (IUser & IEmployee));
     }
   };
 
@@ -48,13 +49,30 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
     }
   };
 
+  const handleRemoveSkill = (skillToRemove: string) => {
+    console.log(skillToRemove);
+    setProfileData({
+      ...profileData,
+      skills: (profileData as ICandidate).skills.filter((skill) => skill !== skillToRemove)
+    } as (IUser & ICandidate) | (IUser & IEmployee));
+  };
+
+  const handleAddSkill = () => {
+    if (newSkill.trim() && !(profileData as ICandidate).skills.includes(newSkill.trim())) {
+      setProfileData({
+        ...profileData,
+        skills: [...(profileData as ICandidate).skills, newSkill.trim()]
+      } as (IUser & ICandidate) | (IUser & IEmployee));
+      setNewSkill("");
+    }
+  };
+
   return (
     <div className="max-w-3xl mx-auto p-6 bg-white rounded-lg shadow-md mt-10">
-      <h1 className="text-2xl font-bold mb-4 text-center">Profile</h1>
-
+      <h1 className="text-3xl font-bold mb-4 text-center">Profile</h1>
       <div className="space-y-4">
         <div>
-          <label className="block text-sm font-medium text-gray-700">Name</label>
+          <label className="mb-4 text-xl font-bold text-gray-800">Name</label>
           <input
             type="text"
             name="name"
@@ -67,7 +85,7 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">Email</label>
+          <label className="mb-4 text-xl font-bold text-gray-800">Email</label>
           <input
             type="email"
             name="email"
@@ -80,7 +98,7 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
         </div>
 
         <div>
-          <label className="block text-sm font-medium text-gray-700">Role</label>
+          <label className="mb-4 text-xl font-bold text-gray-800">Role</label>
           <input
             type="text"
             name="role"
@@ -93,7 +111,7 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
         {profileData.role === "employee" && (
           <>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Company</label>
+              <label className="mb-4 text-xl font-bold text-gray-800">Company</label>
               <input
                 type="text"
                 name="company"
@@ -105,7 +123,7 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Position</label>
+              <label className="mb-4 text-xl font-bold text-gray-800">Position</label>
               <input
                 type="text"
                 name="position"
@@ -122,7 +140,7 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
         {profileData.role === "candidate" && (
           <>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Experience</label>
+              <label className="mb-4 text-xl font-bold text-gray-800">Experience</label>
               <input
                 type="number"
                 name="experience"
@@ -134,28 +152,43 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700">Skills</label>
-              <textarea
-                name="skills"
-                value={(profileData as ICandidate).skills?.length ? (profileData as ICandidate).skills.join(", ") : ""}
-                onChange={handleInputChange}
-                disabled={!isEditing}
-                className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${isEditing ? "bg-white border-gray-300" : "bg-gray-100 border-gray-200"
-                  }`}
-              />
+              <h2 className="mb-4 text-xl font-bold text-gray-800">Skills</h2>
+              <div className="flex flex-wrap gap-2">
+                {(profileData as ICandidate).skills.map((skill, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center gap-2 rounded-md bg-gray-100 px-3 py-1 shadow-md">
+                    <span>{skill}</span>
+                    {isEditing && (
+                      <button
+                        onClick={() => handleRemoveSkill(skill)}
+                        className="text-red-500 hover:text-red-700"
+                        aria-label={`Remove ${skill}`}
+                      >
+                        &times;
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+              {isEditing && (
+                <div className="mt-4 flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={newSkill}
+                    onChange={(e) => setNewSkill(e.target.value)}
+                    placeholder="Add a new skill"
+                    className="flex-1 rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-blue-500 focus:outline-none focus:ring focus:ring-blue-200"
+                  />
+                  <button
+                    onClick={handleAddSkill}
+                    className="rounded-md bg-blue-500 px-4 py-2 text-white shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300"
+                  >
+                    Add
+                  </button>
+                </div>
+              )}
             </div>
-            {/* <div>
-              <label className="block text-sm font-medium text-gray-700">Resume Url</label>
-              <input
-                type="text"
-                name="resumeUrl"
-                value={(profileData as ICandidate).fileUrl}
-                onChange={handleInputChange}
-                disabled={!isEditing}
-                className={`mt-1 block w-full rounded-md shadow-sm sm:text-sm ${isEditing ? "bg-white border-gray-300" : "bg-gray-100 border-gray-200"
-                  }`}
-              />
-            </div> */}
           </>
         )}
       </div>
