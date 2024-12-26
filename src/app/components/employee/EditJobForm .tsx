@@ -20,22 +20,36 @@ const EditJobForm: React.FC<EditJobFormProps> = ({ job, onClose, onUpdate }) => 
     const { name, value } = e.target;
   
     if (name === "experience") {
-      // Only update experience when clicking the spinner buttons
       const nativeEvent = e.nativeEvent as InputEvent;
+  
+      // Handle spinner button interactions
       if (nativeEvent.inputType === "increment" || nativeEvent.inputType === "decrement") {
         setJobDetails((prev) => ({
           ...prev,
           [name]: value === "" ? "" : Number(value),
         } as IJob));
+        return;
       }
-      return; // Ignore other types of events for this input
+  
+      // Allow manual input for valid numbers
+      const numericValue = Number(value);
+      if (!isNaN(numericValue) && numericValue >= 0) {
+        setJobDetails((prev) => ({
+          ...prev,
+          [name]: numericValue,
+        } as IJob));
+      }
+  
+      return;
     }
   
+    // Generic handler for other fields
     setJobDetails((prev) => ({
       ...prev,
       [name]: value,
     } as IJob));
   };
+  
   
 
   const handleArrayChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
