@@ -19,7 +19,11 @@ const EditJobForm: React.FC<EditJobFormProps> = ({ job, onClose, onUpdate }) => 
   ) => {
     const { name, value } = e.target;
 
-    setJobDetails({ ...jobDetails, [name]: value } as IJob);
+    console.log(name,value)
+    setJobDetails((prev) => ({
+      ...prev,
+      [name]: name === "experience" ? Number(value) : value, // Convert experience to a number
+    } as IJob));
   };
   
 
@@ -42,9 +46,11 @@ const EditJobForm: React.FC<EditJobFormProps> = ({ job, onClose, onUpdate }) => 
     setJobDetails((prev) => ({ ...prev, requirements: updatedRequirements } as IJob));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    onUpdate(jobDetails); // Submit the updated job details
+    console.log(jobDetails)
+    await onUpdate(jobDetails); // Submit the updated job details
+
     onClose(); // Close the popup after submission
   };
 
