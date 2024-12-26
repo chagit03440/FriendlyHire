@@ -44,8 +44,6 @@ export const SkillsForm = () => {
         console.error("User or skills not found");
         return;
       }
-      console.log("old skills", descriptions);
-      console.log("new skills", thisUser.skills);
       const mergedSkills = Array.from(
         new Set([...thisUser.skills, ...descriptions])
       );
