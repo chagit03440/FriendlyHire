@@ -55,7 +55,7 @@ const Dashboard = () => {
       ) : localRole === "admin" ? (
         <AdminDashboard />
       ) : (
-        <p>תפקיד לא מזוהה</p> // Default message if role is undefined
+        <p>Unrecognized Role</p> // Default message if role is undefined
       )}
     </div>
   );

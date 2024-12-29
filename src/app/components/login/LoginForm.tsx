@@ -22,7 +22,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
 }) => {
   return (
     <div className="bg-white p-12 rounded-xl shadow-2xl w-full max-w-lg">
-      <h2 className="text-3xl font-bold text-center mb-6">התחברות</h2>
+      <h2 className="text-3xl font-bold text-center mb-6">Sign in to FriendlyHire</h2>
       {error && <p className="text-red-500 text-center mb-6">{error}</p>}
       <form onSubmit={onSubmit}>
         <div className="mb-6">
@@ -63,7 +63,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
           type="submit"
           className="w-full py-3 mt-6 text-lg bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300"
         >
-          התחבר
+         Sign in
         </button>
 
         <button
@@ -71,7 +71,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
           onClick={onForgotPassword}
           className="w-full py-2 mt-4 text-md text-blue-600 hover:text-blue-800 transition-colors duration-300"
         >
-          שכחתי סיסמה
+          Forgot password?
         </button>
       </form>
     </div>

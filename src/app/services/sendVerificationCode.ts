@@ -17,7 +17,7 @@ export const sendVerificationCode = async (
     console.error("Send verification code error:", error);
     return {
       success: false,
-      message: "שליחת קוד אימות נכשל",
+      message: "Failed to send verification code.",
     };
   }
 };

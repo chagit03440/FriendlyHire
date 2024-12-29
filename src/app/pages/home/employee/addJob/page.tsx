@@ -6,6 +6,7 @@ import { toast, Toaster } from "react-hot-toast";
 import { useUser } from "@/app/store/UserContext";
 import { useEffect, useState } from "react";
 import checkAccess from "@/app/utils/checkAccess";
+import LoadSpinner from "@/app/components/common/LoadSpinner";
 
 const AddJob = () => {
   // Initial state for no validation errors
@@ -58,7 +59,7 @@ const AddJob = () => {
   }, [router]);
 
   if (!isAuthenticated) {
-    return <p>...טוען</p>;
+    return <p><LoadSpinner/></p>;
   }
 
   const jobData = {
@@ -97,7 +98,7 @@ const AddJob = () => {
       if (validateForm()) {
         const response = await createJob(jobData);
         if (response) {
-          toast.success("המשרה נוספה בהצלחה!");
+          toast.success("The job was added successfully!");
   
           setTimeout(() => {
             if (role === "admin") {
@@ -107,12 +108,12 @@ const AddJob = () => {
             }
           }, 2000); // Wait for 2 seconds
         } else {
-          setError("היתה בעיה ביצירת המשרה. נסה שוב.");
+          setError("There was an issue creating the job. Please try again.");
         }
       }
     } catch (error) {
       console.error(error);
-      setError("אירעה שגיאה. אנא נסה שוב.");
+      setError("An error occurred. Please try again.");
     }
   };
   
@@ -121,7 +122,7 @@ const AddJob = () => {
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <Toaster />
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-4">פרסום משרה חדשה</h2>
+        <h2 className="text-2xl font-bold text-center mb-4">Post a New Job</h2>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         <form onSubmit={handleSubmit}>
           {/* Title Input */}
@@ -322,7 +323,7 @@ const AddJob = () => {
             type="submit"
             className="w-full py-2 mt-4 bg-blue-600 text-white rounded-md hover:bg-blue-700"
           >
-            צור משרה
+           Create Job
           </button>
         </form>
       </div>
