@@ -9,24 +9,24 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Admin Dashboard</h1>
+    <div className="bg-gray-100 text-black p-8 rounded-lg shadow-lg max-w-md mx-auto">
+      <h1 className="text-3xl text-center font-semibold text-orange-500 mb-6">Admin Managment</h1>
       <div className="flex flex-col space-y-4">
         <button
           onClick={() => navigateToPage("home/admin/users")}
-          className="bg-blue-500 text-white p-4 rounded"
+          className="bg-orange-500 text-white py-3 px-6 rounded-lg hover:bg-orange-600 transition-colors"
         >
           Manage Users
         </button>
         <button
           onClick={() => navigateToPage("home/admin/applications")}
-          className="bg-green-500 text-white p-4 rounded"
+          className="bg-orange-500 text-white py-3 px-6 rounded-lg hover:bg-orange-600 transition-colors"
         >
           Manage Applications
         </button>
         <button
           onClick={() => navigateToPage("home/admin/jobs")}
-          className="bg-purple-500 text-white p-4 rounded"
+          className="bg-orange-500 text-white py-3 px-6 rounded-lg hover:bg-orange-600 transition-colors"
         >
           Manage Jobs
         </button>

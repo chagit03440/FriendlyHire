@@ -1,8 +1,8 @@
 "use client";
+
 import React, { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import EditApplicationForm from "@/app/components/admin/EditApplicationForm";
-// import { useRouter } from "next/navigation";
 import {
   deleteApplication,
   getApplicationById,
@@ -12,7 +12,6 @@ import IApplication from "@/app/types/application";
 import LoadSpinner from "@/app/components/common/LoadSpinner";
 
 const Page = () => {
-  //const router = useRouter();
   const queryClient = useQueryClient();
 
   const {
@@ -25,13 +24,8 @@ const Page = () => {
   });
 
   // Modal state
-  const [selectedApplication, setSelectedApplication] =
-    useState<IApplication | null>(null);
+  const [selectedApplication, setSelectedApplication] = useState<IApplication | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // const handleAddApplication = () => {
-  //     router.push("applications/addApplication");
-  // };
 
   const handleEditApplication = async (application: IApplication) => {
     const thisApplication = await getApplicationById(application._id);
@@ -50,86 +44,95 @@ const Page = () => {
 
   const closeModal = async () => {
     await queryClient.invalidateQueries({ queryKey: ["applications"] }); // Trigger a refetch
-
     setIsModalOpen(false);
     setSelectedApplication(null);
   };
 
   if (isLoading)
     return (
-      <div>
+      <div className="flex justify-center items-center h-full">
         <LoadSpinner />
       </div>
     );
   if (error instanceof Error) return <div>Error: {error.message}</div>;
 
-  console.log("app", applications);
   return (
-    <div className="p-4">
-      {/* Add Application Button */}
-      {/* <div className="mb-6">
-            <button
-            onClick={handleAddApplication}
-            className="bg-green-500 text-white px-4 py-2 rounded"
-            >
-            Add Application
-            </button>
-        </div> */}
-      {/* Aplications Table */}
-      <section className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Applications Data</h2>
-        <table className="min-w-full bg-white border border-gray-200">
-          <thead>
-            <tr>
-              <th className="border p-2 text-left">UserEmail</th>
-              <th className="border p-2 text-left">Title</th>
-              <th className="border p-2 text-left">Company</th>
-              <th className="border p-2 text-left">Status</th>
-              <th className="border p-2 text-left">ResumeUrl</th>
-            </tr>
-          </thead>
-          <tbody>
-            {applications.map((application) => (
-              <tr key={application._id}>
-                <td className="border p-2">{application.userEmail}</td>
-                <td className="border px-4 py-2">
-                  {typeof application.jobId === "object" &&
-                  "title" in application.jobId
-                    ? application.jobId.title
-                    : "N/A"}
-                </td>
-                <td className="border px-4 py-2">
-                  {typeof application.jobId === "object" &&
-                  "company" in application.jobId
-                    ? application.jobId.company
-                    : "N/A"}
-                </td>
-                <td className="border p-2">{application.status}</td>
-                <td className="border p-2">{application.fileUrl}</td>
-                <td className="border p-2 flex">
-                  <button
-                    onClick={() => handleEditApplication(application)}
-                    className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDeleteApplication(application)}
-                    className="bg-red-500 text-white px-2 py-1 rounded"
-                  >
-                    Delete
-                  </button>
-                </td>
+    <div className="bg-gray-100 text-black p-8 rounded-lg shadow-xl">
+      <h2 className="text-3xl font-semibold text-orange-500 mb-6">Applications Data</h2>
+      
+      {/* Applications Table */}
+      <section className="mb-8 overflow-x-auto">
+        <div className="inline-block min-w-full align-middle">
+          <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+            <thead>
+              <tr className="bg-gray-300 text-black">
+                <th className="border p-3 text-left">UserEmail</th>
+                <th className="border p-3 text-left">Title</th>
+                <th className="border p-3 text-left">Company</th>
+                <th className="border p-3 text-left">Status</th>
+                <th className="border p-3 text-left">ResumeUrl</th>
+                <th className="border p-3 text-left">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {applications.map((application) => (
+                <tr key={application._id} className="bg-gray-50 hover:bg-gray-100 transition-colors">
+                  <td className="border p-3">{application.userEmail}</td>
+                  <td className="border px-4 py-3">
+                    {typeof application.jobId === "object" && "title" in application.jobId
+                      ? application.jobId.title
+                      : "N/A"}
+                  </td>
+                  <td className="border px-4 py-3">
+                    {typeof application.jobId === "object" && "company" in application.jobId
+                      ? application.jobId.company
+                      : "N/A"}
+                  </td>
+                  <td className="border p-3">
+                    <span
+                      className={`${
+                        application.status === "Saved"
+                          ? "text-orange-500"
+                          : application.status === "Applied"
+                          ? "text-gray-500"
+                          : application.status === "Sent"
+                          ? "text-gray-500"
+                          : application.status === "Archived"
+                          ? "text-gray-400"
+                          : "text-gray-500"
+                      }`}
+                    >
+                      {application.status}
+                    </span>
+                  </td>
+                  <td className="border p-3 max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
+                    {application.fileUrl}
+                  </td>
+                  <td className="border p-3 flex space-x-2">
+                    <button
+                      onClick={() => handleEditApplication(application)}
+                      className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteApplication(application)}
+                      className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </section>
 
       {/* Application Modal */}
       {isModalOpen && selectedApplication && (
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-          <div className="bg-white rounded-lg shadow-lg w-3/4 max-w-xl p-6 relative">
+          <div className="bg-white rounded-lg shadow-lg w-3/4 max-w-3xl p-8 relative">
             <button
               onClick={closeModal}
               className="absolute top-2 right-2 text-gray-600 hover:text-gray-900"
