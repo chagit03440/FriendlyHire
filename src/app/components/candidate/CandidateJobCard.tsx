@@ -6,40 +6,62 @@ import { useUser } from "@/app/store/UserContext";
 import { getUser } from "@/app/services/userServices";
 import { calculateSkillsMatch } from "./calculateSkillsMatch";
 
-// Define IUser interface to match the user data structure
 interface IUser {
-  skills: string[]; // Adjust the type of skills as needed
+  skills: string[];
   experience: number;
-  // Add any other properties from user data if necessary
 }
 
 interface CandidateJobCardProps {
   job: IJob;
-  onJobAction: (jobId: string) => void; // Callback for job actions
+  onJobAction: (jobId: string) => void;
+  onMatchPercentageUpdate: (matchPercentage: number) => void;
 }
 
 const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
   job,
   onJobAction,
+  onMatchPercentageUpdate,
 }) => {
   const [isSaved, setIsSaved] = useState(false);
-  const [user, setUser] = useState<IUser | null>(null); // Use IUser type here
+  const [user, setUser] = useState<IUser | null>(null);
   const { handleSaveJob, handleApplyJob } = useJobActions();
-  const { mail } = useUser(); // Assume useUser provides the mail value
+  const { mail } = useUser();
 
-  // Fetch user data when the component mounts
   useEffect(() => {
     const fetchUserData = async () => {
-      console.log("dddddddddddddddddddddddddd")
       const fetchedUser = await getUser(mail as string);
       setUser(fetchedUser);
     };
-
     fetchUserData();
-  }, [mail]); // Dependency array, fetch user data when `mail` changes
+  }, [mail]);
+
+  useEffect(() => {
+    if (user) {
+      const { matchPercentage: skillsMatchPercentage } = calculateSkillsMatch(
+        user.skills,
+        job.requirements
+      );
+
+      let finalMatchPercentage = skillsMatchPercentage;
+      const experienceDiff = job.experience - user.experience;
+
+      if (experienceDiff > 0) {
+        if (experienceDiff === 1) finalMatchPercentage *= 0.8;
+        else if (experienceDiff === 2) finalMatchPercentage *= 0.5;
+        else finalMatchPercentage *= 0.2;
+      } else {
+        finalMatchPercentage *= 1.2;
+        if (finalMatchPercentage > 100) finalMatchPercentage = 100;
+      }
+
+      // Format to 2 decimal places before sending to parent
+      const formattedMatchPercentage = Number(finalMatchPercentage.toFixed(2));
+      onMatchPercentageUpdate(formattedMatchPercentage);
+    }
+  }, [user, job, onMatchPercentageUpdate]);
 
   if (!user) {
-    return <div>Loading...</div>; // Show loading state while the user data is being fetched
+    return <div>Loading...</div>;
   }
 
   const { matchPercentage: skillsMatchPercentage, missingSkills } =
@@ -47,7 +69,6 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
 
   let matchPercentage = skillsMatchPercentage;
   const experienceDiff = job.experience - user.experience;
-
   if (experienceDiff > 0) {
     if (experienceDiff === 1) matchPercentage *= 0.8;
     else if (experienceDiff === 2) matchPercentage *= 0.5;
@@ -56,6 +77,9 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
     matchPercentage *= 1.2;
     if (matchPercentage > 100) matchPercentage = 100;
   }
+
+  // Format matchPercentage to 2 decimal places for display
+  const displayMatchPercentage = Number(matchPercentage.toFixed(2));
 
   const getMatchColor = (percentage: number) => {
     if (percentage >= 80) return "bg-green-500";
@@ -66,12 +90,12 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
   const onSaveJob = () => {
     handleSaveJob(job._id);
     setIsSaved(true);
-    onJobAction(job._id); // Notify parent
+    onJobAction(job._id);
   };
 
   const onApplyJob = () => {
     handleApplyJob(job._id);
-    onJobAction(job._id); // Notify parent
+    onJobAction(job._id);
   };
 
   return (
@@ -80,18 +104,16 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
         <div className="flex-1 relative h-3 bg-gray-200 rounded-full overflow-hidden">
           <div
             className={`absolute left-0 top-0 h-full transition-all duration-500 ${getMatchColor(
-              matchPercentage
+              displayMatchPercentage
             )}`}
-            style={{ width: `${matchPercentage}%` }}
+            style={{ width: `${displayMatchPercentage}%` }}
           />
         </div>
         <div className="text-sm text-gray-600 font-medium whitespace-nowrap">
-          {matchPercentage}% Match
+          {displayMatchPercentage}% Match
         </div>
       </div>
-
       <JobCard job={job} missingSkills={missingSkills} />
-
       <div className="flex justify-between mt-4 gap-4">
         <button
           onClick={onSaveJob}
