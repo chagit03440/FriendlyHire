@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getJobs } from "../../services/jobServices";
-import JobList from "../applications/JobList";
+import JobList from "../jobs/JobList";
 import { JobActionsProvider } from "../../store/JobActionsContext";
 import LoadSpinner from "../common/LoadSpinner";
 
@@ -12,26 +12,24 @@ const EmployeeDashboard = () => {
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const [error, setError] = useState<string | null>(null);
 
- // Fetch jobs in useEffect
- useEffect(() => {
-  const fetchJobs = async () => {
-    setIsLoading(true); // Set loading state
-    setError(null); // Reset error state
-    try {
-      const data = await getJobs(); // Call the API
-      setJobs(data || []); // Update state with fetched data
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-    } finally {
-      setIsLoading(false); // Reset loading state
-    }
-  };
+  // Fetch jobs in useEffect
+  useEffect(() => {
+    const fetchJobs = async () => {
+      setIsLoading(true); // Set loading state
+      setError(null); // Reset error state
+      try {
+        const data = await getJobs(); // Call the API
+        setJobs(data || []); // Update state with fetched data
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An error occurred");
+      } finally {
+        setIsLoading(false); // Reset loading state
+      }
+    };
 
+    fetchJobs(); // Trigger the function
+  }, []); // Empty dependency array means it runs once on mount
 
-fetchJobs(); // Trigger the function
-}, []); // Empty dependency array means it runs once on mount
-
- 
   // Handle navigation to the Add Job page
   const handleAddJobClick = () => {
     router.push("/pages/home/employee/addJob");
@@ -43,12 +41,7 @@ fetchJobs(); // Trigger the function
         <LoadSpinner />
       </div>
     );
-    if (error)
-      return (
-        <div className="text-red-500">
-          Error: {error}
-        </div>
-      );
+  if (error) return <div className="text-red-500">Error: {error}</div>;
 
   return (
     <JobActionsProvider>
