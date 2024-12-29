@@ -17,8 +17,7 @@ export const sendResetPasswordCode = async (
     console.error("Send reset code error:", error);
     return {
       success: false,
-      // message: error.response?.data?.message || "שליחת קוד איפוס נכשלה",
-      message: "שליחת קוד איפוס נכשלה",
+      message: "Failed to send the reset code.",
     };
   }
 };
@@ -31,7 +30,7 @@ export const resetPassword = async (
   if (newPassword.length < 6) {
     return {
       success: false,
-      message: "אורך הסיסמא צריך להיות לפחות 6 תווים",
+      message: "The password must be at least 6 characters long.",
     };
   }
   try {
@@ -45,8 +44,7 @@ export const resetPassword = async (
     console.error("Reset password error:", error);
     return {
       success: false,
-      // message: error.response?.data?.message || "איפוס סיסמה נכשל",
-      message: "איפוס סיסמה נכשל",
+      message: "Password reset failed.",
     };
   }
 };

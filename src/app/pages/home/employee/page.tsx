@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import checkAccess from "@/app/utils/checkAccess";
 import { JobActionsProvider } from "@/app/store/JobActionsContext";
+import LoadSpinner from "@/app/components/common/LoadSpinner";
 
 const Page = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -31,7 +32,7 @@ const Page = () => {
   }, [router]);
 
   if (!isAuthenticated) {
-    return <p>...טוען</p>;
+    return <p><LoadSpinner/></p>;
   }
 
   return (

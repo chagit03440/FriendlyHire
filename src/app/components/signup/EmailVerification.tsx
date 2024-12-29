@@ -24,9 +24,9 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
   const handleSendVerificationCode = async () => {
     const response = await sendVerificationCode(userData.email);
     if (response.success) {
-      toast.success(response.message || "קוד אימות נשלח בהצלחה");
+      toast.success(response.message || "Verification code sent successfully.");
     } else {
-      toast.error(response.message || "שליחת קוד אימות נכשלה");
+      toast.error(response.message || "Failed to send verification code.");
     }
   };
 
@@ -43,31 +43,31 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
 
       if (response.success) {
         // Success: show toast and redirect
-        toast.success("נרשמת בהצלחה!");
+        toast.success("Registration completed successfully!");
         setTimeout(() => {
           router.push("/pages/home");
         }, 2000);
       } else {
         // Handle creation failure
-        setError(response.message || "ההרשמה נכשלה");
-        toast.error(response.message || "ההרשמה נכשלה");
+        setError(response.message || "Registration failed.");
+        toast.error(response.message || "Registration failed.");
       }
     } catch (error) {
       // Handle unexpected errors
       console.error(error);
-      setError("אירעה שגיאה. אנא נסה שוב.");
-      toast.error("אירעה שגיאה. אנא נסה שוב.");
+      setError("An error occurred. Please try again.");
+      toast.error("An error occurred. Please try again.");
     }
   };
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-center mb-6">אימות דוא״ל</h2>
+      <h2 className="text-2xl font-bold text-center mb-6">Email Verification</h2>
 
       <p className="text-center mb-6">
-        .{userData.email} קוד אימות נשלח לכתובת הדוא״ל
+        .{userData.email} A verification code has been sent to your email address
       </p>
-      <p className="text-center mb-6">.אנא הזן את הקוד שקיבלת</p>
+      <p className="text-center mb-6">Please enter the code you received.</p>
 
       {error && <p className="text-red-500 text-center mb-6">{error}</p>}
 
@@ -77,7 +77,7 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
             htmlFor="verificationCode"
             className="block text-md font-medium text-gray-700 mb-2"
           >
-            קוד אימות
+            Verification Code
           </label>
           <input
             type="text"
@@ -94,14 +94,14 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
             type="submit"
             className="w-1/2 mr-2 py-3 text-lg bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300"
           >
-            אימות
+            Verify
           </button>
           <button
             type="button"
             onClick={onBack}
             className="w-1/2 ml-2 py-3 text-lg bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors duration-300"
           >
-            חזור
+            Go Back
           </button>
         </div>
 
@@ -111,7 +111,7 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
             onClick={handleSendVerificationCode}
             className="text-blue-600 hover:underline"
           >
-            שלח קוד אימות מחדש
+            Resend Verification Code
           </button>
         </div>
       </form>

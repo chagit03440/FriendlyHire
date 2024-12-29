@@ -7,7 +7,7 @@ const Footer = () => {
         {/* Logo and Company Name */}
         <div className="mb-4 md:mb-0 text-center md:text-left">
           <h2 className="text-2xl font-bold">FriendlyHire</h2>
-          <p className="text-sm text-gray-400">פתרון הגיוס החברתי שלכם</p>
+          <p className="text-sm text-gray-400">Your Social Recruitment Solution</p>
         </div>
 
         {/* Social Media Links */}
@@ -99,7 +99,7 @@ const Footer = () => {
 
         {/* Contact Information */}
         <div className="text-center md:text-right">
-          <p className="text-sm">צור קשר: 054-1234567</p>
+          <p className="text-sm">Contact Us: 054-1234567</p>
           <p className="text-sm">info@friendlyhire.com</p>
         </div>
       </div>
@@ -107,7 +107,7 @@ const Footer = () => {
       {/* Copyright */}
       <div className="text-center mt-6 pt-4 border-t border-gray-700">
         <p className="text-sm text-gray-400">
-          © 2024 FriendlyHire. כל הזכויות שמורות.
+          © 2024 FriendlyHire. All rights reserved.
         </p>
       </div>
     </footer>

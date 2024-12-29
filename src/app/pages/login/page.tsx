@@ -37,12 +37,12 @@ const Login = () => {
     try {
       const { success } = await loginAxiosForGetToken(email, password);
       if (success) {
-        toast.success("התחברת בהצלחה!");
+        toast.success("Successfully logged in!");
         setTimeout(() => {
           router.push("/pages/home");
         }, 2000);
       } else {
-        setError("היה בעיה בהתחברות. נסה שוב.");
+        setError("There was an issue logging in. Please try again.");
       }
     } catch (error) {
       console.error(error);
