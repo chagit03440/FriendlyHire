@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import IJob from "../../types/job";
-import JobCard from "../applications/JobCard";
 import { useJobActions } from "@/app/store/JobActionsContext";
 import { useUser } from "@/app/store/UserContext";
 import { getUser } from "@/app/services/userServices";
 import { calculateSkillsMatch } from "./calculateSkillsMatch";
 import { useRouter } from "next/navigation";
 import ApplyEditModal from "../applications/ApplyEditModal";
+import JobCard from "../jobs/JobCard";
 
 interface IUser {
   skills: string[];
