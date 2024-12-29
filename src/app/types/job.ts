@@ -10,4 +10,5 @@ export default interface IJob extends Document {
   location: string;
   status: "Open" | "Closed";
   createdBy: string;
+  matchPercentage?: number;
 }

@@ -1,5 +1,5 @@
 "use client";
-import JobList from "@/app/components/applications/JobList";
+import JobList from "@/app/components/jobs/JobList";
 import LoadSpinner from "@/app/components/common/LoadSpinner";
 import { getJobs } from "@/app/services/jobServices";
 import { JobActionsProvider } from "@/app/store/JobActionsContext";
@@ -14,8 +14,7 @@ const Page = () => {
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const [error, setError] = useState<string | null>(null);
 
-
- // Fetch jobs in useEffect
+  // Fetch jobs in useEffect
   useEffect(() => {
     const fetchJobs = async () => {
       setIsLoading(true); // Set loading state
@@ -30,10 +29,9 @@ const Page = () => {
       }
     };
 
-  fetchJobs(); // Trigger the function
-}, []); // Empty dependency array means it runs once on mount
+    fetchJobs(); // Trigger the function
+  }, []); // Empty dependency array means it runs once on mount
 
-  
   const handleAddJob = async () => {
     router.push("/pages/home/employee/addJob"); // Navigate to the Add Job page
     await queryClient.invalidateQueries({ queryKey: ["applications"] });
@@ -45,13 +43,8 @@ const Page = () => {
         <LoadSpinner />
       </div>
     );
-    if (error)
-      return (
-        <div className="text-red-500">
-          Error: {error}
-        </div>
-      );
-      
+  if (error) return <div className="text-red-500">Error: {error}</div>;
+
   return (
     <JobActionsProvider>
       <h2 className="text-xl font-semibold mb-4">Jobs Data</h2>

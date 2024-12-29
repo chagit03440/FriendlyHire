@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getJobs } from "../../services/jobServices";
-import JobList from "../applications/JobList";
+import JobList from "../jobs/JobList";
 import { JobActionsProvider } from "../../store/JobActionsContext";
 import LoadSpinner from "../common/LoadSpinner";
 
@@ -41,13 +41,7 @@ const EmployeeDashboard = () => {
         <LoadSpinner />
       </div>
     );
-
-  if (error)
-    return (
-      <div className="text-red-500 text-center">
-        Error: {error}
-      </div>
-    );
+  if (error) return <div className="text-red-500">Error: {error}</div>;
 
   return (
     <JobActionsProvider>
