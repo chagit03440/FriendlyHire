@@ -134,7 +134,6 @@ const NavBar: React.FC = () => {
 
   }, [setRole, router]);
 
-
   const UserMenu: React.FC<{ isOpen: boolean; options: NavOption[] }> = ({
     isOpen,
     options,
@@ -182,7 +181,6 @@ const NavBar: React.FC = () => {
   useEffect(() => {
     setIsOpen(false);
   }, [pathname]);
-
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
