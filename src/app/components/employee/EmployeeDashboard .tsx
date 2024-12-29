@@ -37,7 +37,7 @@ const EmployeeDashboard = () => {
 
   if (isLoading)
     return (
-      <div>
+      <div className="flex justify-center items-center h-full">
         <LoadSpinner />
       </div>
     );
@@ -46,7 +46,7 @@ const EmployeeDashboard = () => {
   return (
     <JobActionsProvider>
       <div className="employee-page bg-gray-100 min-h-screen p-8">
-        <h1 className="text-4xl font-bold mb-6 text-center text-blue-800">
+        <h1 className="text-4xl font-bold mb-6 text-center text-black">
           All the Employee Jobs
         </h1>
 
@@ -54,7 +54,7 @@ const EmployeeDashboard = () => {
         <div className="flex justify-center mb-6">
           <button
             onClick={handleAddJobClick}
-            className="bg-gradient-to-r from-blue-500 to-purple-500 text-white px-8 py-2 rounded-full shadow-lg hover:from-blue-600 hover:to-purple-600 transition duration-200"
+            className="bg-gradient-to-r from-orange-500 to-gray-700 text-white px-8 py-2 rounded-full shadow-lg hover:from-orange-600 hover:to-gray-800 transition duration-200"
           >
             Add Job
           </button>

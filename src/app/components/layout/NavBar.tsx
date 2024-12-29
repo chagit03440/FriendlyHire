@@ -166,7 +166,7 @@ const NavBar: React.FC = () => {
       className="inline-flex items-center justify-center w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
     >
       <Image
-        src="/avatar.jpg"
+        src="/avatar2.png"
         alt="User Avatar"
         width={40}
         height={40}

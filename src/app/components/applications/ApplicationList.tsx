@@ -1,90 +1,150 @@
+"use client";
+
 import React, { useState } from "react";
 import { useJobActions } from "@/app/store/JobActionsContext";
 import IApplication from "@/app/types/application";
+import ApplyEditModal from "./ApplyEditModal";
+import { useRouter } from "next/navigation";
+import { FaBookmark, FaArchive } from "react-icons/fa"; // Bookmark and Archive icons from react-icons
 
 interface Props {
   applications: IApplication[];
 }
 
 const ApplicationList: React.FC<Props> = ({ applications }) => {
-  const { handleApplyJob, handleArchiveJob } = useJobActions(); // Use the archive action from context
-  const [applyingJob, setApplyingJob] = useState<string | null>(null); // Track the job being applied for
-  const [archivingJob, setArchivingJob] = useState<string | null>(null); // Track the job being archived
+  const { handleApplyJob, handleArchiveJob } = useJobActions();
+  const [applyingJob, setApplyingJob] = useState<string | null>(null);
+  const [archivingJob, setArchivingJob] = useState<string | null>(null);
+  const [modalJobId, setModalJobId] = useState<string | null>(null);
+  const router = useRouter();
 
-  const handleApplyButtonClick = async (jobId: string) => {
-    setApplyingJob(jobId); // Set the jobId of the job being applied for
-    try {
-      await handleApplyJob(jobId); // Apply for the job
-    } catch (error) {
-      console.error("Error applying for job:", error);
-    } finally {
-      setApplyingJob(null); // Reset applying job state
-    }
+  const handleApplyButtonClick = (jobId: string) => {
+    setModalJobId(jobId);
   };
 
   const handleArchiveButtonClick = async (jobId: string) => {
-    setArchivingJob(jobId); // Set the jobId of the job being archived
+    setArchivingJob(jobId);
     try {
-      await handleArchiveJob(jobId); // Archive the job
+      await handleArchiveJob(jobId);
     } catch (error) {
       console.error("Error archiving job:", error);
     } finally {
-      setArchivingJob(null); // Reset archiving job state
+      setArchivingJob(null);
     }
+  };
+
+  const handleApplyNow = async () => {
+    if (!modalJobId) return;
+
+    setApplyingJob(modalJobId);
+    try {
+      await handleApplyJob(modalJobId);
+    } catch (error) {
+      console.error("Error applying for job:", error);
+    } finally {
+      setApplyingJob(null);
+      setModalJobId(null);
+    }
+  };
+
+  const handleEditResume = () => {
+    if (!modalJobId) return;
+    router.push("/pages/home/candidate/uploadResume");
+    setModalJobId(null);
   };
 
   return (
     <div className="application-list">
-      <table className="table-auto w-full border-collapse border border-gray-300">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="border px-4 py-2 text-left">Job Title</th>
-            <th className="border px-4 py-2 text-left">Company</th>
-            <th className="border px-4 py-2 text-left">Status</th>
-            <th className="border px-4 py-2 text-left">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {applications.map((application) => (
-            <tr key={application._id}>
-              <td className="border px-4 py-2">
-                {typeof application.jobId === "object" && "title" in application.jobId
-                  ? application.jobId.title
-                  : "N/A"}
-              </td>
-              <td className="border px-4 py-2">
-                {typeof application.jobId === "object" && "company" in application.jobId
-                  ? application.jobId.company
-                  : "N/A"}
-              </td>
-              <td className="border px-4 py-2">{application.status}</td>
-              <td className="border px-4 py-2 space-x-2">
-                {/* Apply Button: Only show if status is 'Saved' */}
-                {application.status === "Saved" && application.jobId && typeof application.jobId === "object" && (
+      <div className="bg-white text-black p-6 rounded-lg shadow-lg">
+        <div className="overflow-x-auto">
+          <div className="space-y-4">
+            {applications.map((application) => (
+              <div
+                key={application._id}
+                className="flex justify-between items-center p-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition-colors"
+              >
+                <div className="flex-1">
+                  <h3 className="text-lg font-medium">
+                    {typeof application.jobId === "object" && "title" in application.jobId
+                      ? application.jobId.title
+                      : "N/A"}
+                  </h3>
+                  <p className="text-sm text-gray-400">
+                    {typeof application.jobId === "object" && "company" in application.jobId
+                      ? application.jobId.company
+                      : "N/A"}
+                  </p>
+                </div>
+
+                <div className="flex items-center space-x-4">
+                  {/* Status - plain text */}
+                  <span
+                    className={`text-sm font-medium text-gray-400 ${
+                      application.status === "Saved"
+                        ? "text-orange-500"
+                        : application.status === "Applied"
+                        ? "text-gray-500"
+                        : application.status === "Sent"
+                        ? "text-gray-500"
+                        : application.status === "Archived"
+                        ? "text-gray-400"
+                        : "text-gray-500"
+                    }`}
+                  >
+                    {application.status === "Saved" ? (
+                      <FaBookmark className="text-orange-500 inline mr-2" />
+                    ) : (
+                      application.status
+                    )}
+                  </span>
+
+                  {/* Apply Button (only for saved jobs, disabled for applied, sent, and archived) */}
                   <button
                     onClick={() => handleApplyButtonClick(application.jobId._id.toString())}
-                    disabled={applyingJob === application.jobId._id.toString()} // Disable if applying for this job
-                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    disabled={
+                      application.status !== "Saved" || applyingJob === application.jobId._id.toString()
+                    }
+                    className={`w-28 px-4 py-2 rounded-md text-white ${
+                      applyingJob === application.jobId._id.toString()
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : application.status === "Saved"
+                        ? "bg-orange-500 hover:bg-orange-600"
+                        : "bg-gray-500 cursor-not-allowed"
+                    }`}
                   >
-                    {applyingJob === application.jobId._id.toString() ? "Applying..." : "Apply Job"}
+                    {applyingJob === application.jobId._id.toString() ? "Applying..." : "Apply"}
                   </button>
-                )}
 
-                {/* Archive Button: Show for all statuses except 'Archived' */}
-                {application.status !== "Archived" && application.jobId && typeof application.jobId === "object" && (
+                  {/* Archive Button (orange for not archived, grey for archived) */}
                   <button
                     onClick={() => handleArchiveButtonClick(application.jobId._id.toString())}
-                    disabled={archivingJob === application.jobId._id.toString()} // Disable if archiving this job
-                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    disabled={archivingJob === application.jobId._id.toString()}
+                    className={`w-28 h-10 flex justify-center items-center rounded-md text-white ${
+                      archivingJob === application.jobId._id.toString()
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : application.status === "Archived"
+                        ? "bg-gray-400 cursor-not-allowed"
+                        : "bg-orange-500 hover:bg-orange-600"
+                    }`}
+                    title="Move to Archive" // Tooltip when hovering over the archive icon
                   >
-                    {archivingJob === application.jobId._id.toString() ? "Archiving..." : "Archive"}
+                    <FaArchive className={`text-white`} />
                   </button>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Apply/Edit Modal */}
+      <ApplyEditModal
+        isOpen={modalJobId !== null}
+        onClose={() => setModalJobId(null)}
+        onApplyNow={handleApplyNow}
+        onEditResume={handleEditResume}
+        loading={applyingJob === modalJobId}
+      />
     </div>
   );
 };
