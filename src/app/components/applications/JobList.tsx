@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import IJob from "../../types/job";
 import JobCard from "./JobCard";
 import CandidateJobCard from "../candidate/CandidateJobCard";
