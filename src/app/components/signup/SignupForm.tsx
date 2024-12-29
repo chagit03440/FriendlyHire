@@ -207,7 +207,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
         type="submit"
         className="w-full py-3 mt-8 text-lg bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300"
       >
-        המשך
+        Continue
       </button>
     </form>
   );

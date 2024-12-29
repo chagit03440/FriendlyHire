@@ -23,20 +23,20 @@ const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
   const handleSendResetCode = async () => {
     const response = await sendResetPasswordCode(email);
     if (response.success) {
-      toast.success(response.message || "קוד איפוס נשלח בהצלחה");
+      toast.success(response.message || "Reset code sent successfully.");
       setStage("code");
     } else {
-      toast.error(response.message || "שליחת קוד איפוס נכשלה");
+      toast.error(response.message || "Failed to send reset code.");
     }
   };
 
   const handleResetPassword = async () => {
     const response = await resetPassword(email, resetCode, newPassword);
     if (response.success) {
-      toast.success(response.message || "סיסמה אופסה בהצלחה");
+      toast.success(response.message || "Password reset successfully.");
       onClose();
     } else {
-      toast.error(response.message || "איפוס סיסמה נכשל");
+      toast.error(response.message || "Password reset failed.");
     }
   };
 
@@ -45,7 +45,7 @@ const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-6">איפוס סיסמה</h2>
+        <h2 className="text-2xl font-bold text-center mb-6">Reset Password</h2>
 
         {stage === "email" && (
           <div>
@@ -53,7 +53,7 @@ const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
               htmlFor="reset-email"
               className="block text-md font-medium text-gray-700 mb-2"
             >
-              הזן כתובת אימייל
+              Enter an email address.
             </label>
             <input
               type="email"
@@ -68,13 +68,13 @@ const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
                 onClick={handleSendResetCode}
                 className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300"
               >
-                שלח קוד איפוס
+                Send Reset Code
               </button>
               <button
                 onClick={onClose}
                 className="w-full py-3 ml-4 text-gray-600 hover:text-gray-800 transition-colors duration-300"
               >
-                בטל
+                Cancel
               </button>
             </div>
           </div>
@@ -86,7 +86,7 @@ const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
               htmlFor="reset-code"
               className="block text-md font-medium text-gray-700 mb-2"
             >
-              הזן קוד איפוס
+              Enter Reset Code
             </label>
             <input
               type="text"
@@ -100,7 +100,7 @@ const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
               onClick={() => setStage("password")}
               className="w-full py-3 mt-6 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300"
             >
-              המשך
+              Continue
             </button>
           </div>
         )}
@@ -111,7 +111,7 @@ const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
               htmlFor="new-password"
               className="block text-md font-medium text-gray-700 mb-2"
             >
-              סיסמה חדשה
+              New Password
             </label>
             <input
               type="password"
@@ -126,13 +126,13 @@ const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
                 onClick={handleResetPassword}
                 className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300"
               >
-                אפס סיסמה
+                Reset Password
               </button>
               <button
                 onClick={onClose}
                 className="w-full py-3 ml-4 text-gray-600 hover:text-gray-800 transition-colors duration-300"
               >
-                בטל
+               Cancel
               </button>
             </div>
           </div>

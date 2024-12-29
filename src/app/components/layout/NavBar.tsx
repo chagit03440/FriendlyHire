@@ -2,12 +2,15 @@
 import Image from "next/image";
 import { useRouter, usePathname } from "next/navigation";
 import { useUser } from "../../store/UserContext";
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, ReactNode } from "react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { FaUser, FaSignOutAlt } from 'react-icons/fa';
+import { RiFileTextFill } from 'react-icons/ri';
+import { MdWork } from 'react-icons/md';
 
 type NavOption = {
-  label: string;
+  label: string | ReactNode;
   onClick: () => void;
   style?: string;
 };
@@ -29,55 +32,82 @@ const NavButton: React.FC<{ href: string; text: string }> = ({
 );
 
 const NavBar: React.FC = () => {
-  const { role, setRole , setMail} = useUser();
+  const { role, setRole, setMail } = useUser();
   const router = useRouter();
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-
-  // Close menu when route changes
-  useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
 
   const roleOptions: RoleOptions = useMemo(
     () => ({
       admin: [
         {
-          label: "Profile",
+          label: (
+            <span className="flex items-center">
+              <FaUser className="mr-2" />Profile
+            </span>
+          ),
           onClick: () => router.push("/pages/home/profile"),
         },
         {
-          label: "Logout",
+          label: (
+            <span className="flex items-center">
+              <FaSignOutAlt className="mr-2" />Logout
+            </span>
+          ),
           onClick: () => handleLogout(),
           style: "text-red-500 hover:bg-red-100",
         },
       ],
       employee: [
         {
-          label: "Profile",
+          label: (
+            <span className="flex items-center">
+              <FaUser className="mr-2" />Profile
+            </span>
+          ),
           onClick: () => router.push("/pages/home/profile"),
         },
         {
-          label: "Logout",
+          label:(
+            <span className="flex items-center">
+              <FaSignOutAlt className="mr-2" />Logout
+            </span>
+          ), 
           onClick: () => handleLogout(),
           style: "text-red-500 hover:bg-red-100",
         },
       ],
       candidate: [
         {
-          label: "Profile",
+          label: (
+            <span className="flex items-center">
+              <FaUser className="mr-2" />Profile
+            </span>
+          ),
           onClick: () => router.push("/pages/home/profile"),
         },
         {
-          label: "Resume",
+          label: (
+            <span className="flex items-center">
+              <RiFileTextFill className="mr-2" />Resume
+            </span>
+          ),
           onClick: () => router.push("/pages/home/candidate/uploadResume"),
         },
         {
-          label: "My Jobs",
+          label: (
+            <span className="flex items-center">
+              <MdWork className="mr-2" />My Jobs
+            </span>
+          ),
           onClick: () => router.push("/pages/home/candidate/myJobs"),
         },
         {
-          label: "Logout",
+          label: (
+            <span className="flex items-center">
+              <FaSignOutAlt className="mr-2" />Logout
+            </span>
+          ),
           onClick: () => handleLogout(),
           style: "text-red-500 hover:bg-red-100",
         },
@@ -120,9 +150,8 @@ const NavBar: React.FC = () => {
               setIsOpen(false); // Close menu after clicking any option
               option.onClick();
             }}
-            className={`w-full text-left px-4 py-2 hover:bg-gray-100 ${
-              option.style || "text-gray-700"
-            }`}
+            className={`w-full text-left px-4 py-2 hover:bg-gray-100 ${option.style || "text-gray-700"
+              }`}
           >
             {option.label}
           </button>
@@ -148,6 +177,12 @@ const NavBar: React.FC = () => {
   );
 
   const toggleMenu = useCallback(() => setIsOpen((prev) => !prev), []);
+
+  // Close menu when route changes
+  useEffect(() => {
+    setIsOpen(false);
+  }, [pathname]);
+
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {

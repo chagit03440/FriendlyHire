@@ -12,7 +12,7 @@ export const getEmployeeEmailTemplate = ({ jobCreatorName, userName, jobTitle })
         <!-- Header -->
         <div style="text-align: center; margin-bottom: 30px;">
           <h2 style="color: #ffffff; font-size: 24px; font-weight: bold; margin: 0;">FriendlyHire</h2>
-          <p style="color: #a0aec0; font-size: 14px; margin: 5px 0;">פתרון הגיוס החברתי שלכם</p>
+          <p style="color: #a0aec0; font-size: 14px; margin: 5px 0;">Your Social Recruitment Solution</p>
         </div>
 
         <!-- Email Content -->
@@ -60,13 +60,13 @@ export const getEmployeeEmailTemplate = ({ jobCreatorName, userName, jobTitle })
 
           <!-- Contact Info -->
           <div style="color: #a0aec0; font-size: 14px; margin-bottom: 15px;">
-            <p style="margin: 5px 0;">צור קשר: 054-1234567</p>
+            <p style="margin: 5px 0;">Contact Us: 054-1234567</p>
             <p style="margin: 5px 0;">info@friendlyhire.com</p>
           </div>
 
           <!-- Copyright -->
           <p style="color: #718096; font-size: 12px; margin: 0;">
-            © 2024 FriendlyHire. כל הזכויות שמורות.
+            © 2024 FriendlyHire. All rights reserved.
           </p>
         </div>
       </div>
