@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import IJob from "../../types/job";
 import JobCard from "./JobCard";
 import CandidateJobCard from "../candidate/CandidateJobCard";
@@ -14,14 +14,18 @@ import { updateJob } from "../../services/jobServices";
 import ReactPaginate from "react-paginate";
 import JobEmployeePopUp from "./JobEmployeePopUp";
 
+interface JobWithMatch extends IJob {
+  matchPercentage?: number;
+}
+
 interface JobListProps {
   jobs: IJob[];
 }
 
 const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
   const { role } = useUser();
-  const [jobs, setJobs] = useState<IJob[]>(initialJobs);
-  const [selectedJob, setSelectedJob] = useState<IJob | null>(null);
+  const [jobs, setJobs] = useState<JobWithMatch[]>(initialJobs);
+  const [selectedJob, setSelectedJob] = useState<JobWithMatch | null>(null);
   const [jobApplications, setJobApplications] = useState<IApplication[]>([]);
   const [isPopUpOpen, setIsPopUpOpen] = useState(false);
   const [isEditPopUpOpen, setIsEditPopUpOpen] = useState(false);
@@ -30,13 +34,27 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
 
   const { handleSendJob } = useJobActions();
 
-  const jobsPerPage = 6; // Display 6 jobs per page
+  const jobsPerPage = 6;
+
+  const handleMatchPercentageUpdate = (
+    jobId: string,
+    matchPercentage: number
+  ) => {
+    setJobs((prevJobs: JobWithMatch[]) => {
+      const updatedJobs: JobWithMatch[] = prevJobs.map((job) =>
+        job._id === jobId ? ({ ...job, matchPercentage } as JobWithMatch) : job
+      );
+
+      return [...updatedJobs].sort(
+        (a, b) => (b.matchPercentage || 0) - (a.matchPercentage || 0)
+      );
+    });
+  };
 
   const filteredJobs = jobs.filter((job) =>
-    job.title.toLowerCase().includes(searchQuery.toLowerCase()) // Filter jobs by title
+    job.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Calculate the total number of pages dynamically based on filtered jobs
   const totalPageCount = Math.ceil(filteredJobs.length / jobsPerPage);
 
   const startIndex = currentPage * jobsPerPage;
@@ -46,23 +64,22 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
   const handleJobAction = (jobId: string) => {
     setJobs((prevJobs) => prevJobs.filter((job) => job._id !== jobId));
   };
-  
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
-    setCurrentPage(0); // Ensure the page resets to 1 when search changes
+    setCurrentPage(0);
   };
-  
 
   const handlePageClick = (selectedItem: { selected: number }) => {
     setCurrentPage(selectedItem.selected);
   };
 
-  const handleEditJob = (job: IJob) => {
+  const handleEditJob = (job: JobWithMatch) => {
     setSelectedJob(job);
     setIsEditPopUpOpen(true);
   };
 
-  const handleOpenPopUp = async (job: IJob) => {
+  const handleOpenPopUp = async (job: JobWithMatch) => {
     setSelectedJob(job);
     try {
       const applications = await getJobApplications(job._id);
@@ -81,9 +98,8 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
     setIsEditPopUpOpen(false);
   };
 
-  const handleJobUpdate = async (updatedJob: IJob) => {
+  const handleJobUpdate = async (updatedJob: JobWithMatch) => {
     try {
-      console.log("job",updatedJob)
       const updated = await updateJob(updatedJob);
       setJobs((prevJobs) =>
         prevJobs.map((job) => (job._id === updated._id ? updated : job))
@@ -95,12 +111,12 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
     }
   };
 
-  const handleCloseJob = async (job: IJob) => {
+  const handleCloseJob = async (job: JobWithMatch) => {
     if (job.status === "Closed") {
       return;
     }
 
-    const updatedJob = { ...job, status: "Closed" } as IJob;
+    const updatedJob = { ...job, status: "Closed" } as JobWithMatch;
     try {
       const updated = await updateJob(updatedJob);
       setJobs((prevJobs) =>
@@ -122,7 +138,7 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
   };
 
   const buttonContainerStyle = {
-    marginTop: "auto", // Ensure buttons are at the bottom
+    marginTop: "auto",
   };
 
   const buttonStyle = {
@@ -140,8 +156,7 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
   return (
     <JobActionsProvider>
       <div className="w-full max-w-5xl mx-auto px-4">
-         {/* Search Input */}
-         <div className="mb-6">
+        <div className="mb-6">
           <input
             type="text"
             placeholder="Search jobs by title"
@@ -152,7 +167,7 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
         </div>
         <div style={jobListStyle}>
           {currentJobs.map((job) =>
-            role === "employee" || role==="admin" ? (
+            role === "employee" || role === "admin" ? (
               <div
                 key={job._id}
                 style={{
@@ -206,30 +221,43 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
                   </button>
                 </div>
               </div>
-            ) : role=="candidate"?(
-              <CandidateJobCard key={job._id} job={job} onJobAction={handleJobAction} />
-            ):<></>
+            ) : role === "candidate" ? (
+              <CandidateJobCard
+                key={job._id}
+                job={job}
+                onJobAction={handleJobAction}
+                onMatchPercentageUpdate={(matchPercentage) =>
+                  handleMatchPercentageUpdate(job._id, matchPercentage)
+                }
+              />
+            ) : (
+              <></>
+            )
           )}
         </div>
 
-        {(role === "employee" || role==="admin") && isPopUpOpen && selectedJob && (
-          <JobEmployeePopUp
-            job={selectedJob}
-            applications={jobApplications}
-            onClose={handleClosePopUp}
-            onUpdateStatus={(applicationId) => {
-              handleSendJob(applicationId);
-            }}
-          />
-        )}
+        {(role === "employee" || role === "admin") &&
+          isPopUpOpen &&
+          selectedJob && (
+            <JobEmployeePopUp
+              job={selectedJob}
+              applications={jobApplications}
+              onClose={handleClosePopUp}
+              onUpdateStatus={(applicationId) => {
+                handleSendJob(applicationId);
+              }}
+            />
+          )}
 
-        {(role === "employee" || role==="admin") && isEditPopUpOpen && selectedJob && (
-          <EditJobForm
-            job={selectedJob}
-            onClose={handleClosePopUp}
-            onUpdate={handleJobUpdate}
-          />
-        )}
+        {(role === "employee" || role === "admin") &&
+          isEditPopUpOpen &&
+          selectedJob && (
+            <EditJobForm
+              job={selectedJob}
+              onClose={handleClosePopUp}
+              onUpdate={handleJobUpdate}
+            />
+          )}
       </div>
 
       <ReactPaginate
@@ -243,8 +271,8 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
         previousClassName={"mx-2"}
         nextClassName={"mx-2"}
         disabledClassName={"text-gray-400"}
-        forcePage={currentPage}  // Add this line to force page reset on search
-        />
+        forcePage={currentPage}
+      />
     </JobActionsProvider>
   );
 };
