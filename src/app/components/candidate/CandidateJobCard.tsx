@@ -5,17 +5,17 @@ import { useJobActions } from "@/app/store/JobActionsContext";
 import { useUser } from "@/app/store/UserContext";
 import { getUser } from "@/app/services/userServices";
 import { calculateSkillsMatch } from "./calculateSkillsMatch";
+import { useRouter } from "next/navigation";
+import ApplyEditModal from "../applications/ApplyEditModal";
 
-// Define IUser interface to match the user data structure
 interface IUser {
-  skills: string[]; // Adjust the type of skills as needed
+  skills: string[];
   experience: number;
-  // Add any other properties from user data if necessary
 }
 
 interface CandidateJobCardProps {
   job: IJob;
-  onJobAction: (jobId: string) => void; // Callback for job actions
+  onJobAction: (jobId: string) => void;
 }
 
 const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
@@ -23,23 +23,24 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
   onJobAction,
 }) => {
   const [isSaved, setIsSaved] = useState(false);
-  const [user, setUser] = useState<IUser | null>(null); // Use IUser type here
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isApplying, setIsApplying] = useState(false); // Track application loading state
+  const [user, setUser] = useState<IUser | null>(null);
   const { handleSaveJob, handleApplyJob } = useJobActions();
-  const { mail } = useUser(); // Assume useUser provides the mail value
+  const { mail } = useUser();
+  const router = useRouter();
 
-  // Fetch user data when the component mounts
   useEffect(() => {
     const fetchUserData = async () => {
-      console.log("dddddddddddddddddddddddddd")
       const fetchedUser = await getUser(mail as string);
       setUser(fetchedUser);
     };
 
     fetchUserData();
-  }, [mail]); // Dependency array, fetch user data when `mail` changes
+  }, [mail]);
 
   if (!user) {
-    return <div>Loading...</div>; // Show loading state while the user data is being fetched
+    return <div>Loading...</div>;
   }
 
   const { matchPercentage: skillsMatchPercentage, missingSkills } =
@@ -66,12 +67,29 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
   const onSaveJob = () => {
     handleSaveJob(job._id);
     setIsSaved(true);
-    onJobAction(job._id); // Notify parent
+    onJobAction(job._id);
   };
 
   const onApplyJob = () => {
-    handleApplyJob(job._id);
-    onJobAction(job._id); // Notify parent
+    setIsModalOpen(true);
+  };
+
+  const handleApplyNow = async () => {
+    setIsModalOpen(false);
+    setIsApplying(true); // Start loading
+    try {
+      await handleApplyJob(job._id);
+      onJobAction(job._id);
+    } catch (error) {
+      console.error("Error applying for the job:", error);
+    } finally {
+      setIsApplying(false); // End loading
+    }
+  };
+
+  const handleEditResume = () => {
+    setIsModalOpen(false);
+    router.push("/pages/home/candidate/uploadResume");
   };
 
   return (
@@ -107,10 +125,20 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
         <button
           onClick={onApplyJob}
           className="flex-1 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors duration-200"
+          disabled={isApplying} // Disable button while applying
         >
-          Apply Now
+          {isApplying ? "Applying..." : "Apply Now"}
         </button>
       </div>
+
+      {/* Apply or Edit Modal */}
+      <ApplyEditModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onApplyNow={handleApplyNow}
+        onEditResume={handleEditResume}
+        loading={isApplying} // Pass the loading state
+      />
     </div>
   );
 };

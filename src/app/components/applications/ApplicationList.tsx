@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useJobActions } from "@/app/store/JobActionsContext";
 import IApplication from "@/app/types/application";
+import ApplyEditModal from "./ApplyEditModal";
+import { useRouter } from "next/navigation";
 
 interface Props {
   applications: IApplication[];
@@ -10,16 +12,11 @@ const ApplicationList: React.FC<Props> = ({ applications }) => {
   const { handleApplyJob, handleArchiveJob } = useJobActions(); // Use the archive action from context
   const [applyingJob, setApplyingJob] = useState<string | null>(null); // Track the job being applied for
   const [archivingJob, setArchivingJob] = useState<string | null>(null); // Track the job being archived
+  const [modalJobId, setModalJobId] = useState<string | null>(null); // Track the jobId for the modal
+  const router = useRouter();
 
-  const handleApplyButtonClick = async (jobId: string) => {
-    setApplyingJob(jobId); // Set the jobId of the job being applied for
-    try {
-      await handleApplyJob(jobId); // Apply for the job
-    } catch (error) {
-      console.error("Error applying for job:", error);
-    } finally {
-      setApplyingJob(null); // Reset applying job state
-    }
+  const handleApplyButtonClick = (jobId: string) => {
+    setModalJobId(jobId); // Open the modal for this job
   };
 
   const handleArchiveButtonClick = async (jobId: string) => {
@@ -31,6 +28,27 @@ const ApplicationList: React.FC<Props> = ({ applications }) => {
     } finally {
       setArchivingJob(null); // Reset archiving job state
     }
+  };
+
+  const handleApplyNow = async () => {
+    if (!modalJobId) return;
+
+    setApplyingJob(modalJobId); // Set the jobId of the job being applied for
+    try {
+      await handleApplyJob(modalJobId); // Apply for the job
+    } catch (error) {
+      console.error("Error applying for job:", error);
+    } finally {
+      setApplyingJob(null); // Reset applying job state
+      setModalJobId(null); // Close the modal
+    }
+  };
+
+  const handleEditResume = () => {
+    if (!modalJobId) return;
+    // Redirect to resume edit page
+    router.push("/pages/home/candidate/uploadResume");
+    setModalJobId(null); // Close the modal
   };
 
   return (
@@ -64,7 +82,11 @@ const ApplicationList: React.FC<Props> = ({ applications }) => {
                   <button
                     onClick={() => handleApplyButtonClick(application.jobId._id.toString())}
                     disabled={applyingJob === application.jobId._id.toString()} // Disable if applying for this job
-                    className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    className={`px-4 py-2 rounded ${
+                      applyingJob === application.jobId._id.toString()
+                        ? "bg-gray-400 text-gray-600 cursor-not-allowed"
+                        : "bg-blue-500 text-white hover:bg-blue-600"
+                    }`}
                   >
                     {applyingJob === application.jobId._id.toString() ? "Applying..." : "Apply Job"}
                   </button>
@@ -75,7 +97,11 @@ const ApplicationList: React.FC<Props> = ({ applications }) => {
                   <button
                     onClick={() => handleArchiveButtonClick(application.jobId._id.toString())}
                     disabled={archivingJob === application.jobId._id.toString()} // Disable if archiving this job
-                    className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                    className={`px-4 py-2 rounded ${
+                      archivingJob === application.jobId._id.toString()
+                        ? "bg-gray-400 text-gray-600 cursor-not-allowed"
+                        : "bg-red-500 text-white hover:bg-red-600"
+                    }`}
                   >
                     {archivingJob === application.jobId._id.toString() ? "Archiving..." : "Archive"}
                   </button>
@@ -85,6 +111,15 @@ const ApplicationList: React.FC<Props> = ({ applications }) => {
           ))}
         </tbody>
       </table>
+
+      {/* Apply/Edit Modal */}
+      <ApplyEditModal
+        isOpen={modalJobId !== null}
+        onClose={() => setModalJobId(null)} // Close the modal
+        onApplyNow={handleApplyNow} // Apply for the job
+        onEditResume={handleEditResume} // Edit the resume
+        loading={applyingJob === modalJobId} // Check if this job is being applied for
+      />
     </div>
   );
 };
