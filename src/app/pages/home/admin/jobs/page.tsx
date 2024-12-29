@@ -3,8 +3,6 @@ import JobList from "@/app/components/jobs/JobList";
 import LoadSpinner from "@/app/components/common/LoadSpinner";
 import { getJobs } from "@/app/services/jobServices";
 import { JobActionsProvider } from "@/app/store/JobActionsContext";
-// import { useUser } from "@/app/store/UserContext";
-// import IJob from "@/app/types/job";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";

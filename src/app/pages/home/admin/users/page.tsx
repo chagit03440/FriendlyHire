@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { getUsers, deleteUser, getUser } from "@/app/services/userServices";
@@ -29,11 +30,8 @@ const Page = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Separate users into candidates and employees
-  const candidates = users.filter(
-    (user) => user.role === "candidate"
-  ) as (IUser & ICandidate)[];
-  const employees = users.filter((user) => user.role === "employee") as (IUser &
-    IEmployee)[];
+  const candidates = users.filter((user) => user.role === "candidate") as (IUser & ICandidate)[];
+  const employees = users.filter((user) => user.role === "employee") as (IUser & IEmployee)[];
 
   const handleAddUser = () => {
     router.push("users/addUser");
@@ -41,7 +39,6 @@ const Page = () => {
 
   const handleEditUser = async (user: IUser & (ICandidate | IEmployee)) => {
     const thisUser = await getUser(user.email);
-    console.log("user", thisUser);
     setSelectedUser(thisUser);
     setIsModalOpen(true);
   };
@@ -57,103 +54,105 @@ const Page = () => {
 
   const closeModal = async () => {
     await queryClient.invalidateQueries({ queryKey: ["users"] }); // Trigger a refetch
-
     setIsModalOpen(false);
     setSelectedUser(null);
   };
 
   if (isLoading)
     return (
-      <div>
+      <div className="flex justify-center items-center h-full">
         <LoadSpinner />
       </div>
     );
   if (error instanceof Error) return <div>Error: {error.message}</div>;
 
   return (
-    <div className="p-4">
-      <h1 className="text-2xl font-bold mb-4">Users Data</h1>
-
-      {/* Add User Button */}
-      <div className="mb-6">
+    <div className="bg-gray-100 text-black p-8 rounded-lg shadow-xl">
+      {/* Header with Add User button */}
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-3xl font-semibold text-orange-500">Users Data</h2>
         <button
           onClick={handleAddUser}
-          className="bg-green-500 text-white px-4 py-2 rounded"
+          className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
         >
           Add User
         </button>
       </div>
 
       {/* Candidates Table */}
-      <section className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Candidates</h2>
-        <table className="min-w-full bg-white border border-gray-200">
-          <thead>
-            <tr>
-              <th className="border p-2 text-left">Name</th>
-              <th className="border p-2 text-left">Email</th>
-              <th className="border p-2 text-left">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {candidates.map((user) => (
-              <tr key={user.id}>
-                <td className="border p-2">{user.name}</td>
-                <td className="border p-2">{user.email}</td>
-                <td className="border p-2 flex">
-                  <button
-                    onClick={() => handleEditUser(user)}
-                    className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDeleteUser(user.email)}
-                    className="bg-red-500 text-white px-2 py-1 rounded"
-                  >
-                    Delete
-                  </button>
-                </td>
+      <section className="mb-8 overflow-x-auto">
+        <h3 className="text-xl font-semibold text-orange-500 mb-4">Candidates</h3>
+        <div className="inline-block min-w-full align-middle">
+          <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+            <thead>
+              <tr className="bg-gray-300 text-black">
+                <th className="border p-3 text-left">Name</th>
+                <th className="border p-3 text-left">Email</th>
+                <th className="border p-3 text-left">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {candidates.map((user) => (
+                <tr key={user.id} className="bg-gray-50 hover:bg-gray-100 transition-colors">
+                  <td className="border p-3">{user.name}</td>
+                  <td className="border p-3">{user.email}</td>
+                  <td className="border p-3 flex space-x-2">
+                    <button
+                      onClick={() => handleEditUser(user)}
+                      className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteUser(user.email)}
+                      className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </section>
 
       {/* Employees Table */}
       <section>
-        <h2 className="text-xl font-semibold mb-4">Employees</h2>
-        <table className="min-w-full bg-white border border-gray-200">
-          <thead>
-            <tr>
-              <th className="border p-2 text-left">Name</th>
-              <th className="border p-2 text-left">Email</th>
-              <th className="border p-2 text-left">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {employees.map((user) => (
-              <tr key={user.id}>
-                <td className="border p-2">{user.name}</td>
-                <td className="border p-2">{user.email}</td>
-                <td className="border p-2 flex">
-                  <button
-                    onClick={() => handleEditUser(user)}
-                    className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
-                  >
-                    Edit
-                  </button>
-                  <button
-                    onClick={() => handleDeleteUser(user.email)}
-                    className="bg-red-500 text-white px-2 py-1 rounded"
-                  >
-                    Delete
-                  </button>
-                </td>
+        <h3 className="text-xl font-semibold text-orange-500 mb-4">Employees</h3>
+        <div className="inline-block min-w-full align-middle">
+          <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
+            <thead>
+              <tr className="bg-gray-300 text-black">
+                <th className="border p-3 text-left">Name</th>
+                <th className="border p-3 text-left">Email</th>
+                <th className="border p-3 text-left">Actions</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {employees.map((user) => (
+                <tr key={user.id} className="bg-gray-50 hover:bg-gray-100 transition-colors">
+                  <td className="border p-3">{user.name}</td>
+                  <td className="border p-3">{user.email}</td>
+                  <td className="border p-3 flex space-x-2">
+                    <button
+                      onClick={() => handleEditUser(user)}
+                      className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
+                    >
+                      Edit
+                    </button>
+                    <button
+                      onClick={() => handleDeleteUser(user.email)}
+                      className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </section>
 
       {/* Profile Modal */}
