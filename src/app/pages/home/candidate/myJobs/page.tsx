@@ -28,7 +28,7 @@ const CandidateApplications = () => {
 
   useEffect(() => {
     // Calculate status counts once when the data is fetched
-    const counts = applications.reduce((acc: { [x: string]: number; }, application: { status: any; }) => {
+    const counts = applications.reduce((acc: { [x: string]: number; }, application: { status: ApplicationStatus; }) => {
       const status = application.status;
       if (!acc[status]) {
         acc[status] = 0;
