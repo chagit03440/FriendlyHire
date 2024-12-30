@@ -11,18 +11,24 @@ interface EmployeeJobCardProps {
 }
 
 const EmployeeJobCard: React.FC<EmployeeJobCardProps> = ({
-  job ,
+  job,
   onView,
   onEdit,
   onClose,
 }) => {
   return (
-    <div className="border border-gray-200 rounded-lg p-4 bg-white shadow-md flex flex-col">
+    <div className="border p-6 rounded-lg shadow-lg bg-gray-800 text-white h-full flex flex-col justify-between">
+      {/* Job Card */}
       <JobCard job={job} />
-      <div className="mb-4">
+
+      {/* Job Status */}
+      <div className="mb-4 p-3 bg-gray-700 rounded-lg">
         <span className="font-semibold">Status:</span> {job.status}
       </div>
+
+      {/* Job Actions (View, Edit, Close) */}
       <JobActions job={job} onView={onView} onEdit={onEdit} onClose={onClose} />
+
     </div>
   );
 };
