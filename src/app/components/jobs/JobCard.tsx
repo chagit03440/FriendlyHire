@@ -30,7 +30,7 @@ const JobCard: React.FC<JobCardProps> = ({ job, missingSkills }) => {
   };
 
   return (
-    <div className="border border-gray-300 p-6 rounded-lg shadow-lg bg-white w-full flex flex-col space-y-4 hover:shadow-xl transition-shadow duration-300 ease-in-out">
+    <div className="border border-gray-300 p-6 rounded-lg shadow-lg bg-white w-full flex flex-col space-y-4 hover:shadow-xl transition-shadow duration-300 ease-in-out h-full">
       <div>
         <h3 className="text-2xl font-semibold text-black">{job.title}</h3>
         <p className="text-lg text-gray-700">{job.company}</p>
@@ -44,17 +44,18 @@ const JobCard: React.FC<JobCardProps> = ({ job, missingSkills }) => {
           {showDescription ? "Hide Description" : "Show Description"}
         </button>
         {showDescription && (
-          <p className="text-gray-800 mt-2">{job.description}</p>
+          <p className="text-gray-800 mt-2 break-words">{job.description}</p>
         )}
       </div>
 
-      <div>
-        <span className="font-semibold text-gray-700">Experience Required:</span>{" "}
-        {job.experience} {job.experience === 1 ? "year" : "years"}
+      <div className="text-gray-700">
+        <span className="font-semibold text-gray-600">Experience Required:</span>{" "}
+        {job.experience ? `${job.experience} ${job.experience === 1 ? "year" : "years"}` : "Not specified"}
       </div>
 
-      <div>
-        <span className="font-semibold text-gray-700">Location:</span> {job.location}
+      <div className="text-gray-700">
+        <span className="font-semibold text-gray-600">Location:</span>{" "}
+        {job.location || "Not specified"}
       </div>
 
       <div>

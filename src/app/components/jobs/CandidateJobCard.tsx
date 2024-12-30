@@ -3,6 +3,8 @@ import IJob from "../../types/job";
 import JobCard from "./JobCard";
 import { useJobActions } from "@/app/store/JobActionsContext";
 import { FaBookmark, FaPaperPlane } from "react-icons/fa"; // Import both the bookmark and apply icons
+import ApplyEditModal from "../applications/ApplyEditModal";
+import { useRouter } from "next/navigation";
 
 interface CandidateJobCardProps {
   job: IJob;
@@ -14,7 +16,9 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
   onJobAction,
 }) => {
   const [isSaved, setIsSaved] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false); // State to control modal visibility
   const { handleSaveJob, handleApplyJob } = useJobActions();
+  const router = useRouter();
 
   const getMatchColor = (percentage: number) => {
     if (percentage >= 80) return "bg-orange-500";
@@ -28,13 +32,26 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
     onJobAction(job._id); // Notify parent
   };
 
-  const onApplyJob = () => {
-    handleApplyJob(job._id);
-    onJobAction(job._id); // Notify parent
+  const handleApplyButtonClick = () => {
+    setModalOpen(true); // Open the modal
+  };
+
+  const handleApplyNow = async () => {
+    try {
+      await handleApplyJob(job._id);
+      setModalOpen(false); // Close the modal after applying
+    } catch (error) {
+      console.error("Error applying for job:", error);
+    }
+  };
+
+  const handleEditResume = () => {
+    router.push("/pages/home/candidate/uploadResume");
+    setModalOpen(false); // Close modal after editing resume
   };
 
   return (
-    <div className="border p-6 rounded-lg shadow-lg bg-gray-800 text-white">
+    <div className="border p-6 rounded-lg shadow-lg bg-gray-800 text-white h-full flex flex-col justify-between">
       <div className="mb-4 p-3 bg-gray-700 rounded-lg flex items-center gap-4">
         <div className="flex-1 relative h-3 bg-gray-600 rounded-full overflow-hidden">
           <div
@@ -51,38 +68,47 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
 
       <JobCard job={job} />
 
-      <div className="flex justify-between mt-4 gap-4">
+      <div className="flex justify-center mt-4 gap-4 w-full">
         {/* Save Job with Icon and Tooltip */}
-        <div className="flex-1 group relative">
+        <div className="w-full group relative">
           <button
             onClick={onSaveJob}
             disabled={isSaved}
-            className={`w-28 h-10 flex justify-center items-center rounded-md text-white ${
+            className={`w-full h-14 flex justify-center items-center rounded-full text-orange-500 ${
               isSaved
                 ? "bg-gray-400 cursor-not-allowed"
-                : "bg-transparent border-2 border-orange-500 hover:bg-orange-500"
+                : "bg-transparent group-hover:bg-orange-500 group-hover:text-white transition-all duration-200"
             }`}
             title="Save Job" // Tooltip text on hover
           >
             <FaBookmark
               className={`${
-                isSaved ? "text-gray-400" : "text-orange-500"
+                isSaved ? "text-gray-400" : "text-orange-500 group-hover:text-white"
               } transition-all duration-200`}
             />
           </button>
         </div>
 
         {/* Apply Now Button with Icon */}
-        <div className="flex-1 group relative">
+        <div className="w-full group relative">
           <button
-            onClick={onApplyJob}
-            className="w-28 h-10 flex justify-center items-center rounded-md text-white bg-transparent border-2 border-orange-500 hover:bg-orange-500"
+            onClick={handleApplyButtonClick}
+            className="w-full h-14 flex justify-center items-center rounded-full text-orange-500 bg-transparent hover:bg-orange-500 hover:text-white transition-all duration-200"
             title="Apply Now"
           >
-            <FaPaperPlane className="text-orange-500 transition-all duration-200" />
+            <FaPaperPlane className="text-xl" />
           </button>
         </div>
       </div>
+
+      {/* Apply/Edit Modal */}
+      <ApplyEditModal
+        isOpen={modalOpen}
+        onClose={() => setModalOpen(false)}
+        onApplyNow={handleApplyNow}
+        onEditResume={handleEditResume}
+        loading={false} // You can pass actual loading state here if needed
+      />
     </div>
   );
 };
