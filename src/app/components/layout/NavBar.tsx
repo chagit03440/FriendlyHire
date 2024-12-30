@@ -171,7 +171,7 @@ const NavBar: React.FC = () => {
   const AvatarButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
     <button
       onClick={onClick}
-      className="inline-flex items-center justify-center w-15 h-15 rounded-full overflow-hidden border-2 border-gray-300 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
+      className="inline-flex items-center justify-center w-12 h-12 rounded-full overflow-hidden border-2 border-gray-300 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
     >
       <Image
         src="/avatar2.png"
@@ -193,7 +193,6 @@ const NavBar: React.FC = () => {
         if (mail) {
           const user = await getUser(String(mail));
           setUserName(user?.name || "Unknown");
-          console.log("nameee", user?.name)
         }
       } catch (error) {
         console.error("Failed to fetch user's name:", error);
@@ -214,16 +213,6 @@ const NavBar: React.FC = () => {
   return (
     <nav className="flex items-center justify-between bg-gray-800 text-white shadow-md relative">
       <div className="flex items-center" onClick={() => router.push("/pages/home")} >
-        <div className="relative w-20 h-20 mr-3">
-          <Image
-            src="/logo1.png"
-            alt="FriendlyHire Logo 1"
-            fill
-            style={{ objectFit: "contain" }}
-            className="!p-0"
-            priority
-          />
-        </div>
         <div className="relative w-20 h-20 ">
           <Image
             src="/imgs/logo2.png"
