@@ -226,15 +226,15 @@ const NavBar: React.FC = () => {
         </div>
         <div className="relative w-20 h-20 ">
           <Image
-            src="/logo2.png"
-            alt="FriendlyHire Logo 2"
+            src="/imgs/logo2.png"
+            alt="FriendlyHire Logo"
             fill
             style={{ objectFit: "contain" }}
             className="!p-0"
             priority
           />
         </div>
-        {/* <h1 className="text-2xl font-bold">FriendlyHire</h1> */}
+        <h1 className="text-2xl font-bold text-orange-500">FriendlyHire</h1>
       </div>
 
       <div className="flex items-center gap-4">
