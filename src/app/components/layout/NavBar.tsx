@@ -200,7 +200,7 @@ const NavBar: React.FC = () => {
       <div className="flex items-center">
         <div className="relative w-12 h-12 mr-3">
           <Image
-            src="/logo.png"
+            src="/imgs/logo2.png"
             alt="FriendlyHire Logo"
             fill
             style={{ objectFit: "contain" }}
@@ -208,7 +208,7 @@ const NavBar: React.FC = () => {
             priority
           />
         </div>
-        <h1 className="text-2xl font-bold">FriendlyHire</h1>
+        <h1 className="text-2xl font-bold text-orange-500">FriendlyHire</h1>
       </div>
 
       <div className="flex items-center gap-4">
