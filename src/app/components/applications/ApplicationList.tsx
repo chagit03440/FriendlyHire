@@ -1,11 +1,9 @@
-"use client";
-
 import React, { useState } from "react";
 import { useJobActions } from "@/app/store/JobActionsContext";
 import IApplication from "@/app/types/application";
 import ApplyEditModal from "./ApplyEditModal";
 import { useRouter } from "next/navigation";
-import { FaBookmark, FaArchive } from "react-icons/fa"; // Bookmark and Archive icons from react-icons
+import { FaBookmark, FaPaperPlane, FaArchive } from "react-icons/fa"; // Save, Apply, Archive icons
 
 interface Props {
   applications: IApplication[];
@@ -98,38 +96,31 @@ const ApplicationList: React.FC<Props> = ({ applications }) => {
                     )}
                   </span>
 
-                  {/* Apply Button (only for saved jobs, disabled for applied, sent, and archived) */}
-                  <button
-                    onClick={() => handleApplyButtonClick(application.jobId._id.toString())}
-                    disabled={
-                      application.status !== "Saved" || applyingJob === application.jobId._id.toString()
-                    }
-                    className={`w-28 px-4 py-2 rounded-md text-white ${
-                      applyingJob === application.jobId._id.toString()
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : application.status === "Saved"
-                        ? "bg-orange-500 hover:bg-orange-600"
-                        : "bg-gray-500 cursor-not-allowed"
-                    }`}
-                  >
-                    {applyingJob === application.jobId._id.toString() ? "Applying..." : "Apply"}
-                  </button>
+                  {/* Apply Icon Button (only for saved jobs) */}
+                  {application.status === "Saved" && (
+                    <div className="flex-1 group relative">
+                      <button
+                        onClick={() => handleApplyButtonClick(application.jobId._id.toString())}
+                        disabled={applyingJob === application.jobId._id.toString()}
+                        className="p-2 rounded-full text-orange-500 hover:bg-orange-500 hover:text-white transition-all duration-200"
+                        title="Apply Now"
+                      >
+                        <FaPaperPlane className="text-xl" />
+                      </button>
+                    </div>
+                  )}
 
-                  {/* Archive Button (orange for not archived, grey for archived) */}
-                  <button
-                    onClick={() => handleArchiveButtonClick(application.jobId._id.toString())}
-                    disabled={archivingJob === application.jobId._id.toString()}
-                    className={`w-28 h-10 flex justify-center items-center rounded-md text-white ${
-                      archivingJob === application.jobId._id.toString()
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : application.status === "Archived"
-                        ? "bg-gray-400 cursor-not-allowed"
-                        : "bg-orange-500 hover:bg-orange-600"
-                    }`}
-                    title="Move to Archive" // Tooltip when hovering over the archive icon
-                  >
-                    <FaArchive className={`text-white`} />
-                  </button>
+                  {/* Archive Icon Button (visible only if the job isn't archived) */}
+                  {application.status !== "Archived" && (
+                     <button
+                      onClick={() => handleArchiveButtonClick(application.jobId._id.toString())}
+                      disabled={archivingJob === application.jobId._id.toString()}
+                      className="p-2 rounded-full text-orange-500 hover:bg-orange-500 hover:text-white transition-all duration-200"
+                      title="Move to Archive"
+                   >
+                     <FaArchive className="text-xl" />
+                   </button>
+                  )}
                 </div>
               </div>
             ))}

@@ -1,13 +1,15 @@
 "use client";
 import Image from "next/image";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useUser } from "../../store/UserContext";
 import { useMemo, useCallback, ReactNode } from "react";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaUser, FaSignOutAlt } from 'react-icons/fa';
 import { RiFileTextFill } from 'react-icons/ri';
+import { IoHome } from "react-icons/io5";
 import { MdWork } from 'react-icons/md';
+import { getUser } from "@/app/services/userServices";
 
 type NavOption = {
   label: string | ReactNode;
@@ -19,23 +21,23 @@ type RoleOptions = {
   [key: string]: NavOption[];
 };
 
-const NavButton: React.FC<{ href: string; text: string }> = ({
+const NavButton: React.FC<{ href: string; text: ReactNode }> = ({
   href,
   text,
 }) => (
   <Link
     href={href}
-    className="inline-flex items-center justify-center h-10 px-4 rounded-full border-2 border-gray-300 hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-white"
+    className="inline-flex items-center justify-center h-10 px-4 rounded-full border-2 border-gray-300 hover:border-orange-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors text-white p-5"
   >
     {text}
   </Link>
 );
 
 const NavBar: React.FC = () => {
-  const { role, setRole, setMail } = useUser();
+  const { role, mail, setRole, setMail } = useUser();
   const router = useRouter();
-  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
+  const [userName, setUserName] = useState("");
 
   const roleOptions: RoleOptions = useMemo(
     () => ({
@@ -68,11 +70,11 @@ const NavBar: React.FC = () => {
           onClick: () => router.push("/pages/home/profile"),
         },
         {
-          label:(
+          label: (
             <span className="flex items-center">
               <FaSignOutAlt className="mr-2" />Logout
             </span>
-          ), 
+          ),
           onClick: () => handleLogout(),
           style: "text-red-500 hover:bg-red-100",
         },
@@ -134,7 +136,6 @@ const NavBar: React.FC = () => {
 
   }, [setRole, router]);
 
-
   const UserMenu: React.FC<{ isOpen: boolean; options: NavOption[] }> = ({
     isOpen,
     options,
@@ -142,12 +143,19 @@ const NavBar: React.FC = () => {
     if (!isOpen) return null;
 
     return (
-      <div className="absolute right-0 top-12 bg-white rounded-md shadow-lg py-2 min-w-[160px] z-50">
+      <div className="absolute right-0 top-0 bg-white rounded-md shadow-lg py-2 min-w-[160px] z-50">
+        <div className="flex items-center p-4 text-black space-x-4 border-b border-gray-300 pb-2">
+          <AvatarButton onClick={toggleMenu} />
+          <div className="flex flex-col">
+            <span className="font-bold text-lg">{userName}</span>
+            <span className="text-sm text-gray-700">{mail}</span>
+          </div>
+        </div>
         {options.map((option, index) => (
           <button
             key={index}
             onClick={() => {
-              setIsOpen(false); // Close menu after clicking any option
+              setIsOpen(false);
               option.onClick();
             }}
             className={`w-full text-left px-4 py-2 hover:bg-gray-100 ${option.style || "text-gray-700"
@@ -163,7 +171,7 @@ const NavBar: React.FC = () => {
   const AvatarButton: React.FC<{ onClick: () => void }> = ({ onClick }) => (
     <button
       onClick={onClick}
-      className="inline-flex items-center justify-center w-10 h-10 rounded-full overflow-hidden border-2 border-gray-300 hover:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors"
+      className="inline-flex items-center justify-center w-12 h-12 rounded-full overflow-hidden border-2 border-gray-300 hover:border-gray-500 focus:outline-none focus:ring-2 focus:ring-gray-500 transition-colors"
     >
       <Image
         src="/avatar2.png"
@@ -178,13 +186,20 @@ const NavBar: React.FC = () => {
 
   const toggleMenu = useCallback(() => setIsOpen((prev) => !prev), []);
 
-  // Close menu when route changes
   useEffect(() => {
-    setIsOpen(false);
-  }, [pathname]);
+    // Function to fetch the creator's name
+    const fetchUserName = async () => {
+      try {
+        if (mail) {
+          const user = await getUser(String(mail));
+          setUserName(user?.name || "Unknown");
+        }
+      } catch (error) {
+        console.error("Failed to fetch user's name:", error);
+      }
+    };
+    fetchUserName();
 
-
-  useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (isOpen && !(event.target as Element).closest(".nav-menu")) {
         setIsOpen(false);
@@ -193,14 +208,14 @@ const NavBar: React.FC = () => {
 
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, [isOpen]);
+  }, [isOpen, mail]);
 
   return (
-    <nav className="flex items-center justify-between px-6 py-4 bg-gray-800 text-white shadow-md relative">
-      <div className="flex items-center">
-        <div className="relative w-12 h-12 mr-3">
+    <nav className="flex items-center justify-between bg-gray-800 text-white shadow-md relative">
+      <div className="flex items-center" onClick={() => router.push("/pages/home")} >
+        <div className="relative w-20 h-20 ">
           <Image
-            src="/logo.png"
+            src="/imgs/logo2.png"
             alt="FriendlyHire Logo"
             fill
             style={{ objectFit: "contain" }}
@@ -208,13 +223,20 @@ const NavBar: React.FC = () => {
             priority
           />
         </div>
-        <h1 className="text-2xl font-bold">FriendlyHire</h1>
+        <h1 className="text-2xl font-bold text-orange-500">FriendlyHire</h1>
       </div>
 
       <div className="flex items-center gap-4">
         {role ? (
           <div className="flex items-center gap-4">
-            <NavButton href="/pages/home" text="Home" />
+            <div className="flex items-center gap-1 text-white">
+              <NavButton href="/pages/home" text={
+                <div className="flex flex-col items-center justify-center text-center p-2">
+                  <IoHome className="text-xl mt-3" />
+                  <span className="text-xs mb-2">Home</span>
+                </div>
+              } /> 
+            </div>
             <div className="nav-menu relative">
               <AvatarButton onClick={toggleMenu} />
               <UserMenu isOpen={isOpen} options={roleOptions[role] || []} />

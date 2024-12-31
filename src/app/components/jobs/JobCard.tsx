@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import IJob from "@/app/types/job";
-import { getUser } from "@/app/services/userServices"; // Adjust the path as necessary
+import { getUser } from "@/app/services/userServices";
 
 interface JobCardProps {
   job: IJob;
@@ -9,13 +9,13 @@ interface JobCardProps {
 
 const JobCard: React.FC<JobCardProps> = ({ job, missingSkills }) => {
   const [showDescription, setShowDescription] = useState(false);
-  const [creatorName, setCreatorName] = useState<string | null>(null); // State for creator's name
+  const [creatorName, setCreatorName] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCreatorName = async () => {
       try {
         const user = await getUser(job.createdBy);
-        setCreatorName(user?.name || "Unknown"); // Fallback to "Unknown" if no name is found
+        setCreatorName(user?.name || "Unknown");
       } catch (error) {
         console.error("Failed to fetch creator's name:", error);
         setCreatorName("Error fetching name");
@@ -29,76 +29,60 @@ const JobCard: React.FC<JobCardProps> = ({ job, missingSkills }) => {
     setShowDescription(!showDescription);
   };
 
-  const getRequirementStyle = (requirement: string) => {
-    const baseStyle = {
-      backgroundColor: "#f8f9fa",
-      borderRadius: "4px",
-      padding: "5px 10px",
-      margin: "5px 0",
-      fontSize: "12px",
-      width: "calc(50% - 10px)",
-      boxShadow: "0px 1px 3px rgba(0, 0, 0, 0.1)",
-    };
-
-    // Only apply color styling if missingSkills is defined
-    if (missingSkills) {
-      return {
-        ...baseStyle,
-        backgroundColor: missingSkills.includes(requirement)
-          ? "#ffebeb" // very light red for missing skills
-          : "#eaffea", // very light green for matching skills
-      };
-    }
-
-    return baseStyle;
-  };
-
   return (
-    <div className="border p-6 rounded-lg shadow-lg bg-white w-full flex flex-col justify-between">
+    <div className="border border-gray-300 p-6 rounded-lg shadow-lg bg-white w-full flex flex-col space-y-4 hover:shadow-xl transition-shadow duration-300 ease-in-out h-full">
       <div>
-        <h3 className="text-2xl font-bold text-indigo-700">{job.title}</h3>
-        <p className="text-md text-gray-500 mb-2">{job.company}</p>
-        <div className="mb-4">
-          <button
-            className="text-blue-500 underline"
-            onClick={toggleDescription}
-          >
-            {showDescription ? "Hide Description" : "Show Description"}
-          </button>
-          {showDescription && (
-            <p className="text-gray-700 mt-2 mb-4">{job.description}</p>
+        <h3 className="text-2xl font-semibold text-black">{job.title}</h3>
+        <p className="text-lg text-gray-700">{job.company}</p>
+      </div>
+
+      <div>
+        <button
+          onClick={toggleDescription}
+          className="text-indigo-600 hover:text-indigo-700 font-medium focus:outline-none"
+        >
+          {showDescription ? "Hide Description" : "Show Description"}
+        </button>
+        {showDescription && (
+          <p className="text-gray-800 mt-2 break-words">{job.description}</p>
+        )}
+      </div>
+
+      <div className="text-gray-700">
+        <span className="font-semibold text-gray-600">Experience Required:</span>{" "}
+        {job.experience ? `${job.experience} ${job.experience === 1 ? "year" : "years"}` : "Not specified"}
+      </div>
+
+      <div className="text-gray-700">
+        <span className="font-semibold text-gray-600">Location:</span>{" "}
+        {job.location || "Not specified"}
+      </div>
+
+      <div>
+        <span className="font-semibold text-gray-700">Requirements:</span>
+        <div className="flex flex-wrap gap-3 mt-3">
+          {job.requirements.length > 0 ? (
+            job.requirements.map((req, index) => (
+              <span
+                key={index}
+                className={`px-4 py-2 text-sm rounded-full font-medium ${
+                  missingSkills?.includes(req)
+                    ? "bg-red-100 text-red-600"
+                    : "bg-green-100 text-green-600"
+                }`}
+              >
+                {req}
+              </span>
+            ))
+          ) : (
+            <span className="text-gray-500 italic">No requirements listed</span>
           )}
         </div>
-        <div className="mb-4">
-          <span className="font-semibold">Experience Required:</span>{" "}
-          {job.experience} {job.experience === 1 ? "year" : "years"}
-        </div>
-        <div className="mb-4">
-          <span className="font-semibold">Location:</span> {job.location}
-        </div>
-        <div className="mb-4">
-          <span className="font-semibold">Requirements:</span>
-          <div
-            style={{
-              display: "flex",
-              flexWrap: "wrap",
-              gap: "10px",
-              justifyContent: "flex-start",
-            }}
-          >
-            {job.requirements.length > 0
-              ? job.requirements.map((req, index) => (
-                  <div key={index} style={getRequirementStyle(req)}>
-                    {req}
-                  </div>
-                ))
-              : null}
-          </div>
-        </div>
-        <div className="text-left text-sm text-gray-400 mt-auto">
-          <span className="font-semibold">Posted by:</span>{" "}
-          {creatorName || "Loading..."} {/* Display creator's name */}
-        </div>
+      </div>
+
+      <div className="text-sm text-gray-500 mt-4">
+        <span className="font-semibold text-gray-700">Posted by:</span>{" "}
+        {creatorName || "Loading..."}
       </div>
     </div>
   );

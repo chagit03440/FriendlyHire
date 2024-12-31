@@ -65,8 +65,8 @@ const CandidateDashboard: React.FC = () => {
   return (
     <JobActionsProvider>
       <div className="candidate-page bg-gray-100 min-h-screen p-8">
-        <h1 className="text-4xl font-bold mb-6 text-center text-orange-600">
-          Available Jobs for Candidates
+        <h1 className="text-4xl font-bold mb-6 text-center text-black">
+          Jobs for you
         </h1>
 
         {/* Job list */}
