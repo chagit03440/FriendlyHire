@@ -59,10 +59,13 @@ const Signup = () => {
     <div className="min-h-[calc(100vh-200px)] flex items-center justify-center bg-gray-100 py-8">
       <Toaster />
       <div className="bg-white p-12 rounded-xl shadow-2xl w-full max-w-lg">
-        <h2 className="text-3xl font-bold text-center mb-8">Registration</h2>
-
         {!isEmailVerificationStep ? (
-          <SignupForm onSignupSuccess={handleSignupSuccess} />
+          <>
+            <h2 className="text-3xl text-gray-800 font-bold text-center mb-8">
+              Create Your Account
+            </h2>
+            <SignupForm onSignupSuccess={handleSignupSuccess} />
+          </>
         ) : (
           userData && (
             <EmailVerification
