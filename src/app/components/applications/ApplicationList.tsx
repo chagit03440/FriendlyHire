@@ -3,7 +3,7 @@ import { useJobActions } from "@/app/store/JobActionsContext";
 import IApplication from "@/app/types/application";
 import ApplyEditModal from "./ApplyEditModal";
 import { useRouter } from "next/navigation";
-import { FaBookmark, FaPaperPlane, FaArchive } from "react-icons/fa"; // Save, Apply, Archive icons
+import { FaPaperPlane, FaArchive } from "react-icons/fa"; // Save, Apply, Archive icons
 
 interface Props {
   applications: IApplication[];
