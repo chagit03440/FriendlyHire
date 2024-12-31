@@ -62,12 +62,14 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
 
   return (
     <div>
-      <h2 className="text-2xl font-bold text-center mb-6">Email Verification</h2>
+      <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
+        Email Verification
+      </h2>
 
-      <p className="text-center mb-6">
-        .{userData.email} A verification code has been sent to your email address
+      <p className="text-center mb-6 text-gray-800">
+        {userData.name} A verification code has been sent to your email address
+        ({userData.email}).
       </p>
-      <p className="text-center mb-6">Please enter the code you received.</p>
 
       {error && <p className="text-red-500 text-center mb-6">{error}</p>}
 
@@ -75,14 +77,14 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
         <div className="mb-6">
           <label
             htmlFor="verificationCode"
-            className="block text-md font-medium text-gray-700 mb-2"
+            className="block text-md font-bold text-gray-800 mb-2"
           >
-            Verification Code
+            Please enter the code you received:
           </label>
           <input
             type="text"
             id="verificationCode"
-            className="w-full mt-1 p-3 border rounded-lg text-md border-gray-300 focus:ring-blue-500"
+            className="w-full mt-1 p-3 border rounded-lg text-md text-gray-800 border-gray-300 focus:ring-orange-500"
             value={verificationCode}
             onChange={(e) => setVerificationCode(e.target.value)}
             required
@@ -92,14 +94,14 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
         <div className="flex justify-between">
           <button
             type="submit"
-            className="w-1/2 mr-2 py-3 text-lg bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300"
+            className="w-1/2 mr-2 py-3 text-lg bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300"
           >
             Verify
           </button>
           <button
             type="button"
             onClick={onBack}
-            className="w-1/2 ml-2 py-3 text-lg bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors duration-300"
+            className="w-1/2 ml-2 py-3 text-lg bg-gray-800 text-white rounded-lg hover:bg-gray-700 transition-colors duration-300"
           >
             Go Back
           </button>
@@ -109,7 +111,7 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
           <button
             type="button"
             onClick={handleSendVerificationCode}
-            className="text-blue-600 hover:underline"
+            className="text-orange-500 hover:underline"
           >
             Resend Verification Code
           </button>

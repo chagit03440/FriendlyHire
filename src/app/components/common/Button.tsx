@@ -18,11 +18,11 @@ interface ButtonLinkProps {
 const ButtonLink: React.FC<ButtonLinkProps> = ({ onClick, text }) => {
   return (
     <button
-    onClick={onClick} 
-    className="px-4 py-2 text-white bg-gray-700 hover:bg-gray-800 rounded-md transition-colors duration-300 ease-in-out"
-  >
-    {text}
-  </button>
+      onClick={onClick}
+      className="px-4 py-2 text-white bg-gray-700 hover:bg-gray-800 rounded-md transition-colors duration-300 ease-in-out"
+    >
+      {text}
+    </button>
   );
 };
 

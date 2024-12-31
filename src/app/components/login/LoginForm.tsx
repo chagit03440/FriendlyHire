@@ -1,5 +1,7 @@
 "use client";
 import React from "react";
+import { useRouter } from "next/navigation";
+
 
 interface LoginFormProps {
   email: string;
@@ -20,39 +22,48 @@ const LoginForm: React.FC<LoginFormProps> = ({
   onSubmit,
   onForgotPassword,
 }) => {
+    const router = useRouter();
+
+  const inputClassName = `
+    w-full p-3 rounded-lg text-gray-800 bg-white
+    border-2 border-gray-200 transition-all duration-200
+    focus:border-orange-500 focus:ring-orange-200
+    focus:outline-none focus:ring-4
+  `;
+
+  const labelClassName = "block text-gray-800 font-semibold mb-2";
+
   return (
-    <div className="bg-white p-12 rounded-xl shadow-2xl w-full max-w-lg">
-      <h2 className="text-3xl font-bold text-center mb-6">Sign in to FriendlyHire</h2>
-      {error && <p className="text-red-500 text-center mb-6">{error}</p>}
-      <form onSubmit={onSubmit}>
-        <div className="mb-6">
-          <label
-            htmlFor="email"
-            className="block text-md font-medium text-gray-700 mb-2"
-          >
+    <div className="max-w-2xl mx-auto p-8 bg-white rounded-xl shadow-lg">
+      <form onSubmit={onSubmit} className="space-y-6">
+        {error && (
+          <div className="p-4 bg-red-50 border-l-4 border-red-500 text-red-700 rounded">
+            {error}
+          </div>
+        )}
+
+        <div>
+          <label htmlFor="email" className={labelClassName}>
             Email
           </label>
           <input
             type="email"
             id="email"
-            className="w-full mt-1 p-3 border border-gray-300 rounded-lg text-md"
+            className={inputClassName}
             value={email}
             onChange={(e) => onEmailChange(e.target.value)}
             required
           />
         </div>
 
-        <div className="mb-6">
-          <label
-            htmlFor="password"
-            className="block text-md font-medium text-gray-700 mb-2"
-          >
+        <div>
+          <label htmlFor="password" className={labelClassName}>
             Password
           </label>
           <input
             type="password"
             id="password"
-            className="w-full mt-1 p-3 border border-gray-300 rounded-lg text-md"
+            className={inputClassName}
             value={password}
             onChange={(e) => onPasswordChange(e.target.value)}
             required
@@ -61,17 +72,31 @@ const LoginForm: React.FC<LoginFormProps> = ({
 
         <button
           type="submit"
-          className="w-full py-3 mt-6 text-lg bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300"
+          className="w-full py-3 px-4 text-white bg-orange-500 hover:bg-orange-600 
+                   rounded-lg font-semibold shadow-md hover:shadow-lg
+                   transform hover:-translate-y-0.5 transition-all duration-200
+                   focus:outline-none focus:ring-4 focus:ring-orange-200"
         >
-         Sign in
+          Sign In
         </button>
 
         <button
           type="button"
           onClick={onForgotPassword}
-          className="w-full py-2 mt-4 text-md text-blue-600 hover:text-blue-800 transition-colors duration-300"
+          className="w-full py-2 text-gray-800 hover:text-orange-500 
+                   font-medium transition-colors duration-200
+                   focus:outline-none focus:ring-4 focus:ring-orange-200 rounded-lg"
         >
-          Forgot password?
+          Forgot Password?
+        </button>
+        <button
+          type="button"
+          className="w-full py-2 text-gray-800 hover:text-orange-500 
+               font-medium transition-colors duration-200
+               focus:outline-none focus:ring-4 focus:ring-orange-200 rounded-lg"
+          onClick={() => router.push("/pages/signup")}
+        >
+          Don&apos;t have account yet?
         </button>
       </form>
     </div>

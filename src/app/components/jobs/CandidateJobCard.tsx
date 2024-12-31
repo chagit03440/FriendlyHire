@@ -71,7 +71,7 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
         </div>
       </div>
 
-      <JobCard job={job} />
+      <JobCard job={job} missingSkills={job.missingSkills} />
 
       <div className="flex justify-center mt-4 gap-4 w-full">
         {/* Save Job with Icon and Tooltip */}
@@ -88,7 +88,9 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
           >
             <FaBookmark
               className={`${
-                isSaved ? "text-gray-400" : "text-orange-500 group-hover:text-white"
+                isSaved
+                  ? "text-gray-400"
+                  : "text-orange-500 group-hover:text-white"
               } transition-all duration-200`}
             />
           </button>
