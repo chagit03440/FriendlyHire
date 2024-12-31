@@ -11,7 +11,7 @@ const AboutPage = () => {
         <section className="mb-12">
           <h2 className="text-2xl font-semibold mb-4">Our Mission</h2>
           <p className="text-lg leading-relaxed">
-            Our mission is to bridge the gap between alumni and job seekers by providing a centralized, user-friendly platform. Whether you're a recent graduate searching for your dream job or an experienced professional looking to help others in your field, FriendlyHire is here to make the process seamless and effective.
+            Our mission is to bridge the gap between alumni and job seekers by providing a centralized, user-friendly platform. Whether you&apos;re a recent graduate searching for your dream job or an experienced professional looking to help others in your field, FriendlyHire is here to make the process seamless and effective.
           </p>
         </section>
 
@@ -59,7 +59,7 @@ const AboutPage = () => {
         <section>
           <h2 className="text-2xl font-semibold mb-4">Join Us</h2>
           <p className="text-lg leading-relaxed">
-            Whether you're looking to grow your career or help others advance theirs, FriendlyHire is the platform to make it happen. Together, we can build a thriving professional community that supports, uplifts, and inspires.
+            Whether you&apos;re looking to grow your career or help others advance theirs, FriendlyHire is the platform to make it happen. Together, we can build a thriving professional community that supports, uplifts, and inspires.
           </p>
           <p className="text-lg leading-relaxed mt-4">
             Start your journey with FriendlyHire today!
