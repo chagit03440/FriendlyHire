@@ -9,7 +9,6 @@ import checkAccess from "@/app/utils/checkAccess";
 import LoadSpinner from "@/app/components/common/LoadSpinner";
 
 const AddJob = () => {
-  // Initial state for no validation errors
   const noValidationErrors = {
     title: "",
     description: "",
@@ -20,7 +19,6 @@ const AddJob = () => {
     status: "",
   };
 
-  // State for form fields
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [experience, setExperience] = useState("");
@@ -30,12 +28,10 @@ const AddJob = () => {
   const [status, setStatus] = useState<"Open" | "Closed">("Open");
 
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  // State for validation and error handling
   const [validationErrors, setValidationErrors] = useState(noValidationErrors);
   const [error, setError] = useState<string | null>(null);
 
-  const { mail, role} = useUser();
-
+  const { mail, role } = useUser();
   const router = useRouter();
 
   useEffect(() => {
@@ -73,12 +69,10 @@ const AddJob = () => {
     createdBy: mail || "",
   };
 
-  // Form validation function
   const validateForm = () => {
     const parsed = JobSchema.safeParse(jobData);
     if (parsed.success) {
       setValidationErrors(noValidationErrors);
-
       return true;
     } else {
       const newErrors = { ...noValidationErrors };
@@ -87,7 +81,6 @@ const AddJob = () => {
         newErrors[field] = err.message;
       });
       setValidationErrors(newErrors);
-
       return false;
     }
   };
@@ -102,11 +95,11 @@ const AddJob = () => {
   
           setTimeout(() => {
             if (role === "admin") {
-              router.push("/pages/home/admin/jobs"); // Redirect to admin jobs page for admin users
+              router.push("/pages/home/admin/jobs");
             } else {
-              router.push("/pages/home"); // Redirect to home for non-admin users
+              router.push("/pages/home");
             }
-          }, 2000); // Wait for 2 seconds
+          }, 2000); 
         } else {
           setError("There was an issue creating the job. Please try again.");
         }
@@ -116,21 +109,17 @@ const AddJob = () => {
       setError("An error occurred. Please try again.");
     }
   };
-  
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className="min-h-screen flex items-center justify-center bg-white">
       <Toaster />
-      <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-4">Post a New Job</h2>
+      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-4xl">
+        <h2 className="text-3xl font-bold text-center text-orange-500 mb-4">Post a New Job</h2>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {/* Title Input */}
           <div className="mb-4">
-            <label
-              htmlFor="title"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="title" className="block text-sm font-medium text-white">
               Job Title
             </label>
             <input
@@ -139,25 +128,20 @@ const AddJob = () => {
               className={`w-full mt-1 p-2 border rounded-md ${
                 validationErrors.title
                   ? "border-red-500 focus:ring-red-500"
-                  : "border-gray-300 focus:ring-blue-500"
-              }`}
+                  : "border-gray-300 focus:ring-orange-500"
+              } text-gray-800`}
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               required
             />
             {validationErrors.title && (
-              <p className="text-red-500 text-sm mt-1">
-                {validationErrors.title}
-              </p>
+              <p className="text-red-500 text-sm mt-1">{validationErrors.title}</p>
             )}
           </div>
 
           {/* Description Input */}
-          <div className="mb-4">
-            <label
-              htmlFor="description"
-              className="block text-sm font-medium text-gray-700"
-            >
+          <div className="mb-4 sm:col-span-2">
+            <label htmlFor="description" className="block text-sm font-medium text-white">
               Job Description
             </label>
             <textarea
@@ -165,26 +149,21 @@ const AddJob = () => {
               className={`w-full mt-1 p-2 border rounded-md ${
                 validationErrors.description
                   ? "border-red-500 focus:ring-red-500"
-                  : "border-gray-300 focus:ring-blue-500"
-              }`}
+                  : "border-gray-300 focus:ring-orange-500"
+              } text-gray-800`}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
               rows={4}
             />
             {validationErrors.description && (
-              <p className="text-red-500 text-sm mt-1">
-                {validationErrors.description}
-              </p>
+              <p className="text-red-500 text-sm mt-1">{validationErrors.description}</p>
             )}
           </div>
 
           {/* Experience Input */}
           <div className="mb-4">
-            <label
-              htmlFor="experience"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="experience" className="block text-sm font-medium text-white">
               Years of Experience Required
             </label>
             <input
@@ -193,26 +172,21 @@ const AddJob = () => {
               className={`w-full mt-1 p-2 border rounded-md ${
                 validationErrors.experience
                   ? "border-red-500 focus:ring-red-500"
-                  : "border-gray-300 focus:ring-blue-500"
-              }`}
+                  : "border-gray-300 focus:ring-orange-500"
+              } text-gray-800`}
               value={experience}
               onChange={(e) => setExperience(e.target.value)}
               required
               min="0"
             />
             {validationErrors.experience && (
-              <p className="text-red-500 text-sm mt-1">
-                {validationErrors.experience}
-              </p>
+              <p className="text-red-500 text-sm mt-1">{validationErrors.experience}</p>
             )}
           </div>
 
           {/* Company Input */}
           <div className="mb-4">
-            <label
-              htmlFor="company"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="company" className="block text-sm font-medium text-white">
               Company Name
             </label>
             <input
@@ -221,25 +195,20 @@ const AddJob = () => {
               className={`w-full mt-1 p-2 border rounded-md ${
                 validationErrors.company
                   ? "border-red-500 focus:ring-red-500"
-                  : "border-gray-300 focus:ring-blue-500"
-              }`}
+                  : "border-gray-300 focus:ring-orange-500"
+              } text-gray-800`}
               value={company}
               onChange={(e) => setCompany(e.target.value)}
               required
             />
             {validationErrors.company && (
-              <p className="text-red-500 text-sm mt-1">
-                {validationErrors.company}
-              </p>
+              <p className="text-red-500 text-sm mt-1">{validationErrors.company}</p>
             )}
           </div>
 
           {/* Requirements Input */}
-          <div className="mb-4">
-            <label
-              htmlFor="requirements"
-              className="block text-sm font-medium text-gray-700"
-            >
+          <div className="mb-4 sm:col-span-2">
+            <label htmlFor="requirements" className="block text-sm font-medium text-white">
               Job Requirements (comma-separated)
             </label>
             <input
@@ -248,26 +217,21 @@ const AddJob = () => {
               className={`w-full mt-1 p-2 border rounded-md ${
                 validationErrors.requirements
                   ? "border-red-500 focus:ring-red-500"
-                  : "border-gray-300 focus:ring-blue-500"
-              }`}
+                  : "border-gray-300 focus:ring-orange-500"
+              } text-gray-800`}
               value={requirements}
               onChange={(e) => setRequirements(e.target.value)}
               placeholder="e.g. JavaScript, React, Node.js"
               required
             />
             {validationErrors.requirements && (
-              <p className="text-red-500 text-sm mt-1">
-                {validationErrors.requirements}
-              </p>
+              <p className="text-red-500 text-sm mt-1">{validationErrors.requirements}</p>
             )}
           </div>
 
           {/* Location Input */}
           <div className="mb-4">
-            <label
-              htmlFor="location"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="location" className="block text-sm font-medium text-white">
               Job Location
             </label>
             <input
@@ -276,25 +240,20 @@ const AddJob = () => {
               className={`w-full mt-1 p-2 border rounded-md ${
                 validationErrors.location
                   ? "border-red-500 focus:ring-red-500"
-                  : "border-gray-300 focus:ring-blue-500"
-              }`}
+                  : "border-gray-300 focus:ring-orange-500"
+              } text-gray-800`}
               value={location}
               onChange={(e) => setLocation(e.target.value)}
               required
             />
             {validationErrors.location && (
-              <p className="text-red-500 text-sm mt-1">
-                {validationErrors.location}
-              </p>
+              <p className="text-red-500 text-sm mt-1">{validationErrors.location}</p>
             )}
           </div>
 
           {/* Status Input */}
           <div className="mb-4">
-            <label
-              htmlFor="status"
-              className="block text-sm font-medium text-gray-700"
-            >
+            <label htmlFor="status" className="block text-sm font-medium text-white">
               Job Status
             </label>
             <select
@@ -302,8 +261,8 @@ const AddJob = () => {
               className={`w-full mt-1 p-2 border rounded-md ${
                 validationErrors.status
                   ? "border-red-500 focus:ring-red-500"
-                  : "border-gray-300 focus:ring-blue-500"
-              }`}
+                  : "border-gray-300 focus:ring-orange-500"
+              } text-gray-800`}
               value={status}
               onChange={(e) => setStatus(e.target.value as "Open" | "Closed")}
               required
@@ -312,18 +271,16 @@ const AddJob = () => {
               <option value="Closed">Closed</option>
             </select>
             {validationErrors.status && (
-              <p className="text-red-500 text-sm mt-1">
-                {validationErrors.status}
-              </p>
+              <p className="text-red-500 text-sm mt-1">{validationErrors.status}</p>
             )}
           </div>
 
           {/* Submit Button */}
           <button
             type="submit"
-            className="w-full py-2 mt-4 bg-blue-600 text-white rounded-md hover:bg-blue-700"
+            className="w-full py-2 mt-4 bg-orange-500 text-white rounded-md hover:bg-orange-600"
           >
-           Create Job
+            Post
           </button>
         </form>
       </div>
