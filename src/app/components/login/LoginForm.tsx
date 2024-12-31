@@ -94,9 +94,9 @@ const LoginForm: React.FC<LoginFormProps> = ({
           className="w-full py-2 text-gray-800 hover:text-orange-500 
                font-medium transition-colors duration-200
                focus:outline-none focus:ring-4 focus:ring-orange-200 rounded-lg"
-          onClick={()=>router.push("/pages/signup")}
+          onClick={() => router.push("/pages/signup")}
         >
-          Don't have account yet?
+          Don&apos;t have account yet?
         </button>
       </form>
     </div>
