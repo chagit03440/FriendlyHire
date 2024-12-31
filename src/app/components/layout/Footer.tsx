@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React from "react";
 
 const Footer = () => {
@@ -101,6 +102,9 @@ const Footer = () => {
         <div className="text-center md:text-right">
           <p className="text-sm">Contact Us: 054-1234567</p>
           <p className="text-sm">info@friendlyhire.com</p>
+          <Link href="/pages/about" className="text-sm text-gray-400 hover:text-white">
+            About
+          </Link>
         </div>
       </div>
 

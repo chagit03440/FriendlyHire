@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import ICandidate from "@/app/types/candidate";
 import IEmployee from "@/app/types/employee";
 import LoadSpinner from "@/app/components/common/LoadSpinner";
+import { FaPlus } from "react-icons/fa";
 
 const Page = () => {
   const router = useRouter();
@@ -70,18 +71,20 @@ const Page = () => {
     <div className="bg-gray-100 text-black p-8 rounded-lg shadow-xl">
       {/* Header with Add User button */}
       <div className="flex justify-between items-center mb-6">
-        <h2 className="text-3xl font-semibold text-orange-500">Users Data</h2>
-        <button
-          onClick={handleAddUser}
-          className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
-        >
-          Add User
-        </button>
+        <h2 className="text-3xl font-semibold text-black">Users Data</h2>
+         {/* Add Job button */}
+          <button
+              onClick={handleAddUser}
+              className="bg-orange-500 text-white p-3 rounded-full shadow-md hover:bg-orange-600 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
+              title="Add a New User"
+            >
+              <FaPlus size={24} /> {/* Add icon */}
+          </button>
       </div>
 
       {/* Candidates Table */}
       <section className="mb-8 overflow-x-auto">
-        <h3 className="text-xl font-semibold text-orange-500 mb-4">Candidates</h3>
+        <h3 className="text-xl font-semibold text-black mb-4">Candidates</h3>
         <div className="inline-block min-w-full align-middle">
           <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
             <thead>
@@ -99,13 +102,13 @@ const Page = () => {
                   <td className="border p-3 flex space-x-2">
                     <button
                       onClick={() => handleEditUser(user)}
-                      className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
+                      className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDeleteUser(user.email)}
-                      className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
+                      className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
                     >
                       Delete
                     </button>
@@ -119,7 +122,7 @@ const Page = () => {
 
       {/* Employees Table */}
       <section>
-        <h3 className="text-xl font-semibold text-orange-500 mb-4">Employees</h3>
+        <h3 className="text-xl font-semibold text-black mb-4">Employees</h3>
         <div className="inline-block min-w-full align-middle">
           <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">
             <thead>
@@ -137,13 +140,13 @@ const Page = () => {
                   <td className="border p-3 flex space-x-2">
                     <button
                       onClick={() => handleEditUser(user)}
-                      className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
+                      className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDeleteUser(user.email)}
-                      className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
+                      className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
                     >
                       Delete
                     </button>
@@ -165,7 +168,11 @@ const Page = () => {
             >
               ✕
             </button>
-            <ProfilePage user={selectedUser} />
+            
+            {/* Add max-height and scroll functionality here */}
+            <div className="max-h-[80vh] overflow-y-auto">
+              <ProfilePage user={selectedUser} />
+            </div>
           </div>
         </div>
       )}
