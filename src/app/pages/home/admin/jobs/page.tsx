@@ -6,6 +6,7 @@ import { JobActionsProvider } from "@/app/store/JobActionsContext";
 import { useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
+import { FaPlus } from "react-icons/fa";
 
 const Page = () => {
   const router = useRouter();
@@ -14,7 +15,6 @@ const Page = () => {
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch jobs in useEffect
   useEffect(() => {
     const fetchJobs = async () => {
       setIsLoading(true); // Set loading state
@@ -47,18 +47,23 @@ const Page = () => {
 
   return (
     <JobActionsProvider>
-      <h2 className="text-xl font-semibold mb-4">Jobs Data</h2>
-      {/* Add Job Button */}
-      <div className="mb-6">
-        <button
-          onClick={handleAddJob}
-          className="bg-green-500 text-white px-4 py-2 rounded"
-        >
-          Add Job
-        </button>
-      </div>
-      <div>
-        <JobList jobs={jobs} />
+      {/* Wrapper with consistent width */}
+      <div className="max-w-5xl mx-auto">
+        {/* Header and button */}
+        <div className="flex justify-between items-center mt-6 mb-6 px-4">
+          <h2 className="text-3xl font-semibold text-black">Jobs Data</h2>
+          <button
+            onClick={handleAddJob}
+            className="bg-orange-500 text-white p-3 rounded-full shadow-md hover:bg-orange-600 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
+            title="Add a New Job"
+          >
+            <FaPlus size={24} />
+          </button>
+        </div>
+        {/* Job List */}
+        <div className="px-4">
+          <JobList jobs={jobs} />
+        </div>
       </div>
     </JobActionsProvider>
   );

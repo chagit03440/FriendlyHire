@@ -58,7 +58,7 @@ const Page = () => {
 
   return (
     <div className="bg-gray-100 text-black p-8 rounded-lg shadow-xl">
-      <h2 className="text-3xl font-semibold text-orange-500 mb-6">Applications Data</h2>
+      <h2 className="text-3xl font-semibold text-black mb-6">Applications Data</h2>
       
       {/* Applications Table */}
       <section className="mb-8 overflow-x-auto">
@@ -77,18 +77,18 @@ const Page = () => {
             <tbody>
               {applications.map((application) => (
                 <tr key={application._id} className="bg-gray-50 hover:bg-gray-100 transition-colors">
-                  <td className="border p-3">{application.userEmail}</td>
-                  <td className="border px-4 py-3">
+                  <td className="border p-3 text-black">{application.userEmail}</td>
+                  <td className="border px-4 py-3 text-black">
                     {typeof application.jobId === "object" && "title" in application.jobId
                       ? application.jobId.title
                       : "N/A"}
                   </td>
-                  <td className="border px-4 py-3">
+                  <td className="border px-4 py-3 text-black">
                     {typeof application.jobId === "object" && "company" in application.jobId
                       ? application.jobId.company
                       : "N/A"}
                   </td>
-                  <td className="border p-3">
+                  <td className="border p-3 text-black">
                     <span
                       className={`${
                         application.status === "Saved"
@@ -105,19 +105,19 @@ const Page = () => {
                       {application.status}
                     </span>
                   </td>
-                  <td className="border p-3 max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
+                  <td className="border p-3 text-black max-w-xs overflow-hidden text-ellipsis whitespace-nowrap">
                     {application.fileUrl}
                   </td>
                   <td className="border p-3 flex space-x-2">
                     <button
                       onClick={() => handleEditApplication(application)}
-                      className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
+                      className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
                     >
                       Edit
                     </button>
                     <button
                       onClick={() => handleDeleteApplication(application)}
-                      className="bg-orange-500 text-white px-4 py-2 rounded-lg hover:bg-orange-600"
+                      className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
                     >
                       Delete
                     </button>
