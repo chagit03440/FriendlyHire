@@ -98,7 +98,7 @@ const ApplicationList: React.FC<Props> = ({ applications }) => {
                       <button
                         onClick={() => handleApplyButtonClick(application.jobId._id.toString())}
                         disabled={applyingJob === application.jobId._id.toString()}
-                        className="p-2 rounded-full text-orange-500 hover:bg-orange-500 hover:text-white transition-all duration-200"
+                        className="p-2 rounded-full text-orange-400 hover:bg-orange-400 hover:text-white transition-all duration-200"
                         title="Apply Now"
                       >
                         <FaPaperPlane className="text-xl" />
@@ -111,7 +111,7 @@ const ApplicationList: React.FC<Props> = ({ applications }) => {
                      <button
                       onClick={() => handleArchiveButtonClick(application.jobId._id.toString())}
                       disabled={archivingJob === application.jobId._id.toString()}
-                      className="p-2 rounded-full text-orange-500 hover:bg-orange-500 hover:text-white transition-all duration-200"
+                      className="p-2 rounded-full text-orange-400 hover:bg-orange-400 hover:text-white transition-all duration-200"
                       title="Move to Archive"
                    >
                      <FaArchive className="text-xl" />

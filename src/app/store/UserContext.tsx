@@ -1,7 +1,7 @@
 // context/UserContext.tsx
 import React, { createContext, useContext, useState } from 'react';
 
-interface UserContextType {
+export interface UserContextType {
     role: string | null;
     setRole: (role: string | null) => void;
     mail: string | null;

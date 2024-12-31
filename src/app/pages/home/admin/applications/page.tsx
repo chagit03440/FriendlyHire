@@ -92,7 +92,7 @@ const Page = () => {
                     <span
                       className={`${
                         application.status === "Saved"
-                          ? "text-orange-500"
+                          ? "text-orange-400"
                           : application.status === "Applied"
                           ? "text-gray-500"
                           : application.status === "Sent"
