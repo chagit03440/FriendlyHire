@@ -10,6 +10,7 @@ import { initialSettings, ShowForm } from "../../lib/redux/settingsSlice";
 import { getHasUsedAppBefore, saveStateToLocalStorage } from "../../lib/redux/local-storage";
 import { useRouter } from "next/navigation";
 import { uploadResume } from "@/app/services/resumeServices";
+import ButtonLink from "../common/Button";
 
 type Props = {
     user: (IUser & ICandidate) | null;
@@ -113,7 +114,7 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
                 {!file ? (
                     <>
                         <p className="text-gray-600">Drag and drop a PDF file here, or</p>
-                        <label className="cursor-pointer inline-block bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                        <label className="cursor-pointer inline-block bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
                             Browse File
                             <input
                                 type="file"
@@ -137,12 +138,7 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
                 )}
             </div>
             {file && (
-                <button
-                    onClick={handleSubmit}
-                    className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
-                >
-                    Upload Resume
-                </button>
+                <ButtonLink onClick={handleSubmit} text="Upload Resume" />
             )}
             {profileData?.fileUrl && (
                 <div className="mt-6">
@@ -171,12 +167,7 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
                             >
                                 View or Download Resume
                             </a>
-                            <button
-                                onClick={handleEdit}
-                                className="bg-blue-500 text-white px-6 py-2 rounded hover:bg-blue-600"
-                            >
-                                Edit Resume
-                            </button>
+                            <ButtonLink onClick={handleEdit} text="Edit Resume" />
                         </div>
                         <div className="mt-4">
                             <iframe

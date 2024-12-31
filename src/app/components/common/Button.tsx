@@ -12,19 +12,18 @@ const isAnchor = (props: ButtonProps): props is ReactAnchorProps => {
 };
 
 interface ButtonLinkProps {
-  href: string;
+  onClick: () => void;
   text: string;
 }
 
-const ButtonLink: React.FC<ButtonLinkProps> = ({ href, text }) => {
+const ButtonLink: React.FC<ButtonLinkProps> = ({ onClick, text }) => {
   return (
-    <Link href={href}>
-      <button
-        className={`mt-4 px-4 py-2 text-white bg-blue-500 hover:bg-blue-700 rounded-md`}
-      >
-        {text}
-      </button>
-    </Link>
+    <button
+    onClick={onClick} 
+    className="px-4 py-2 text-white bg-gray-700 hover:bg-gray-800 rounded-md transition-colors duration-300 ease-in-out"
+  >
+    {text}
+  </button>
   );
 };
 

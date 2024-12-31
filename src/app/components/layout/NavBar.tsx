@@ -211,9 +211,9 @@ const NavBar: React.FC = () => {
   }, [isOpen, mail]);
 
   return (
-    <nav className="flex items-center justify-between bg-gray-800 text-white shadow-md relative">
+    <nav className="flex items-center justify-between bg-gray-800 text-white shadow-md relative h-20">
       <div className="flex items-center" onClick={() => router.push("/pages/home")} >
-        <div className="relative w-20 h-20 ">
+        <div className="relative w-12 h-12 ">
           <Image
             src="/imgs/logo2.png"
             alt="FriendlyHire Logo"
@@ -223,7 +223,7 @@ const NavBar: React.FC = () => {
             priority
           />
         </div>
-        <h1 className="text-2xl font-bold text-orange-500">FriendlyHire</h1>
+        <h1 className="text-2xl font-bold text-orange-500 p-2">FriendlyHire</h1>
       </div>
 
       <div className="flex items-center gap-4">
