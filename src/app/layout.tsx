@@ -39,6 +39,10 @@ const LayoutContent: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <html lang="en">
+       <head>
+       <title>FriendlyHire</title>
+        <link rel="icon" href="/favicon.ico" />
+      </head>
       <body>
         <QueryClientProvider client={queryClient}>
           <div className="page-container">
