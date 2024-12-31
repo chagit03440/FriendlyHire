@@ -46,8 +46,12 @@ const JobCard: React.FC<JobCardProps> = ({ job, missingSkills }) => {
       </div>
 
       <div className="text-gray-700">
-        <span className="font-semibold text-gray-600">Experience Required:</span>{" "}
-        {job.experience ? `${job.experience} ${job.experience === 1 ? "year" : "years"}` : "Not specified"}
+        <span className="font-semibold text-gray-600">
+          Experience Required:
+        </span>{" "}
+        {job.experience
+          ? `${job.experience} ${job.experience === 1 ? "year" : "years"}`
+          : "Not specified"}
       </div>
 
       <div className="text-gray-700">
@@ -63,9 +67,11 @@ const JobCard: React.FC<JobCardProps> = ({ job, missingSkills }) => {
               <span
                 key={index}
                 className={`px-4 py-2 text-sm rounded-full font-medium ${
-                  missingSkills?.includes(req)
-                    ? "bg-red-100 text-red-600"
-                    : "bg-green-100 text-green-600"
+                  missingSkills
+                    ? missingSkills.includes(req)
+                      ? "bg-red-100 text-red-600"
+                      : "bg-green-100 text-green-600"
+                    : "bg-gray-100 text-gray-600"
                 }`}
               >
                 {req}

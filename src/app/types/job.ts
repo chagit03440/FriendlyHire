@@ -11,4 +11,5 @@ export default interface IJob extends Document {
   status: "Open" | "Closed";
   createdBy: string;
   matchPercentage?: number;
+  missingSkills?: string[];
 }

@@ -45,20 +45,18 @@ const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md">
-        <h2 className="text-2xl font-bold text-center mb-6">Reset Password</h2>
-
         {stage === "email" && (
           <div>
             <label
               htmlFor="reset-email"
-              className="block text-md font-medium text-gray-700 mb-2"
+              className="text-2xl font-bold text-center mb-6 text-gray-800 flex justify-center items-center"
             >
-              Enter an email address.
+              Enter your email address.
             </label>
             <input
               type="email"
               id="reset-email"
-              className="w-full mt-1 p-3 border border-gray-300 rounded-lg text-md"
+              className="w-full mt-1 p-3 border border-gray-300 rounded-lg text-md text-gray-800"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
@@ -66,13 +64,13 @@ const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
             <div className="flex justify-between mt-6">
               <button
                 onClick={handleSendResetCode}
-                className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300"
+                className="w-full py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300"
               >
                 Send Reset Code
               </button>
               <button
                 onClick={onClose}
-                className="w-full py-3 ml-4 text-gray-600 hover:text-gray-800 transition-colors duration-300"
+                className="w-full py-3 ml-4 text-gray-800 hover:text-gray-600 transition-colors duration-300"
               >
                 Cancel
               </button>
@@ -84,21 +82,21 @@ const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
           <div>
             <label
               htmlFor="reset-code"
-              className="block text-md font-medium text-gray-700 mb-2"
+              className="text-2xl font-bold text-center mb-6 text-gray-800 flex justify-center items-center"
             >
-              Enter Reset Code
+              Enter The Reset Code:
             </label>
             <input
               type="text"
               id="reset-code"
-              className="w-full mt-1 p-3 border border-gray-300 rounded-lg text-md"
+              className="w-full mt-1 p-3 border border-gray-300 rounded-lg text-md text-gray-800"
               value={resetCode}
               onChange={(e) => setResetCode(e.target.value)}
               required
             />
             <button
               onClick={() => setStage("password")}
-              className="w-full py-3 mt-6 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300"
+              className="w-full py-3 mt-6 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300"
             >
               Continue
             </button>
@@ -109,14 +107,14 @@ const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
           <div>
             <label
               htmlFor="new-password"
-              className="block text-md font-medium text-gray-700 mb-2"
+              className="text-2xl font-bold text-center mb-6 text-gray-800 flex justify-center items-center"
             >
-              New Password
+              Enter The New Password:
             </label>
             <input
               type="password"
               id="new-password"
-              className="w-full mt-1 p-3 border border-gray-300 rounded-lg text-md"
+              className="w-full mt-1 p-3 border border-gray-300 rounded-lg text-md text-gray-800"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               required
@@ -124,15 +122,15 @@ const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
             <div className="flex justify-between mt-6">
               <button
                 onClick={handleResetPassword}
-                className="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300"
+                className="w-full py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300"
               >
                 Reset Password
               </button>
               <button
                 onClick={onClose}
-                className="w-full py-3 ml-4 text-gray-600 hover:text-gray-800 transition-colors duration-300"
+                className="w-full py-3 ml-4 text-gray-800 hover:text-gray-600 transition-colors duration-300"
               >
-               Cancel
+                Cancel
               </button>
             </div>
           </div>

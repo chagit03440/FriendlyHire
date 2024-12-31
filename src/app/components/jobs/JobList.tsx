@@ -62,12 +62,10 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
 
   // Calculate match percentage for candidates
   const calculateMatchPercentage = (job: IJob) => {
-    if (!user) return 0;
+    if (!user) return { matchPercentage: 0, missingSkills: [] };
 
-    const { matchPercentage: skillsMatchPercentage } = calculateSkillsMatch(
-      user.skills,
-      job.requirements
-    );
+    const { matchPercentage: skillsMatchPercentage, missingSkills } =
+      calculateSkillsMatch(user.skills, job.requirements);
 
     let matchPercentage = skillsMatchPercentage;
     const experienceDiff = job.experience - user.experience;
@@ -82,7 +80,10 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
     }
 
     // Round to 2 decimal places
-    return Number(matchPercentage.toFixed(2));
+    return {
+      matchPercentage: Number(matchPercentage.toFixed(2)),
+      missingSkills,
+    };
   };
 
   // First filter the jobs based on search query
@@ -90,13 +91,18 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
     job.title.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  // Then enrich the filtered jobs with matchPercentage for candidates
+  // Then enrich the filtered jobs with matchPercentage and missingSkills for candidates
   const enrichedJobs =
     role === "candidate"
-      ? filteredJobs.map((job) => ({
-          ...job,
-          matchPercentage: calculateMatchPercentage(job),
-        }))
+      ? filteredJobs.map((job) => {
+          const { matchPercentage, missingSkills } =
+            calculateMatchPercentage(job);
+          return {
+            ...job,
+            matchPercentage,
+            missingSkills, // Add missingSkills to the job object
+          };
+        })
       : filteredJobs;
 
   // Finally sort the enriched jobs by matchPercentage

@@ -17,7 +17,7 @@ const Login = () => {
 
   useEffect(() => {
     const validateAccess = async () => {
-      console.log("logout")
+      console.log("logout");
 
       try {
         const userData = await checkAccess();
@@ -50,21 +50,26 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-[calc(100vh-200px)] flex items-center justify-center bg-gray-100">
+    <div className="min-h-[calc(100vh-200px)] flex items-center justify-center bg-gray-100 py-8">
       <Toaster />
-      <LoginForm
-        email={email}
-        password={password}
-        error={error}
-        onEmailChange={setEmail}
-        onPasswordChange={setPassword}
-        onSubmit={handleSubmit}
-        onForgotPassword={() => setIsPasswordResetOpen(true)}
-      />
-      <PasswordResetModal
-        isOpen={isPasswordResetOpen}
-        onClose={() => setIsPasswordResetOpen(false)}
-      />
+      <div className="bg-white p-12 rounded-xl shadow-2xl w-full max-w-lg">
+        <h2 className="text-3xl text-gray-800 font-bold text-center mb-8">
+          Welcome Back :)
+        </h2>
+        <LoginForm
+          email={email}
+          password={password}
+          error={error}
+          onEmailChange={setEmail}
+          onPasswordChange={setPassword}
+          onSubmit={handleSubmit}
+          onForgotPassword={() => setIsPasswordResetOpen(true)}
+        />
+        <PasswordResetModal
+          isOpen={isPasswordResetOpen}
+          onClose={() => setIsPasswordResetOpen(false)}
+        />
+      </div>
     </div>
   );
 };
