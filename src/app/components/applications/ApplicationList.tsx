@@ -3,7 +3,7 @@ import { useJobActions } from "@/app/store/JobActionsContext";
 import IApplication from "@/app/types/application";
 import ApplyEditModal from "./ApplyEditModal";
 import { useRouter } from "next/navigation";
-import { FaBookmark, FaPaperPlane, FaArchive } from "react-icons/fa"; // Save, Apply, Archive icons
+import { FaPaperPlane, FaArchive } from "react-icons/fa"; // Save, Apply, Archive icons
 
 interface Props {
   applications: IApplication[];
@@ -79,7 +79,7 @@ const ApplicationList: React.FC<Props> = ({ applications }) => {
                   <span
                     className={`text-sm font-medium text-gray-400 ${
                       application.status === "Saved"
-                        ? "text-orange-500"
+                        ? "text-gray-500"
                         : application.status === "Applied"
                         ? "text-gray-500"
                         : application.status === "Sent"
@@ -89,11 +89,7 @@ const ApplicationList: React.FC<Props> = ({ applications }) => {
                         : "text-gray-500"
                     }`}
                   >
-                    {application.status === "Saved" ? (
-                      <FaBookmark className="text-orange-500 inline mr-2" />
-                    ) : (
-                      application.status
-                    )}
+                    {application.status}
                   </span>
 
                   {/* Apply Icon Button (only for saved jobs) */}

@@ -9,26 +9,30 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="bg-gray-100 text-black p-8 rounded-lg shadow-lg max-w-md mx-auto">
-      <h1 className="text-3xl text-center font-semibold text-orange-500 mb-6">Admin Managment</h1>
-      <div className="flex flex-col space-y-4">
+    <div className="bg-gray-50 text-gray-800 min-h-screen flex flex-col items-center pt-20">
+      {/* Reduced top padding */}
+      <h1 className="text-4xl text-center font-bold text-gray-700 mb-14">
+        Admin Management
+      </h1>
+      {/* Reduced margin below the header */}
+      <div className="flex justify-center space-x-12">
         <button
           onClick={() => navigateToPage("home/admin/users")}
-          className="bg-orange-500 text-white py-3 px-6 rounded-lg hover:bg-orange-600 transition-colors"
+          className="w-32 h-32 bg-gray-500 text-white rounded-full hover:bg-gray-600 transition-colors shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 flex items-center justify-center text-xl"
         >
-          Manage Users
+          Users
         </button>
         <button
           onClick={() => navigateToPage("home/admin/applications")}
-          className="bg-orange-500 text-white py-3 px-6 rounded-lg hover:bg-orange-600 transition-colors"
+          className="w-32 h-32 bg-gray-500 text-white rounded-full hover:bg-gray-600 transition-colors shadow-lg focus:outline-none focus:ring-4 focus:ring-green-500 focus:ring-opacity-50 flex items-center justify-center text-xl"
         >
-          Manage Applications
+          Applications
         </button>
         <button
           onClick={() => navigateToPage("home/admin/jobs")}
-          className="bg-orange-500 text-white py-3 px-6 rounded-lg hover:bg-orange-600 transition-colors"
+          className="w-32 h-32 bg-gray-500 text-white rounded-full hover:bg-gray-600 transition-colors shadow-lg focus:outline-none focus:ring-4 focus:ring-purple-500 focus:ring-opacity-50 flex items-center justify-center text-xl"
         >
-          Manage Jobs
+          Jobs
         </button>
       </div>
     </div>

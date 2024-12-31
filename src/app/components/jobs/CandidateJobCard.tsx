@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import IJob from "../../types/job";
 import JobCard from "./JobCard";
 import { useJobActions } from "@/app/store/JobActionsContext";
-import { FaBookmark, FaPaperPlane } from "react-icons/fa"; // Import both the bookmark and apply icons
-import ApplyEditModal from "../applications/ApplyEditModal";
+import { FaBookmark, FaPaperPlane } from "react-icons/fa";
 import { useRouter } from "next/navigation";
+import ApplyEditModal from "../applications/ApplyEditModal";
 
 interface CandidateJobCardProps {
   job: IJob;
@@ -17,6 +17,7 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
 }) => {
   const [isSaved, setIsSaved] = useState(false);
   const [modalOpen, setModalOpen] = useState(false); // State to control modal visibility
+  const [loading, setLoading] = useState(false); // Loading state for applying
   const { handleSaveJob, handleApplyJob } = useJobActions();
   const router = useRouter();
 
@@ -37,11 +38,15 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
   };
 
   const handleApplyNow = async () => {
+    setLoading(true); // Start loading
     try {
       await handleApplyJob(job._id);
+      onJobAction(job._id)
       setModalOpen(false); // Close the modal after applying
     } catch (error) {
       console.error("Error applying for job:", error);
+    } finally {
+      setLoading(false); // Stop loading
     }
   };
 
@@ -79,7 +84,7 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-transparent group-hover:bg-orange-500 group-hover:text-white transition-all duration-200"
             }`}
-            title="Save Job" // Tooltip text on hover
+            title="Save Job"
           >
             <FaBookmark
               className={`${
@@ -107,7 +112,7 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
         onClose={() => setModalOpen(false)}
         onApplyNow={handleApplyNow}
         onEditResume={handleEditResume}
-        loading={false} // You can pass actual loading state here if needed
+        loading={loading} // Pass the loading state here
       />
     </div>
   );

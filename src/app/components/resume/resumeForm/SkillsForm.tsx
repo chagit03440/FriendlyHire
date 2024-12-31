@@ -14,6 +14,7 @@ import {
 } from "@/app/lib/redux/settingsSlice";
 import { getCandidate, updateCandidate } from "@/app/services/candidateServices";
 import { useUser } from "@/app/store/UserContext";
+import toast from "react-hot-toast";
 
 export const SkillsForm = () => {
   const skills = useAppSelector(selectSkills);
@@ -53,6 +54,7 @@ export const SkillsForm = () => {
       };
       await updateCandidate(String(mail), updatedUser);
       console.log("Skills successfully updated:", mergedSkills);
+      toast.success("Skills added successfully!");
     } catch (error) {
       console.error("Error adding skills to profile:", error);
     }
