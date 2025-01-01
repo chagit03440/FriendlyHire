@@ -10,13 +10,35 @@ import { JobActionsProvider } from "@/app/store/JobActionsContext";
 import IJob from "../../types/job";
 import IApplication from "../../types/application";
 import LoadSpinner from "../common/LoadSpinner";
+import { getUser } from "@/app/services/userServices";
+import { useRouter } from "next/navigation";
+
+const hasSkills = async (mail: string | null) => {
+  if (mail) {
+    const user = await getUser(mail);
+    return user.skills && user.skills.length > 0;
+  }
+  return false;
+};
 
 const CandidateDashboard: React.FC = () => {
   const { mail } = useUser();
-
+  const router = useRouter();
   const [jobs, setJobs] = useState([]); // State to store job data
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const [error, setError] = useState<string | null>(null);
+  const [userHasSkills, setUserHasSkills] = useState<boolean>(true);
+
+  // Check if user has skills
+  useEffect(() => {
+    const checkSkills = async () => {
+      if (mail) {
+        const skills = await hasSkills(mail);
+        setUserHasSkills(skills);
+      }
+    };
+    checkSkills();
+  }, [mail]);
 
   // Fetch jobs in useEffect
   useEffect(() => {
@@ -68,6 +90,22 @@ const CandidateDashboard: React.FC = () => {
         <h1 className="text-4xl font-bold mb-6 text-center text-black">
           Jobs for you
         </h1>
+
+        {/* Conditional message */}
+        {!userHasSkills && (
+          <div className="text-center mb-6">
+            <p className="text-gray-700 mb-4">
+              It seems like you haven't set up your profile yet. Jobs aren't
+              specifically matched to you right now.
+            </p>
+            <button
+              onClick={() => router.push("/pages/home/profile")}
+              className="bg-orange-400 text-white px-4 py-2 rounded hover:bg-orange-300"
+            >
+              Complete Your Profile
+            </button>
+          </div>
+        )}
 
         {/* Job list */}
         {filteredJobs.length > 0 ? (

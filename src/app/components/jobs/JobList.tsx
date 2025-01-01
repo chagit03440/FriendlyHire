@@ -14,6 +14,7 @@ import Pagination from "./Pagination";
 import { useJobList } from "./useJobList";
 import { getUser } from "@/app/services/userServices";
 import { calculateSkillsMatch } from "../candidate/calculateSkillsMatch";
+import { boolean } from "zod";
 
 interface IUser {
   skills: string[];
@@ -95,14 +96,17 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
   const enrichedJobs =
     role === "candidate"
       ? filteredJobs.map((job) => {
-          const { matchPercentage, missingSkills } =
-            calculateMatchPercentage(job);
+        const { matchPercentage, missingSkills } =
+          calculateMatchPercentage(job);
+        // Treat candidates without skills as employees
+        if (user?.skills !== undefined && user?.skills.length > 0) {
           return {
             ...job,
             matchPercentage,
-            missingSkills, // Add missingSkills to the job object
+            missingSkills,
           };
-        })
+        } else return job; // Skip adding matchPercentage or missingSkills
+      })
       : filteredJobs;
 
   // Finally sort the enriched jobs by matchPercentage
@@ -157,6 +161,9 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
                 key={job._id}
                 job={job as IJob}
                 onJobAction={handleJobAction}
+                hasSkills={
+                  user?.skills !== undefined && user?.skills.length > 0
+                }
               />
             ) : null
           )}
