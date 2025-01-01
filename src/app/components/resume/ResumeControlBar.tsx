@@ -95,12 +95,13 @@ const ResumeControlBar = ({
               setScaleOnResize(false);
               setScale(Number(e.target.value));
             }}
+            className="w-32 accent-orange-400"
           />
           <div className="w-10">{`${Math.round(scale * 100)}%`}</div>
           <label className="hidden items-center gap-1 lg:flex">
             <input
               type="checkbox"
-              className="mt-0.5 h-4 w-4"
+              className="mt-0.5 h-4 w-4 accent-orange-400"
               checked={scaleOnResize}
               onChange={() => setScaleOnResize((prev) => !prev)}
             />
@@ -122,7 +123,7 @@ const ResumeControlBar = ({
           <span className="whitespace-nowrap">Download Resume</span>
         </a>
         <button
-          className="ml-4 flex items-center gap-1 rounded-md bg-orange-500 px-3 py-0.5 text-white hover:bg-orange-600"
+          className="ml-4 flex items-center gap-1 rounded-md bg-orange-400 px-3 py-0.5 text-white hover:bg-orange-500"
           onClick={handleSaveResume}
         >
           <span className="whitespace-nowrap">Save Resume</span>

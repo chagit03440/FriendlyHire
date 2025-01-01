@@ -27,7 +27,6 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
             console.log("Selected file:", selectedFile);
         }
     };
-
     const handleSubmit = async () => {
         if (!file) {
             alert("Please select a file");
@@ -57,7 +56,6 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
             console.error("Error uploading file:", error);
         }
     };
-
     const handleEdit = async () => {
         const resume = await parseResumeFromPdf(String(profileData?.fileUrl));
         console.log("resume", resume);
