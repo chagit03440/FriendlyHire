@@ -169,7 +169,7 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
               <h2 className="text-lg font-semibold text-gray-700">Skills</h2>
               <div className="flex flex-wrap gap-3">
                 {(profileData as ICandidate).skills.map((skill, index) => (
-                  <div key={index} className="flex items-center gap-2 bg-gray-50 rounded-md px-4 py-2 shadow-md">
+                  <div key={index} className="flex items-center gap-2 bg-gray-50 rounded-md px-4 py-2 shadow-md text-black">
                     <span>{skill}</span>
                     {isEditing && (
                       <button

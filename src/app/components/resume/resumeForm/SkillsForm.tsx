@@ -80,15 +80,16 @@ export const SkillsForm = () => {
               onClick={handleShowBulletPoints}
             />
           </div>
-          <div className="mt-4 flex justify-start">
+          <div className="flex justify-center items-center pt-2">
             <a
               href="#"
-              className="text-blue-600 underline hover:text-blue-800"
+              className="bg-orange-400 text-white px-3 py-0.5 rounded-lg hover:bg-orange-500 dark:bg-gray-700 dark:hover:bg-gray-800 font-medium shadow-md transition-all duration-200"
               onClick={handleAddSkillsToProfile}
             >
-              Would you like to add these skills to your profile?
+              Save skills to your profile?
             </a>
           </div>
+
         </div>
         <div className="col-span-full mb-4 mt-6 border-t-2 border-dotted border-gray-200" />
         <InputGroupWrapper
