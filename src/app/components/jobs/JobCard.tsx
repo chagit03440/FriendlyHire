@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import IJob from "@/app/types/job";
 import { getUser } from "@/app/services/userServices";
+import JobDescriptionModal from "./JobDescriptionModal";
 
 interface JobCardProps {
   job: IJob;
@@ -8,7 +9,7 @@ interface JobCardProps {
 }
 
 const JobCard: React.FC<JobCardProps> = ({ job, missingSkills }) => {
-  const [showDescription, setShowDescription] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [creatorName, setCreatorName] = useState<string | null>(null);
 
   useEffect(() => {
@@ -25,9 +26,8 @@ const JobCard: React.FC<JobCardProps> = ({ job, missingSkills }) => {
     fetchCreatorName();
   }, [job.createdBy]);
 
-  const toggleDescription = () => {
-    setShowDescription(!showDescription);
-  };
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
 
   return (
     <div className="border border-gray-300 p-6 rounded-lg shadow-lg bg-white w-full flex flex-col space-y-4 hover:shadow-xl transition-shadow duration-300 ease-in-out h-full">
@@ -38,14 +38,11 @@ const JobCard: React.FC<JobCardProps> = ({ job, missingSkills }) => {
 
       <div>
         <button
-          onClick={toggleDescription}
+          onClick={openModal}
           className="text-indigo-600 hover:text-indigo-700 font-medium focus:outline-none"
         >
-          {showDescription ? "Hide Description" : "Show Description"}
+          Show Description
         </button>
-        {showDescription && (
-          <p className="text-gray-800 mt-2 break-words">{job.description}</p>
-        )}
       </div>
 
       <div className="text-gray-700">
@@ -90,6 +87,15 @@ const JobCard: React.FC<JobCardProps> = ({ job, missingSkills }) => {
         <span className="font-semibold text-gray-700">Posted by:</span>{" "}
         {creatorName || "Loading..."}
       </div>
+
+      {/* Modal */}
+      {isModalOpen && (
+        <JobDescriptionModal
+          title={job.title}
+          description={job.description}
+          onClose={closeModal}
+        />
+      )}
     </div>
   );
 };
