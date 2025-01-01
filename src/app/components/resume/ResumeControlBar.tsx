@@ -122,7 +122,7 @@ const ResumeControlBar = ({
           <span className="whitespace-nowrap">Download Resume</span>
         </a>
         <button
-          className="ml-4 flex items-center gap-1 rounded-md bg-blue-500 px-3 py-0.5 text-white hover:bg-blue-600"
+          className="ml-4 flex items-center gap-1 rounded-md bg-orange-500 px-3 py-0.5 text-white hover:bg-orange-600"
           onClick={handleSaveResume}
         >
           <span className="whitespace-nowrap">Save Resume</span>

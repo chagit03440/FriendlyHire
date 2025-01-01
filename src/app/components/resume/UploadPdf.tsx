@@ -11,8 +11,6 @@ import { useRouter } from "next/navigation";
 import { uploadResume } from "@/app/services/resumeServices";
 import { FaEdit, FaEye } from "react-icons/fa";
 
-import ButtonLink from "../common/Button";
-
 type Props = {
     user: (IUser & ICandidate) | null;
 };
