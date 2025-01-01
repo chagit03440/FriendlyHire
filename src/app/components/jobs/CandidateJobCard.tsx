@@ -22,7 +22,7 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
   const router = useRouter();
 
   const getMatchColor = (percentage: number) => {
-    if (percentage >= 80) return "bg-orange-500";
+    if (percentage >= 80) return "bg-orange-400";
     if (percentage >= 50) return "bg-yellow-500";
     return "bg-gray-500";
   };
@@ -79,10 +79,10 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
           <button
             onClick={onSaveJob}
             disabled={isSaved}
-            className={`w-full h-14 flex justify-center items-center rounded-full text-orange-500 ${
+            className={`w-full h-14 flex justify-center items-center rounded-full text-orange-400 ${
               isSaved
                 ? "bg-gray-400 cursor-not-allowed"
-                : "bg-transparent group-hover:bg-orange-500 group-hover:text-white transition-all duration-200"
+                : "bg-transparent group-hover:bg-orange-400 group-hover:text-white transition-all duration-200"
             }`}
             title="Save Job"
           >
@@ -90,7 +90,7 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
               className={`${
                 isSaved
                   ? "text-gray-400"
-                  : "text-orange-500 group-hover:text-white"
+                  : "text-orange-400 group-hover:text-white"
               } transition-all duration-200`}
             />
           </button>
@@ -100,7 +100,7 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
         <div className="w-full group relative">
           <button
             onClick={handleApplyButtonClick}
-            className="w-full h-14 flex justify-center items-center rounded-full text-orange-500 bg-transparent hover:bg-orange-500 hover:text-white transition-all duration-200"
+            className="w-full h-14 flex justify-center items-center rounded-full text-orange-400 bg-transparent hover:bg-orange-400 hover:text-white transition-all duration-200"
             title="Apply Now"
           >
             <FaPaperPlane className="text-xl" />

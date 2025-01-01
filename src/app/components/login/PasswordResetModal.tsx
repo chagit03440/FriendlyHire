@@ -64,7 +64,7 @@ const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
             <div className="flex justify-between mt-6">
               <button
                 onClick={handleSendResetCode}
-                className="w-full py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300"
+                className="w-full py-3 bg-orange-400 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300"
               >
                 Send Reset Code
               </button>
@@ -96,7 +96,7 @@ const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
             />
             <button
               onClick={() => setStage("password")}
-              className="w-full py-3 mt-6 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300"
+              className="w-full py-3 mt-6 bg-orange-400 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300"
             >
               Continue
             </button>
@@ -122,7 +122,7 @@ const PasswordResetModal: React.FC<PasswordResetModalProps> = ({
             <div className="flex justify-between mt-6">
               <button
                 onClick={handleResetPassword}
-                className="w-full py-3 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300"
+                className="w-full py-3 bg-orange-400 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300"
               >
                 Reset Password
               </button>

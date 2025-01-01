@@ -75,7 +75,7 @@ const Page = () => {
          {/* Add Job button */}
           <button
               onClick={handleAddUser}
-              className="bg-orange-500 text-white p-3 rounded-full shadow-md hover:bg-orange-600 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-opacity-50"
+              className="bg-orange-400 text-white p-3 rounded-full shadow-md hover:bg-orange-600 transition-colors duration-300 focus:outline-none focus:ring-2 focus:ring-orange-400 focus:ring-opacity-50"
               title="Add a New User"
             >
               <FaPlus size={24} /> {/* Add icon */}

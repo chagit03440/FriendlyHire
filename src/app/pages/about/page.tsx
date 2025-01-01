@@ -5,7 +5,7 @@ const AboutPage = () => {
     <div className="min-h-screen bg-gray-100 text-gray-800 py-12">
       <div className="container max-w-3xl mx-auto px-6">
         {/* Heading */}
-        <h1 className="text-6xl font-bold text-center mb-6 text-orange-500">About Us</h1>
+        <h1 className="text-6xl font-bold text-center mb-6 text-orange-400">About Us</h1>
 
         {/* Mission Section */}
         <section className="mb-12">

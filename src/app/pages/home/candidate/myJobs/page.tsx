@@ -61,7 +61,7 @@ const CandidateApplications = () => {
             <button
               onClick={() => handleStatusChange("all")}
               className={`px-4 py-2 rounded-full text-sm font-medium border ${
-                statusFilter === null ? "bg-orange-500 text-white" : "bg-gray-200 text-black"
+                statusFilter === null ? "bg-orange-400 text-white" : "bg-gray-200 text-black"
               } hover:bg-orange-600 hover:text-white`}
             >
               All ({applications.length})
@@ -71,7 +71,7 @@ const CandidateApplications = () => {
                 key={status}
                 onClick={() => handleStatusChange(status)}
                 className={`px-4 py-2 rounded-full text-sm font-medium border ${
-                  statusFilter === status ? "bg-orange-500 text-white" : "bg-gray-200 text-black"
+                  statusFilter === status ? "bg-orange-400 text-white" : "bg-gray-200 text-black"
                 } hover:bg-orange-600 hover:text-white`}
               >
                 {status} ({statusCount[status] || 0})

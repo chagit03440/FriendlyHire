@@ -70,7 +70,7 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
   return (
     <div className="max-w-3xl mx-auto p-8 bg-white rounded-lg shadow-lg mt-0 border border-gray-200">
       <div className="relative mb-8">
-        <div className="h-32 bg-orange-500 rounded-t-lg"></div>
+        <div className="h-32 bg-orange-400 rounded-t-lg"></div>
         <div className="absolute -bottom-12 left-1/2 transform -translate-x-1/2 bg-white rounded-full p-1">
           <Image
             src="/imgs/logo2.png"

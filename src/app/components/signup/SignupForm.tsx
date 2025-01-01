@@ -57,7 +57,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
     ${
       fieldError
         ? "border-red-400 focus:border-red-500 focus:ring-red-200"
-        : "border-gray-200 focus:border-orange-500 focus:ring-orange-200"
+        : "border-gray-200 focus:border-orange-400 focus:ring-orange-200"
     }
     focus:outline-none focus:ring-4
   `;
@@ -171,7 +171,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
 
         <button
           type="submit"
-          className="w-full py-3 px-4 text-white bg-orange-500 hover:bg-orange-600 
+          className="w-full py-3 px-4 text-white bg-orange-400 hover:bg-orange-600 
                    rounded-lg font-semibold shadow-md hover:shadow-lg
                    transform hover:-translate-y-0.5 transition-all duration-200
                    focus:outline-none focus:ring-4 focus:ring-orange-200"

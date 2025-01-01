@@ -8,7 +8,9 @@ const Footer = () => {
         {/* Logo and Company Name */}
         <div className="mb-4 md:mb-0 text-center md:text-left">
           <h2 className="text-2xl font-bold">FriendlyHire</h2>
-          <p className="text-sm text-gray-400">Your Social Recruitment Solution</p>
+          <p className="text-sm text-gray-400">
+            Your Social Recruitment Solution
+          </p>
         </div>
 
         {/* Social Media Links */}
@@ -99,11 +101,11 @@ const Footer = () => {
         </div>
 
         {/* Contact Information */}
-        <div className="text-center md:text-right">
-          <p className="text-sm">Contact Us: 054-1234567</p>
-          <p className="text-sm">info@friendlyhire.com</p>
-          <Link href="/pages/about" className="text-sm text-gray-400 hover:text-white">
-            About
+        <div className="text-center md:text-center">
+          <p className="text-sm text-gray-400">Contact Us: 054-1234567</p>
+          <p className="text-sm text-gray-400">info@friendlyhire.com</p>
+          <Link href="/pages/about" className="text-sm hover:text-gray-400">
+            About Us
           </Link>
         </div>
       </div>
