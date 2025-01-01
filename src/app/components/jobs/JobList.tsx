@@ -14,7 +14,6 @@ import Pagination from "./Pagination";
 import { useJobList } from "./useJobList";
 import { getUser } from "@/app/services/userServices";
 import { calculateSkillsMatch } from "../candidate/calculateSkillsMatch";
-import { boolean } from "zod";
 
 interface IUser {
   skills: string[];

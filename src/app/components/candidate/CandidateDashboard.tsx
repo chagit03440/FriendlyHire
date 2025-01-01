@@ -95,8 +95,8 @@ const CandidateDashboard: React.FC = () => {
         {!userHasSkills && (
           <div className="text-center mb-6">
             <p className="text-gray-700 mb-4">
-              It seems like you haven't set up your profile yet. Jobs aren't
-              specifically matched to you right now.
+              It seems like you haven&apos;t set up your profile yet. Jobs&apos;
+              aren&apost specifically matched to you right now.
             </p>
             <button
               onClick={() => router.push("/pages/home/profile")}
