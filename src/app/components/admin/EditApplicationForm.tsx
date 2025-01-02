@@ -99,7 +99,7 @@ const EditApplicationForm: React.FC<EditApplicationFormProps> = ({ application, 
               <button
                 type="button"
                 onClick={handleSave}
-                className="px-4 py-2 bg-blue-500 text-white rounded"
+                className="px-4 py-2 bg-orange-400 text-white rounded"
               >
                 Save
               </button>
@@ -108,7 +108,7 @@ const EditApplicationForm: React.FC<EditApplicationFormProps> = ({ application, 
             <button
               type="button"
               onClick={() => setIsEditing(true)}
-              className="px-4 py-2 bg-yellow-500 text-white rounded"
+              className="px-4 py-2 bg-orange-400 text-white rounded"
             >
               Edit
             </button>

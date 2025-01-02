@@ -30,7 +30,7 @@ export const useRoleOptions = (
               Manage Jobs
             </span>
           ),
-          onClick: () => router.push("/pages/home/admin/manageJobs"),
+          onClick: () => router.push("/pages/home/admin/jobs"),
         },
         {
           label: (
@@ -39,7 +39,16 @@ export const useRoleOptions = (
               Manage Users
             </span>
           ),
-          onClick: () => router.push("/pages/home/admin/manageUsers"),
+          onClick: () => router.push("/pages/home/admin/users"),
+        },
+        {
+          label: (
+            <span className="flex items-center">
+              <FaUser className="mr-2" />
+              Manage Applications
+            </span>
+          ),
+          onClick: () => router.push("/pages/home/admin/applications"),
         },
         {
           label: (

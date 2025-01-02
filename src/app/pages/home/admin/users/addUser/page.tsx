@@ -69,7 +69,7 @@ const Page = () => {
         <div className="min-h-[calc(100vh-200px)] flex items-center justify-center bg-gray-100 py-8">
           <Toaster />
           <div className="bg-white p-12 rounded-xl shadow-2xl w-full max-w-lg">
-            <h2 className="text-3xl font-bold text-center mb-8">Registration</h2>
+            <h2 className="text-3xl font-bold text-center mb-8">Add a New User</h2>
             {error && <p className="text-red-500 text-center mb-6">{error}</p>}
             <form onSubmit={handleSubmit}>
               <div className="mb-6">
@@ -209,7 +209,7 @@ const Page = () => {
     
               <button
                 type="submit"
-                className="w-full py-3 mt-8 text-lg bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors duration-300"
+                className="w-full py-3 mt-8 text-lg bg-orange-400 text-white rounded-lg hover:bg-orange-500 transition-colors duration-300"
               >
                Add
               </button>
