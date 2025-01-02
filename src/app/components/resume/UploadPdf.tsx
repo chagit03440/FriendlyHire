@@ -118,32 +118,47 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
                                 </label>
                             </>
                         ) : (
-                            <div className="flex items-center justify-between w-full">
-                                <span className="truncate">{file.name}</span>
-                                <button
-                                    type="button"
-                                    className="text-red-400 hover:text-red-700"
-                                    onClick={() => setFile(null)}
-                                >
-                                    Remove
-                                </button>
+                            <div className="flex flex-col items-center w-full">
+                                <div className="flex flex-row items-center justify-between space-x-4 w-full">
+                                    <span className="truncate">{file.name}</span>
+                                    <button
+                                        type="button"
+                                        className="text-red-400 hover:text-red-700"
+                                        onClick={() => setFile(null)}
+                                    >
+                                        Remove
+                                    </button>
+                                </div>
+                                {file && (
+                                    <div className="flex justify-center items-center h-full pt-2">
+                                        <button className=" bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800" onClick={() => handleSubmit()}>
+                                            Upload Resume
+                                        </button>
+                                    </div>
+                                )}
                             </div>
+
                         )}
                     </div>
-                    {file && (
-                        <div className="flex justify-center items-center h-full pt-2">
-                            <button className=" bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800" onClick={() => handleSubmit()}>
-                                Upload Resume
-                            </button>
-                        </div>
-                    )}
+
+                    <div className="mb-4 p-4 bg-orange-50 border-l-4 border-orange-400 rounded-lg">
+                        <h2 className="text-orange-400 font-semibold text-lg">Important Guidelines</h2>
+                        <p className="text-gray-700 mt-2 text-sm">
+                            Please upload your resume as a PDF file. Ensure that:
+                        </p>
+                        <ul className="list-disc list-inside text-gray-700 mt-2 text-sm">
+                            <li>The file is in English.</li>
+                            <li>The file name is in English characters.</li>
+                        </ul>
+                    </div>
                 </div>
 
                 <div className="col-span-2 bg-white shadow-md p-6 rounded-lg">
                     {profileData?.fileUrl ? (
                         <div className="border p-4 rounded-md shadow-sm">
                             <p className="mb-2">
-                                <strong>File:</strong> {decodeURIComponent(profileData.fileUrl.split("/").pop() || "")}
+                                <strong>File:</strong>{" "}
+                                {decodeURIComponent(profileData.fileUrl.split("/").pop() || "").split("-").slice(1).join("-")}
                             </p>
                             <div className="flex space-x-6 mb-4">
                                 {/* View Resume Button */}
