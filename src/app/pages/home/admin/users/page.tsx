@@ -47,7 +47,7 @@ const Page = () => {
   };
 
   const handleDeleteUser = (user: IUser) => {
-    let confirmationMessage =
+    const confirmationMessage =
       user.role === "candidate"
         ? "Deleting this candidate will also delete all the applications they have made. Are you sure?"
         : "Are you sure you want to delete this user?";

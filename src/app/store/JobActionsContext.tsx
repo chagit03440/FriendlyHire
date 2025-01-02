@@ -16,6 +16,7 @@ import IJob from "../types/job";
 import { getUser } from "../services/userServices";
 import { getEmployeeEmailTemplate } from "../components/employee/EmployeeEmailTemplate";
 import { toast } from "react-hot-toast";
+import { AxiosError } from "axios";
 
 // Define the shape of the context's values
 interface JobActionsContextProps {
@@ -138,8 +139,8 @@ export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({
         try {
           await updateApplication(existingApplication);
           queryClient.invalidateQueries({ queryKey: ["userApplications", mail] });
-        } catch (error: any) {
-          if (
+        } catch (error:unknown ) {
+          if (error instanceof AxiosError &&
             error.response &&
             error.response.status === 400 &&
             error.response.data.message.includes("job is closed")

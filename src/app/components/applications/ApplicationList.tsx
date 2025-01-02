@@ -49,13 +49,12 @@ const ApplicationList: React.FC<Props> = ({ applications }) => {
     setApplyingJob(modalJobId);
     try {
       await handleApplyJob(modalJobId);
-      //toast.success("Application submitted successfully.");
     } catch (error) {
       let errorMessage = "An unexpected error occurred. Please try again.";
       if (error instanceof Error && error.message.includes("Job is closed")) {
         errorMessage = "This job is no longer accepting applications.";
+        toast.error(errorMessage);
       }
-      //toast.error(errorMessage);
       console.error("Error applying for job:", error);
     } finally {
       setApplyingJob(null);
