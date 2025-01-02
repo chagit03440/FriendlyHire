@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import connect from "@/app/lib/db/mongodb";
 import User from "@/app/lib/models/User";
+import Application from "@/app/lib/models/Application";
+import Job from "@/app/lib/models/Job";
 
 // Secret key for JWT verification
 const SECRET_KEY = process.env.JWT_SECRET || "your_secret_key";
@@ -72,13 +74,6 @@ export async function PUT(
 
     const { role, email } = decoded as { role: string; email: string };
 
-    // // Only allow admin or the specific employee
-    // if (role !== "admin" && email !== userEmail) {
-    //   return NextResponse.json(
-    //     { message: "Access denied" },
-    //     { status: 403 }
-    //   );
-    // }
 
     const updatedUser = await User.findOneAndUpdate(
       { email: userEmail },
@@ -99,7 +94,7 @@ export async function PUT(
   }
 }
 
-// DELETE an employee
+// DELETE a user (employee or candidate)
 export async function DELETE(
   req: NextRequest,
   { params }: { params: { userEmail: string } }
@@ -131,21 +126,54 @@ export async function DELETE(
 
     const { role } = decoded as { role: string };
 
-    // Only allow admin to delete an employee
-    if (role !== "admin") {
-      return NextResponse.json(
-        { message: "Only admins can delete employees" },
-        { status: 403 }
-      );
+    // Check if the user exists
+    const user = await User.findOne({ email: userEmail });
+    if (!user) {
+      return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
+    // If the role is 'admin', check if the user is an employee with applications
+    if (role === "admin") {
+      if (user.role === "employee") {
+        // Check if this employee has any associated jobs
+        const jobs = await Job.find({ createdBy: userEmail });
+
+        console.log(jobs)
+        // If the employee has any associated jobs, check if there are applications linked to them
+        if (jobs.length > 0) {
+          const applications = await Application.find().populate({
+            path: "jobId",
+            select: "title company createdBy",
+            match: { createdBy: user.email },
+          });
+          console.log(applications)
+          if (applications.length > 0) {
+            return NextResponse.json(
+              { message: "Cannot delete employee with associated applications" },
+              { status: 400 }
+            );
+          }
+        }
+      }
+    }
+
+    // If the user is a candidate and has applications, delete the applications too
+    if (user.role === "candidate") {
+      const userApplications = await Application.find({ userEmail: userEmail });
+      if (userApplications.length > 0) {
+        // Delete all applications of this candidate
+        await Application.deleteMany({ userEmail: userEmail });
+      }
+    }
+
+    // Finally, delete the user
     const deletedUser = await User.findOneAndDelete({ email: userEmail });
     if (!deletedUser) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
     }
 
     return NextResponse.json(
-      { message: "User deleted successfully" },
+      { message: "User and their applications deleted successfully" },
       { status: 200 }
     );
   } catch (error) {

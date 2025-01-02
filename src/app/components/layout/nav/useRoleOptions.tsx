@@ -1,8 +1,7 @@
-// hooks/useRoleOptions.ts
 import { useMemo } from "react";
 import { RoleOptions } from "./types";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
-import { FaUser, FaSignOutAlt } from "react-icons/fa";
+import { FaUser, FaSignOutAlt, FaRegListAlt } from "react-icons/fa";
 import { MdWork } from "react-icons/md";
 import { RiFileTextFill } from "react-icons/ri";
 
@@ -44,7 +43,7 @@ export const useRoleOptions = (
         {
           label: (
             <span className="flex items-center">
-              <FaUser className="mr-2" />
+              <FaRegListAlt className="mr-2" />
               Manage Applications
             </span>
           ),
