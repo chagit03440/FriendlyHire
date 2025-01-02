@@ -17,8 +17,7 @@ const Login = () => {
 
   useEffect(() => {
     const validateAccess = async () => {
-      console.log("logout");
-
+    
       try {
         const userData = await checkAccess();
         if (userData.hasAccess) {

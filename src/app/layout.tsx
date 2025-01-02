@@ -23,6 +23,10 @@ const LayoutContent: React.FC<{ children: React.ReactNode }> = ({
         const accessData = await checkAccess();
 
         if (!accessData.hasAccess) {
+          // Reset user state and query cache on logout
+          setRole(null);
+          setMail(null);
+          queryClient.clear(); // Clear all cached data
           router.push("/pages/login");
         } else {
           setRole(accessData.role.toLowerCase());
@@ -30,12 +34,15 @@ const LayoutContent: React.FC<{ children: React.ReactNode }> = ({
         }
       } catch (error) {
         console.error("Validation error:", error);
+        setRole(null);
+        setMail(null);
+        queryClient.clear(); // Clear all cached data
         router.push("/pages/login");
       }
     };
 
     validateAccess();
-  }, [router, setRole, setMail]);
+  }, [router, setRole, setMail, queryClient]);
 
   return (
     <html lang="en">
