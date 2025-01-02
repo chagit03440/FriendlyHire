@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import IApplication from "../types/application";
 import { ApplicationStatus } from "../types/enums";
 //import { Types } from "mongoose";
@@ -37,8 +37,8 @@ export const createApplication=async(application:{userEmail: string; jobId: stri
     try {
       const response = await axios.put(`/api/application/${application._id}`, application);
       return response.data;
-    } catch (error: any) {
-      if (error.response && error.response.status === 400) {
+    } catch (error: unknown) {
+      if (error instanceof AxiosError && error.response && error.response.status === 400) {
         // Check if the error is related to the job being closed
         if (error.response.data.message.includes("job is closed")) {
           throw new Error("Cannot update the application because the job is closed.");
