@@ -3,7 +3,10 @@ import { useJobActions } from "@/app/store/JobActionsContext";
 import IApplication from "@/app/types/application";
 import ApplyEditModal from "./ApplyEditModal";
 import { useRouter } from "next/navigation";
-import { FaPaperPlane, FaArchive } from "react-icons/fa"; // Save, Apply, Archive icons
+import { FaPaperPlane, FaArchive, FaEye } from "react-icons/fa"; // Save, Apply, Archive, View icons
+import JobDetailsPopUp from "../jobs/JobDetailsPopUp";
+import IJob from "@/app/types/job";
+import { getJobById } from "@/app/services/jobServices";
 
 interface Props {
   applications: IApplication[];
@@ -14,6 +17,8 @@ const ApplicationList: React.FC<Props> = ({ applications }) => {
   const [applyingJob, setApplyingJob] = useState<string | null>(null);
   const [archivingJob, setArchivingJob] = useState<string | null>(null);
   const [modalJobId, setModalJobId] = useState<string | null>(null);
+  const [viewingJob, setViewingJob] = useState<IJob | null>(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false); // Controls JobDetailsPopUp visibility
   const router = useRouter();
 
   const handleApplyButtonClick = (jobId: string) => {
@@ -49,6 +54,19 @@ const ApplicationList: React.FC<Props> = ({ applications }) => {
     if (!modalJobId) return;
     router.push("/pages/home/candidate/uploadResume");
     setModalJobId(null);
+  };
+
+  const handleViewDetails = async (application: IApplication) => {
+    if (typeof application.jobId === "object") {
+      const job = await getJobById(application.jobId._id.toString())
+      setViewingJob(job);
+      setIsPopupOpen(true); // Open the popup
+    }
+  };
+
+  const handleClosePopup = () => {
+    setIsPopupOpen(false); // Close the popup
+    setViewingJob(null);
   };
 
   return (
@@ -92,30 +110,37 @@ const ApplicationList: React.FC<Props> = ({ applications }) => {
                     {application.status}
                   </span>
 
+                  {/* View Details Icon Button */}
+                  <button
+                    onClick={() => handleViewDetails(application)}
+                    className="p-2 rounded-full text-blue-400 hover:bg-blue-400 hover:text-white transition-all duration-200"
+                    title="View Details"
+                  >
+                    <FaEye className="text-xl" />
+                  </button>
+
                   {/* Apply Icon Button (only for saved jobs) */}
                   {application.status === "Saved" && (
-                    <div className="flex-1 group relative">
-                      <button
-                        onClick={() => handleApplyButtonClick(application.jobId._id.toString())}
-                        disabled={applyingJob === application.jobId._id.toString()}
-                        className="p-2 rounded-full text-orange-400 hover:bg-orange-400 hover:text-white transition-all duration-200"
-                        title="Apply Now"
-                      >
-                        <FaPaperPlane className="text-xl" />
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => handleApplyButtonClick(application.jobId._id.toString())}
+                      disabled={applyingJob === application.jobId._id.toString()}
+                      className="p-2 rounded-full text-orange-400 hover:bg-orange-400 hover:text-white transition-all duration-200"
+                      title="Apply Now"
+                    >
+                      <FaPaperPlane className="text-xl" />
+                    </button>
                   )}
 
                   {/* Archive Icon Button (visible only if the job isn't archived) */}
                   {application.status !== "Archived" && (
-                     <button
+                    <button
                       onClick={() => handleArchiveButtonClick(application.jobId._id.toString())}
                       disabled={archivingJob === application.jobId._id.toString()}
                       className="p-2 rounded-full text-orange-400 hover:bg-orange-400 hover:text-white transition-all duration-200"
                       title="Move to Archive"
-                   >
-                     <FaArchive className="text-xl" />
-                   </button>
+                    >
+                      <FaArchive className="text-xl" />
+                    </button>
                   )}
                 </div>
               </div>
@@ -132,6 +157,15 @@ const ApplicationList: React.FC<Props> = ({ applications }) => {
         onEditResume={handleEditResume}
         loading={applyingJob === modalJobId}
       />
+
+      {/* Job Details Popup */}
+      {viewingJob && (
+        <JobDetailsPopUp
+          job={viewingJob}
+          isOpen={isPopupOpen}
+          onClose={handleClosePopup}
+        />
+      )}
     </div>
   );
 };
