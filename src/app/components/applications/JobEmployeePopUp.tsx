@@ -59,9 +59,9 @@ const JobEmployeePopUp: React.FC<Props> = ({
           <h2 className="text-xl font-semibold">Applicants for {job.title}</h2>
           <button
             onClick={onClose}
-            className="text-gray-600 hover:text-gray-900"
+            className="text-gray-600 hover:text-gray-900 p-2 rounded-full focus:outline-none"
           >
-            X
+            ✕
           </button>
         </div>
 
@@ -80,8 +80,12 @@ const JobEmployeePopUp: React.FC<Props> = ({
                   onClick={() =>
                     handleChangeStatus(application._id, application.userEmail)
                   }
-                  className="bg-blue-500 text-white px-4 py-2 rounded disabled:bg-gray-400"
-                  disabled={application.status === "Sent"}
+                  className={`px-4 py-2 rounded text-white ${
+                    application.status === "Applied"
+                      ? "bg-orange-500 hover:bg-orange-600"
+                      : "bg-gray-400 cursor-not-allowed"
+                  }`}
+                  disabled={application.status !== "Applied"}
                 >
                   {application.status === "Sent"
                     ? "Already Sent"
@@ -92,15 +96,6 @@ const JobEmployeePopUp: React.FC<Props> = ({
           ) : (
             <p>No applicants yet.</p>
           )}
-        </div>
-
-        <div className="mt-4">
-          <button
-            onClick={onClose}
-            className="w-full bg-gray-500 text-white py-2 rounded hover:bg-gray-600"
-          >
-            Close
-          </button>
         </div>
       </div>
     </div>

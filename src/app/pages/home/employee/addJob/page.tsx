@@ -55,7 +55,7 @@ const AddJob = () => {
   }, [router]);
 
   if (!isAuthenticated) {
-    return <p><LoadSpinner/></p>;
+    return <LoadSpinner />;
   }
 
   const jobData = {
@@ -113,13 +113,13 @@ const AddJob = () => {
   return (
     <div className="min-h-screen flex items-center justify-center bg-white">
       <Toaster />
-      <div className="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-4xl">
+      <div className="p-8 rounded-lg shadow-lg w-full max-w-4xl">
         <h2 className="text-3xl font-bold text-center text-orange-500 mb-4">Post a New Job</h2>
         {error && <p className="text-red-500 text-center mb-4">{error}</p>}
         <form onSubmit={handleSubmit} className="grid grid-cols-1 sm:grid-cols-2 gap-6">
           {/* Title Input */}
           <div className="mb-4">
-            <label htmlFor="title" className="block text-sm font-medium text-white">
+            <label htmlFor="title" className="block text-sm font-medium text-black">
               Job Title
             </label>
             <input
@@ -141,7 +141,7 @@ const AddJob = () => {
 
           {/* Description Input */}
           <div className="mb-4 sm:col-span-2">
-            <label htmlFor="description" className="block text-sm font-medium text-white">
+            <label htmlFor="description" className="block text-sm font-medium text-black">
               Job Description
             </label>
             <textarea
@@ -163,7 +163,7 @@ const AddJob = () => {
 
           {/* Experience Input */}
           <div className="mb-4">
-            <label htmlFor="experience" className="block text-sm font-medium text-white">
+            <label htmlFor="experience" className="block text-sm font-medium text-black">
               Years of Experience Required
             </label>
             <input
@@ -186,7 +186,7 @@ const AddJob = () => {
 
           {/* Company Input */}
           <div className="mb-4">
-            <label htmlFor="company" className="block text-sm font-medium text-white">
+            <label htmlFor="company" className="block text-sm font-medium text-black">
               Company Name
             </label>
             <input
@@ -208,7 +208,7 @@ const AddJob = () => {
 
           {/* Requirements Input */}
           <div className="mb-4 sm:col-span-2">
-            <label htmlFor="requirements" className="block text-sm font-medium text-white">
+            <label htmlFor="requirements" className="block text-sm font-medium text-black">
               Job Requirements (comma-separated)
             </label>
             <input
@@ -231,7 +231,7 @@ const AddJob = () => {
 
           {/* Location Input */}
           <div className="mb-4">
-            <label htmlFor="location" className="block text-sm font-medium text-white">
+            <label htmlFor="location" className="block text-sm font-medium text-black">
               Job Location
             </label>
             <input
@@ -253,7 +253,7 @@ const AddJob = () => {
 
           {/* Status Input */}
           <div className="mb-4">
-            <label htmlFor="status" className="block text-sm font-medium text-white">
+            <label htmlFor="status" className="block text-sm font-medium text-black">
               Job Status
             </label>
             <select
@@ -275,13 +275,15 @@ const AddJob = () => {
             )}
           </div>
 
-          {/* Submit Button */}
-          <button
-            type="submit"
-            className="w-full py-2 mt-4 bg-orange-500 text-white rounded-md hover:bg-orange-600"
-          >
-            Post
-          </button>
+         {/* Submit Button */}
+          <div className="sm:col-span-2 flex justify-end">
+            <button
+              type="submit"
+              className="w-20 py-2 mt-4 bg-orange-500 text-white rounded-md hover:bg-orange-600"
+            >
+              Post
+            </button>
+          </div>
         </form>
       </div>
     </div>
