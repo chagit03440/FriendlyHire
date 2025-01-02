@@ -8,6 +8,7 @@ import { updateEmployee } from "@/app/services/employeeServices";
 import { updateUser } from "@/app/services/userServices";
 import ButtonLink from "../common/Button";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 
 type Props = {
   user: IUser & (IEmployee | ICandidate);
@@ -17,6 +18,7 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [newSkill, setNewSkill] = useState<string>("");
   const [profileData, setProfileData] = useState(user);
+  const router = useRouter();
 
   const handleEditToggle = () => setIsEditing((prev) => !prev);
 
@@ -166,7 +168,7 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
             </div>
 
             <div className="mt-4">
-              <h2 className="text-lg font-semibold text-gray-700">Skills</h2>
+              <h2 className="text-lg font-medium text-gray-700">Skills</h2>
               <div className="flex flex-wrap gap-3">
                 {(profileData as ICandidate).skills.map((skill, index) => (
                   <div key={index} className="flex items-center gap-2 bg-gray-50 rounded-md px-4 py-2 shadow-md text-black">
@@ -196,8 +198,22 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
                 </div>
               )}
             </div>
+            {/* Add Resume Button */}
+            {!((profileData as ICandidate).fileUrl) && isEditing &&(
+              <div className="mt-4 flex justify-center">
+                <button
+                  className="bg-orange-400 text-white px-4 py-2 rounded hover:bg-orange-300"
+                  onClick={() => router.push("/pages/home/candidate/uploadResume")}
+                >
+                  Add Resume
+                </button>
+              </div>
+            )}
           </div>
+
         )}
+
+
       </div>
 
       <div className="mt-6 flex justify-end space-x-4">
