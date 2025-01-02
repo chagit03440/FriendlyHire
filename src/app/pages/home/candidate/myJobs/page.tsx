@@ -9,11 +9,15 @@ import IApplication from "@/app/types/application";
 import { JobActionsProvider } from "@/app/store/JobActionsContext";
 import { ApplicationStatus } from "@/app/types/enums";
 import LoadSpinner from "@/app/components/common/LoadSpinner";
+import checkAccess from "@/app/utils/checkAccess";
+import { useRouter } from "next/navigation";
 
 const CandidateApplications = () => {
   const { mail, role } = useUser();
   const [statusFilter, setStatusFilter] = useState<ApplicationStatus | null>(null);
   const [statusCount, setStatusCount] = useState<Record<string, number>>({});
+  const router = useRouter();
+  const { setRole, setMail } = useUser();
 
   const {
     data: applications = [],
@@ -49,7 +53,30 @@ const CandidateApplications = () => {
 
   if (isLoading) return <div><LoadSpinner /></div>;
   if (error instanceof Error) return <div>Error: {error.message}</div>;
+  useEffect(() => {
+    const validateAccess = async () => {
+      try {
+        if (!mail || !role) {
+          router.push("/pages/login");
+          return;
+        }
 
+        const accessData = await checkAccess();
+
+        if (!accessData.hasAccess) {
+          router.push("/pages/login");
+        } else {
+          setRole(accessData.role.toLowerCase());
+          setMail(accessData.email);
+        }
+      } catch (error) {
+        console.error("Validation error:", error);
+        router.push("/pages/login");
+      }
+    };
+
+    validateAccess();
+  }, [router,  setRole, setMail]);
   return (
     <JobActionsProvider>
       <div className="candidate-page bg-white text-black p-6 rounded-lg shadow-lg">
