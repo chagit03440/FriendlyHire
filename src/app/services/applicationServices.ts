@@ -33,15 +33,22 @@ export const createApplication=async(application:{userEmail: string; jobId: stri
     }
   }
 
-  export const updateApplication=async(application:IApplication)=>{
-    try{
+  export const updateApplication = async (application: IApplication) => {
+    try {
       const response = await axios.put(`/api/application/${application._id}`, application);
-      const data = response.data;
-      return data;
-    } catch (error) {
-      console.error(error);
+      return response.data;
+    } catch (error: any) {
+      if (error.response && error.response.status === 400) {
+        // Check if the error is related to the job being closed
+        if (error.response.data.message.includes("job is closed")) {
+          throw new Error("Cannot update the application because the job is closed.");
+        }
+      }
+      console.error("Error updating application:", error);
+      throw new Error("An unexpected error occurred while updating the application.");
     }
-  }
+  };
+  
 
   export const deleteApplication=async(id: string)=>{
     try{

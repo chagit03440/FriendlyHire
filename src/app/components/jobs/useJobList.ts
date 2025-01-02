@@ -38,6 +38,7 @@ export const useJobList = (initialJobs: IJob[]) => {
 
   const handleJobUpdate = async (updatedJob: IJob) => {
     try {
+      console.log("update",updateJob)
       const updated = await updateJob(updatedJob);
       setJobs((prevJobs) =>
         prevJobs.map((job) => (job._id === updated._id ? updated : job))

@@ -176,7 +176,6 @@ const EditJobForm: React.FC<EditJobFormProps> = ({ job, onClose, onUpdate }) => 
           </button>
           <button
             type="submit"
-            form="edit-job-form"
             className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 flex items-center gap-2"
           >
             <FaSave /> Save Changes
