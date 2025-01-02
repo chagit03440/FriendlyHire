@@ -1,16 +1,15 @@
-"use client";
 import IJob from "@/app/types/job";
 import IApplication from "@/app/types/application";
 import { sendEmail } from "@/app/services/sendEmail";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { getUser } from "@/app/services/userServices";
 import { getCandidateEmailTemplate } from "./CandidateEmailTemplate";
 
 interface Props {
-  job: IJob; // The job for which we are showing applicants
-  applications: IApplication[]; // List of applications for the job
-  onClose: () => void; // Function to close the popup
-  onUpdateStatus: (applicationId: string, newStatus: string) => void; // Function to update the application status
+  job: IJob;
+  applications: IApplication[];
+  onClose: () => void;
+  onUpdateStatus: (applicationId: string, newStatus: string) => void;
 }
 
 const JobEmployeePopUp: React.FC<Props> = ({
@@ -19,9 +18,26 @@ const JobEmployeePopUp: React.FC<Props> = ({
   onClose,
   onUpdateStatus,
 }) => {
-  const [localApplications, setLocalApplications] = useState(applications);
+  const [localApplications, setLocalApplications] =
+    useState<IApplication[]>(applications);
+  const [userNames, setUserNames] = useState<{ [key: string]: string }>({});
+  const [loading, setLoading] = useState<boolean>(true);
 
-  // Function to handle changing the status of an application to "Sent"
+  useEffect(() => {
+    // Fetch the names for all applicants initially
+    const fetchUserNames = async () => {
+      const names: { [key: string]: string } = {};
+      for (const application of applications) {
+        const candidate = await getUser(application.userEmail);
+        names[application.userEmail] = candidate.name;
+      }
+      setUserNames(names);
+      setLoading(false);
+    };
+
+    fetchUserNames();
+  }, [applications]);
+
   const handleChangeStatus = async (
     applicationId: string,
     userEmail: string
@@ -29,27 +45,31 @@ const JobEmployeePopUp: React.FC<Props> = ({
     onUpdateStatus(applicationId, "Sent");
 
     const candidate = await getUser(userEmail);
-    console.log(
-      `the candidate email and name is: ${candidate.email} ${candidate.name}`
-    );
-    //send email to the user
+    const userName = candidate.name;
+
+    // Send email to the user
     try {
       await sendEmail(
         userEmail,
         `Your Job Application for ${job.title} Has Been Sent to ${job.company}`,
-        getCandidateEmailTemplate({ candidate: candidate.name, job: job.title })
+        getCandidateEmailTemplate({ candidate: userName, job: job.title })
       );
     } catch (error) {
       console.error(error);
     }
 
     // Update the application status locally
-    setLocalApplications(
-      (prevApplications) =>
-        prevApplications.map((app) =>
-          app._id === applicationId ? { ...app, status: "Sent" } : app
-        ) as IApplication[]
+    setLocalApplications((prevApplications) =>
+      prevApplications.map((app) =>
+        app._id === applicationId
+          ? ({
+              ...app,
+              status: "Sent",
+            } as IApplication) // Cast to IApplication
+          : app
+      )
     );
+
   };
 
   return (
@@ -66,26 +86,31 @@ const JobEmployeePopUp: React.FC<Props> = ({
         </div>
 
         <div className="space-y-4">
-          {localApplications.length > 0 ? (
+          {loading ? (
+            <p>Loading applicants...</p>
+          ) : localApplications.length > 0 ? (
             localApplications.map((application) => (
               <div
                 key={application._id}
                 className="flex justify-between items-center"
               >
                 <div>
-                  <h3 className="font-medium">{application.userEmail}</h3>
-                  <p>Status: {application.status}</p>
+                  <h3 className="font-medium">
+                    {userNames[application.userEmail] || "Loading..."}
+                  </h3>
+                  <span className="text-[12px]">
+                    Status:{" "}
+                    <span style={{ fontStyle: "italic" }}>
+                      {application.status}
+                    </span>
+                  </span>
                 </div>
                 <button
                   onClick={() =>
                     handleChangeStatus(application._id, application.userEmail)
                   }
-                  className={`px-4 py-2 rounded text-white ${
-                    application.status === "Applied"
-                      ? "bg-orange-500 hover:bg-orange-600"
-                      : "bg-gray-400 cursor-not-allowed"
-                  }`}
-                  disabled={application.status !== "Applied"}
+                  className="bg-orange-400 text-white px-4 py-2 rounded disabled:bg-gray-400"
+                  disabled={application.status === "Sent"}
                 >
                   {application.status === "Sent"
                     ? "Already Sent"
@@ -96,6 +121,15 @@ const JobEmployeePopUp: React.FC<Props> = ({
           ) : (
             <p>No applicants yet.</p>
           )}
+        </div>
+
+        <div className="mt-4">
+          <button
+            onClick={onClose}
+            className="w-full bg-gray-800 text-white py-2 rounded hover:bg-gray-600"
+          >
+            Close
+          </button>
         </div>
       </div>
     </div>

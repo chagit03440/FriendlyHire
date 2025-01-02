@@ -8,12 +8,14 @@ import ApplyEditModal from "../applications/ApplyEditModal";
 
 interface CandidateJobCardProps {
   job: IJob;
-  onJobAction: (jobId: string) => void; // Callback for job actions
+  onJobAction: (jobId: string) => void;
+  hasSkills: boolean;
 }
 
 const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
   job,
   onJobAction,
+  hasSkills,
 }) => {
   const [isSaved, setIsSaved] = useState(false);
   const [modalOpen, setModalOpen] = useState(false); // State to control modal visibility
@@ -22,7 +24,7 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
   const router = useRouter();
 
   const getMatchColor = (percentage: number) => {
-    if (percentage >= 80) return "bg-orange-500";
+    if (percentage >= 80) return "bg-orange-400";
     if (percentage >= 50) return "bg-yellow-500";
     return "bg-gray-500";
   };
@@ -41,7 +43,7 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
     setLoading(true); // Start loading
     try {
       await handleApplyJob(job._id);
-      onJobAction(job._id)
+      onJobAction(job._id);
       setModalOpen(false); // Close the modal after applying
     } catch (error) {
       console.error("Error applying for job:", error);
@@ -57,19 +59,21 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
 
   return (
     <div className="border p-6 rounded-lg shadow-lg bg-gray-800 text-white h-full flex flex-col justify-between">
-      <div className="mb-4 p-3 bg-gray-700 rounded-lg flex items-center gap-4">
-        <div className="flex-1 relative h-3 bg-gray-600 rounded-full overflow-hidden">
-          <div
-            className={`absolute left-0 top-0 h-full transition-all duration-500 ${getMatchColor(
-              job.matchPercentage || 0
-            )}`}
-            style={{ width: `${job.matchPercentage || 0}%` }}
-          />
+      {hasSkills && (
+        <div className="mb-4 p-3 bg-gray-700 rounded-lg flex items-center gap-4">
+          <div className="flex-1 relative h-3 bg-gray-600 rounded-full overflow-hidden">
+            <div
+              className={`absolute left-0 top-0 h-full transition-all duration-500 ${getMatchColor(
+                job.matchPercentage || 0
+              )}`}
+              style={{ width: `${job.matchPercentage || 0}%` }}
+            />
+          </div>
+          <div className="text-sm text-gray-400 font-medium whitespace-nowrap">
+            {job.matchPercentage || 0}% Match
+          </div>
         </div>
-        <div className="text-sm text-gray-400 font-medium whitespace-nowrap">
-          {job.matchPercentage || 0}% Match
-        </div>
-      </div>
+      )}
 
       <JobCard job={job} missingSkills={job.missingSkills} />
 
@@ -79,10 +83,10 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
           <button
             onClick={onSaveJob}
             disabled={isSaved}
-            className={`w-full h-14 flex justify-center items-center rounded-full text-orange-500 ${
+            className={`w-full h-14 flex justify-center items-center rounded-full text-orange-400 ${
               isSaved
                 ? "bg-gray-400 cursor-not-allowed"
-                : "bg-transparent group-hover:bg-orange-500 group-hover:text-white transition-all duration-200"
+                : "bg-transparent group-hover:bg-orange-400 group-hover:text-white transition-all duration-200"
             }`}
             title="Save Job"
           >
@@ -90,7 +94,7 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
               className={`${
                 isSaved
                   ? "text-gray-400"
-                  : "text-orange-500 group-hover:text-white"
+                  : "text-orange-400 group-hover:text-white"
               } transition-all duration-200`}
             />
           </button>
@@ -100,7 +104,7 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
         <div className="w-full group relative">
           <button
             onClick={handleApplyButtonClick}
-            className="w-full h-14 flex justify-center items-center rounded-full text-orange-500 bg-transparent hover:bg-orange-500 hover:text-white transition-all duration-200"
+            className="w-full h-14 flex justify-center items-center rounded-full text-orange-400 bg-transparent hover:bg-orange-400 hover:text-white transition-all duration-200"
             title="Apply Now"
           >
             <FaPaperPlane className="text-xl" />

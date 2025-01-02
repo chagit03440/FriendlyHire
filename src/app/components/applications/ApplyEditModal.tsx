@@ -44,7 +44,7 @@ const ApplyEditModal: React.FC<ApplyEditModalProps> = ({
           </button>
           <button
             onClick={onEditResume}
-            className="flex items-center gap-2 px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600"
+            className="flex items-center gap-2 px-4 py-2 bg-orange-400 text-white rounded-lg hover:bg-orange-600"
           >
             <FaEdit className="text-base" />
             Edit Resume
@@ -55,7 +55,7 @@ const ApplyEditModal: React.FC<ApplyEditModalProps> = ({
             className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
               loading
                 ? "bg-gray-400 text-gray-600 cursor-not-allowed"
-                : "bg-orange-500 text-white hover:bg-orange-600"
+                : "bg-orange-400 text-white hover:bg-orange-600"
             }`}
           >
             <FaPaperPlane className="text-base" />

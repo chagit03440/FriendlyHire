@@ -20,11 +20,12 @@ const Pagination: React.FC<PaginationProps> = ({
       onPageChange={onPageChange}
       containerClassName="pagination flex justify-center mt-8"
       pageClassName="mx-2"
-      activeClassName="text-orange-500 font-bold"
-      previousClassName="mx-2"
-      nextClassName="mx-2"
-      disabledClassName="text-gray-400"
+      activeClassName="bg-orange-400 text-gray-800 font-bold rounded-full px-3 py-1"
+      previousClassName="mx-2 bg-gray-800 text-white rounded-full px-3 py-1 transition-colors duration-200 hover:bg-orange-400 hover:text-gray-800"
+      nextClassName="mx-2 bg-gray-800 text-white rounded-full px-3 py-1 transition-colors duration-200 hover:bg-orange-400 hover:text-gray-800"
+      disabledClassName="text-gray-400 cursor-not-allowed"
       forcePage={currentPage}
+      pageLinkClassName="text-gray-800 rounded-full px-3 py-1 transition-colors duration-200 hover:bg-orange-100 hover:text-orange-400 font-poppins" // Added custom font class
     />
   );
 };

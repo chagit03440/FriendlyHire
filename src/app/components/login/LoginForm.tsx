@@ -2,7 +2,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
 
-
 interface LoginFormProps {
   email: string;
   password: string;
@@ -22,12 +21,12 @@ const LoginForm: React.FC<LoginFormProps> = ({
   onSubmit,
   onForgotPassword,
 }) => {
-    const router = useRouter();
+  const router = useRouter();
 
   const inputClassName = `
     w-full p-3 rounded-lg text-gray-800 bg-white
     border-2 border-gray-200 transition-all duration-200
-    focus:border-orange-500 focus:ring-orange-200
+    focus:border-orange-400 focus:ring-orange-200
     focus:outline-none focus:ring-4
   `;
 
@@ -72,7 +71,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
 
         <button
           type="submit"
-          className="w-full py-3 px-4 text-white bg-orange-500 hover:bg-orange-600 
+          className="w-full py-3 px-4 text-white bg-orange-400 hover:bg-orange-600 
                    rounded-lg font-semibold shadow-md hover:shadow-lg
                    transform hover:-translate-y-0.5 transition-all duration-200
                    focus:outline-none focus:ring-4 focus:ring-orange-200"
@@ -83,7 +82,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
         <button
           type="button"
           onClick={onForgotPassword}
-          className="w-full py-2 text-gray-800 hover:text-orange-500 
+          className="w-full py-2 text-gray-800 hover:text-orange-400 
                    font-medium transition-colors duration-200
                    focus:outline-none focus:ring-4 focus:ring-orange-200 rounded-lg"
         >
@@ -91,12 +90,12 @@ const LoginForm: React.FC<LoginFormProps> = ({
         </button>
         <button
           type="button"
-          className="w-full py-2 text-gray-800 hover:text-orange-500 
+          className="w-full py-2 text-gray-800 hover:text-orange-400 
                font-medium transition-colors duration-200
                focus:outline-none focus:ring-4 focus:ring-orange-200 rounded-lg"
           onClick={() => router.push("/pages/signup")}
         >
-          Don&apos;t have account yet?
+          Don&apos;t have an account yet?
         </button>
       </form>
     </div>

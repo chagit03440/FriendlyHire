@@ -1,6 +1,6 @@
 "use client";
 import "./globals.css";
-import NavBar from "./components/layout/NavBar";
+import NavBar from "./components/layout/nav/NavBar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { UserProvider, useUser } from "./store/UserContext";
@@ -39,8 +39,8 @@ const LayoutContent: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <html lang="en">
-       <head>
-       <title>FriendlyHire</title>
+      <head>
+        <title>FriendlyHire</title>
         <link rel="icon" href="/favicon.ico" />
       </head>
       <body>

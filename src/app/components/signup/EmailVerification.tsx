@@ -84,7 +84,7 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
           <input
             type="text"
             id="verificationCode"
-            className="w-full mt-1 p-3 border rounded-lg text-md text-gray-800 border-gray-300 focus:ring-orange-500"
+            className="w-full mt-1 p-3 border rounded-lg text-md text-gray-800 border-gray-300 focus:ring-orange-400"
             value={verificationCode}
             onChange={(e) => setVerificationCode(e.target.value)}
             required
@@ -94,7 +94,7 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
         <div className="flex justify-between">
           <button
             type="submit"
-            className="w-1/2 mr-2 py-3 text-lg bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300"
+            className="w-1/2 mr-2 py-3 text-lg bg-orange-400 text-white rounded-lg hover:bg-orange-600 transition-colors duration-300"
           >
             Verify
           </button>
@@ -111,7 +111,7 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
           <button
             type="button"
             onClick={handleSendVerificationCode}
-            className="text-orange-500 hover:underline"
+            className="text-orange-400 hover:underline"
           >
             Resend Verification Code
           </button>

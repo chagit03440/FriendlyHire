@@ -21,7 +21,7 @@ const JobActions: React.FC<JobActionsProps> = ({
       <div className="w-full group relative">
         <button
           onClick={() => onView(job)}
-          className="w-full h-14 flex justify-center items-center rounded-full text-orange-500 bg-transparent hover:bg-orange-500 hover:text-white transition-all duration-200"
+          className="w-full h-14 flex justify-center items-center rounded-full text-orange-400 bg-transparent hover:bg-orange-400 hover:text-white transition-all duration-200"
           title="View Applications"
         >
           <FaEye className="text-xl" />
@@ -32,7 +32,7 @@ const JobActions: React.FC<JobActionsProps> = ({
       <div className="w-full group relative">
         <button
           onClick={() => onEdit(job)}
-          className="w-full h-14 flex justify-center items-center rounded-full text-orange-500 bg-transparent hover:bg-orange-500 hover:text-white transition-all duration-200"
+          className="w-full h-14 flex justify-center items-center rounded-full text-orange-400 bg-transparent hover:bg-orange-400 hover:text-white transition-all duration-200"
           title="Edit"
         >
           <FaEdit className="text-xl" />
@@ -43,7 +43,7 @@ const JobActions: React.FC<JobActionsProps> = ({
       <div className="w-full group relative">
         <button
           onClick={() => onClose(job)}
-          className="w-full h-14 flex justify-center items-center rounded-full text-orange-500 bg-transparent hover:bg-orange-500 hover:text-white transition-all duration-200"
+          className="w-full h-14 flex justify-center items-center rounded-full text-orange-400 bg-transparent hover:bg-orange-400 hover:text-white transition-all duration-200"
           disabled={job.status === "Closed"}
           title="Close Job"
         >
