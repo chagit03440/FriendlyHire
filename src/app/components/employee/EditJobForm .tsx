@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { FaSave, FaMinus, FaPlus } from "react-icons/fa"; // Import icons
 import IJob from "@/app/types/job";
 
 interface EditJobFormProps {
@@ -18,39 +19,11 @@ const EditJobForm: React.FC<EditJobFormProps> = ({ job, onClose, onUpdate }) => 
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-  
-    if (name === "experience") {
-      const nativeEvent = e.nativeEvent as InputEvent;
-  
-      // Handle spinner button interactions
-      if (nativeEvent.inputType === "increment" || nativeEvent.inputType === "decrement") {
-        setJobDetails((prev) => ({
-          ...prev,
-          [name]: value === "" ? "" : Number(value),
-        } as IJob));
-        return;
-      }
-  
-      // Allow manual input for valid numbers
-      const numericValue = Number(value);
-      if (!isNaN(numericValue) && numericValue >= 0) {
-        setJobDetails((prev) => ({
-          ...prev,
-          [name]: numericValue,
-        } as IJob));
-      }
-  
-      return;
-    }
-  
-    // Generic handler for other fields
     setJobDetails((prev) => ({
       ...prev,
-      [name]: value,
+      [name]: name === "experience" ? (value === "" ? "" : Number(value)) : value,
     } as IJob));
   };
-  
-  
 
   const handleArrayChange = (e: React.ChangeEvent<HTMLInputElement>, index: number) => {
     const updatedRequirements = [...(jobDetails.requirements || [])];
@@ -73,13 +46,13 @@ const EditJobForm: React.FC<EditJobFormProps> = ({ job, onClose, onUpdate }) => 
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await onUpdate(jobDetails); // Submit the updated job details
-    onClose(); // Close the popup after submission
+    await onUpdate(jobDetails);
+    onClose();
   };
 
   return (
     <div className="fixed inset-0 bg-gray-500 bg-opacity-50 flex justify-center items-center z-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-lg max-h-full overflow-y-auto relative">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-4xl max-h-full overflow-y-auto relative">
         {/* Close Button */}
         <button
           type="button"
@@ -89,128 +62,126 @@ const EditJobForm: React.FC<EditJobFormProps> = ({ job, onClose, onUpdate }) => 
         >
           ✕
         </button>
-        <h2 className="text-xl font-bold mb-4">Edit Job</h2>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="title" className="block text-sm font-medium text-gray-700">
-              Title
-            </label>
-            <input
-              name="title"
-              id="title"
-              value={jobDetails.title}
-              onChange={handleChange}
-              className="w-full mt-1 p-2 border border-gray-300 rounded-md"
-            />
+        <h2 className="text-xl font-bold mb-6 text-center">Edit Job</h2>
+        <form onSubmit={handleSubmit} className="flex gap-6">
+          {/* Left Column */}
+          <div className="flex-1 space-y-4">
+            <div>
+              <label htmlFor="title" className="block text-sm font-medium text-gray-700">
+                Title
+              </label>
+              <input
+                name="title"
+                id="title"
+                value={jobDetails.title}
+                onChange={handleChange}
+                className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+            </div>
+            <div>
+              <label htmlFor="company" className="block text-sm font-medium text-gray-700">
+                Company
+              </label>
+              <input
+                name="company"
+                id="company"
+                value={jobDetails.company}
+                onChange={handleChange}
+                className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+            </div>
+            <div>
+              <label htmlFor="location" className="block text-sm font-medium text-gray-700">
+                Location
+              </label>
+              <input
+                name="location"
+                id="location"
+                value={jobDetails.location}
+                onChange={handleChange}
+                className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+            </div>
+            <div>
+              <label htmlFor="experience" className="block text-sm font-medium text-gray-700">
+                Experience (Years)
+              </label>
+              <input
+                name="experience"
+                id="experience"
+                type="number"
+                min={0}
+                value={jobDetails.experience}
+                onChange={handleChange}
+                className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              />
+            </div>
+            <div>
+              <label htmlFor="status" className="block text-sm font-medium text-gray-700">
+                Status
+              </label>
+              <select
+                name="status"
+                id="status"
+                value={jobDetails.status}
+                onChange={handleChange}
+                className="w-full mt-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+              >
+                <option value="Open">Open</option>
+                <option value="Closed">Closed</option>
+              </select>
+            </div>
           </div>
-          <div className="mb-4">
-            <label htmlFor="description" className="block text-sm font-medium text-gray-700">
-              Description
-            </label>
-            <textarea
-              name="description"
-              id="description"
-              value={jobDetails.description}
-              onChange={handleChange}
-              className="w-full mt-1 p-2 border border-gray-300 rounded-md"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="experience" className="block text-sm font-medium text-gray-700">
-              Experience
-            </label>
-            <input
-              name="experience"
-              id="experience"
-              type="number"
-              min={0}
-              value={jobDetails.experience}
-              onChange={handleChange}
-              className="w-full mt-1 p-2 border border-gray-300 rounded-md"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="company" className="block text-sm font-medium text-gray-700">
-              Company
-            </label>
-            <input
-              name="company"
-              id="company"
-              value={jobDetails.company}
-              onChange={handleChange}
-              className="w-full mt-1 p-2 border border-gray-300 rounded-md"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="location" className="block text-sm font-medium text-gray-700">
-              Location
-            </label>
-            <input
-              name="location"
-              id="location"
-              value={jobDetails.location}
-              onChange={handleChange}
-              className="w-full mt-1 p-2 border border-gray-300 rounded-md"
-            />
-          </div>
-          <div className="mb-4">
-            <label htmlFor="status" className="block text-sm font-medium text-gray-700">
-              Status
-            </label>
-            <select
-              name="status"
-              id="status"
-              value={jobDetails.status}
-              onChange={handleChange}
-              className="w-full mt-1 p-2 border border-gray-300 rounded-md"
-            >
-              <option value="Open">Open</option>
-              <option value="Closed">Closed</option>
-            </select>
-          </div>
-          <div className="mb-4">
+
+          {/* Right Column */}
+          <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700">Requirements</label>
-            {(jobDetails.requirements || []).map((requirement, index) => (
-              <div key={index} className="flex items-center gap-2 mb-2">
-                <input
-                  type="text"
-                  value={requirement}
-                  onChange={(e) => handleArrayChange(e, index)}
-                  className="w-full p-2 border border-gray-300 rounded-md"
-                />
-                <button
-                  type="button"
-                  onClick={() => handleRemoveRequirement(index)}
-                  className="px-2 py-1 bg-red-500 text-white rounded-md hover:bg-red-600"
-                >
-                  Remove
-                </button>
-              </div>
-            ))}
+            <div className="space-y-2">
+              {(jobDetails.requirements || []).map((requirement, index) => (
+                <div key={index} className="flex items-center gap-2">
+                  <input
+                    type="text"
+                    value={requirement}
+                    onChange={(e) => handleArrayChange(e, index)}
+                    className="flex-1 p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-500"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveRequirement(index)}
+                    className="p-2 bg-gray-300 text-orange-500 rounded-md hover:bg-gray-400"
+                  >
+                    <FaMinus />
+                  </button>
+                </div>
+              ))}
+            </div>
             <button
               type="button"
               onClick={handleAddRequirement}
-              className="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+              className="mt-4 px-4 py-2 text-orange-500 rounded-md hover:bg-gray-400 flex items-center gap-2"
             >
-              Add Requirement
-            </button>
-          </div>
-          <div className="flex justify-between items-center">
-            <button
-              type="button"
-              onClick={onClose}
-              className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
-            >
-              Save Changes
+              <FaPlus /> Add Requirement
             </button>
           </div>
         </form>
+
+        {/* Buttons */}
+        <div className="mt-6 flex justify-between gap-4">
+          <button
+            type="button"
+            onClick={onClose}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400"
+          >
+            Cancel
+          </button>
+          <button
+            type="submit"
+            form="edit-job-form"
+            className="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600 flex items-center gap-2"
+          >
+            <FaSave /> Save Changes
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -79,9 +79,9 @@ const JobEmployeePopUp: React.FC<Props> = ({
           <h2 className="text-xl font-semibold">Applicants for {job.title}</h2>
           <button
             onClick={onClose}
-            className="text-gray-600 hover:text-gray-900"
+            className="text-gray-600 hover:text-gray-900 p-2 rounded-full focus:outline-none"
           >
-            X
+            ✕
           </button>
         </div>
 
