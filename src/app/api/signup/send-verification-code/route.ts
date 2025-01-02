@@ -26,6 +26,7 @@ export async function POST(req: Request) {
       { status: 400 }
     );
   }
+  
   const verificationCode = Math.floor(
     100000 + Math.random() * 900000
   ).toString(); // 6-digit code

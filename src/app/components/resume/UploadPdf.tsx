@@ -122,7 +122,7 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
                                 <span className="truncate">{file.name}</span>
                                 <button
                                     type="button"
-                                    className="text-red-500 hover:text-red-700"
+                                    className="text-red-400 hover:text-red-700"
                                     onClick={() => setFile(null)}
                                 >
                                     Remove
@@ -132,9 +132,9 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
                     </div>
                     {file && (
                         <div className="flex justify-center items-center h-full pt-2">
-                        <button className=" bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800" onClick={()=>handleSubmit()}>
-                            Upload Resume
-                        </button>
+                            <button className=" bg-gray-700 text-white px-4 py-2 rounded hover:bg-gray-800" onClick={() => handleSubmit()}>
+                                Upload Resume
+                            </button>
                         </div>
                     )}
                 </div>
@@ -145,8 +145,9 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
                             <p className="mb-2">
                                 <strong>File:</strong> {decodeURIComponent(profileData.fileUrl.split("/").pop() || "")}
                             </p>
-                            <div className="flex space-x-4 mb-4">
-                                <div className="group relative">
+                            <div className="flex space-x-6 mb-4">
+                                {/* View Resume Button */}
+                                <div className="group relative flex items-center space-x-2">
                                     <button
                                         onClick={() => {
                                             if (profileData?.fileUrl) {
@@ -155,23 +156,29 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
                                                 toast.error("No file URL found.");
                                             }
                                         }}
-                                        className="w-12 h-12 flex justify-center items-center rounded-full text-orange-500 bg-transparent hover:bg-orange-500 hover:text-white transition-all duration-200"
-                                        title="View Resume"
+                                        className="w-12 h-12 flex justify-center items-center rounded-full text-orange-400 bg-transparent hover:bg-orange-400 hover:text-white transition-all duration-200"
                                     >
-                                        <FaEye className="text-xl" />
+                                        <FaEye className="text-3xl" />
                                     </button>
+                                    <span className="text-orange-400 group-hover:text-orange-500 font-medium transition-all duration-200">
+                                        View Resume
+                                    </span>
                                 </div>
 
-                                <div className="group relative">
+                                {/* Edit Resume Button */}
+                                <div className="group relative flex items-center space-x-2">
                                     <button
                                         onClick={handleEdit}
-                                        className="w-12 h-12 flex justify-center items-center rounded-full text-orange-500 bg-transparent hover:bg-orange-500 hover:text-white transition-all duration-200"
-                                        title="Edit Resume"
+                                        className="w-12 h-12 flex justify-center items-center rounded-full text-orange-400 bg-transparent hover:bg-orange-400 hover:text-white transition-all duration-200"
                                     >
-                                        <FaEdit className="text-xl" />
+                                        <FaEdit className="text-3xl" />
                                     </button>
+                                    <span className="text-orange-400 group-hover:text-orange-500 font-medium transition-all duration-200">
+                                        Edit Resume
+                                    </span>
                                 </div>
                             </div>
+
                             <iframe
                                 src={profileData.fileUrl}
                                 className="w-full h-[600px] border rounded-md"
@@ -179,7 +186,7 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
                             ></iframe>
                         </div>
                     ) : (
-                        <p className="text-gray-500 text-center">
+                        <p className="text-gray-400 text-center">
                             No resume uploaded yet. Please use the form to the right to upload a PDF.
                         </p>
                     )}
