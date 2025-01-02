@@ -18,7 +18,11 @@ export function calculateSkillsMatch(
 ): SkillMatch {
   const matchedSkills: string[] = [];
   const missingSkills: string[] = [];
-
+  
+  // If the user has no skills, return a default high match percentage
+  if (!userSkills) {
+    return { matchPercentage: 100, matchedSkills, missingSkills };
+  }
   // Check each required skill
   for (const requiredSkill of requiredSkills) {
     const normalized2 = normalizeSkill(requiredSkill);
