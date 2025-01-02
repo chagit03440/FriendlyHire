@@ -41,6 +41,7 @@ const Signup = () => {
       if (response.success) {
         setUserData(data);
         setIsEmailVerificationStep(true);
+        toast.success(response.message || "Verification code sent successfully.");
       } else {
         toast.error(response.message || "Failed to send verification code.");
       }

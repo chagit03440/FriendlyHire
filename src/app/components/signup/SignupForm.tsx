@@ -23,6 +23,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
   const [profile, setProfile] = useState("");
   const [validationErrors, setValidationErrors] = useState(noValidationErrors);
   const [error, setError] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const userData: IUser = { name, email, password, role, profile } as IUser;
 
@@ -45,7 +46,16 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      onSignupSuccess(userData);
+      setIsSubmitting(true);
+      try {
+        await new Promise((resolve) => setTimeout(resolve, 4000));
+        onSignupSuccess(userData);
+      } catch (err) {
+        console.error("Error during signup:", err);
+        setError("An error occurred. Please try again.");
+      } finally {
+        setIsSubmitting(false); 
+      }
     } else {
       setError("Please correct the errors below");
     }
@@ -54,10 +64,9 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
   const inputClassName = (fieldError: string) => `
     w-full p-3 rounded-lg text-gray-800 bg-white
     border-2 transition-all duration-200
-    ${
-      fieldError
-        ? "border-red-400 focus:border-red-500 focus:ring-red-200"
-        : "border-gray-200 focus:border-orange-400 focus:ring-orange-200"
+    ${fieldError
+      ? "border-red-400 focus:border-red-500 focus:ring-red-200"
+      : "border-gray-200 focus:border-orange-400 focus:ring-orange-200"
     }
     focus:outline-none focus:ring-4
   `;
@@ -176,7 +185,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
                    transform hover:-translate-y-0.5 transition-all duration-200
                    focus:outline-none focus:ring-4 focus:ring-orange-200"
         >
-          Create Account
+          {isSubmitting ? "Creating Account..." : "Create Account"}
         </button>
       </form>
     </div>
