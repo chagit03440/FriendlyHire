@@ -121,7 +121,7 @@ const Page = () => {
       </section>
 
       {/* Employees Table */}
-      <section>
+      <section className="mb-8 overflow-x-auto">
         <h3 className="text-xl font-semibold text-black mb-4">Employees</h3>
         <div className="inline-block min-w-full align-middle">
           <table className="min-w-full bg-white border border-gray-200 rounded-lg shadow-md">

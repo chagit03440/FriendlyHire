@@ -24,7 +24,6 @@ const JobEmployeePopUp: React.FC<Props> = ({
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Fetch the names for all applicants initially
     const fetchUserNames = async () => {
       const names: { [key: string]: string } = {};
       for (const application of applications) {
@@ -47,7 +46,6 @@ const JobEmployeePopUp: React.FC<Props> = ({
     const candidate = await getUser(userEmail);
     const userName = candidate.name;
 
-    // Send email to the user
     try {
       await sendEmail(
         userEmail,
@@ -58,23 +56,21 @@ const JobEmployeePopUp: React.FC<Props> = ({
       console.error(error);
     }
 
-    // Update the application status locally
     setLocalApplications((prevApplications) =>
       prevApplications.map((app) =>
         app._id === applicationId
           ? ({
               ...app,
               status: "Sent",
-            } as IApplication) // Cast to IApplication
+            } as IApplication)
           : app
       )
     );
-
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg w-1/3">
+    <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 px-4">
+      <div className="bg-white p-6 rounded-lg shadow-lg w-full max-w-md sm:max-w-lg lg:max-w-sm">
         <div className="flex justify-between items-center mb-4">
           <h2 className="text-xl font-semibold">Applicants for {job.title}</h2>
           <button
@@ -92,9 +88,9 @@ const JobEmployeePopUp: React.FC<Props> = ({
             localApplications.map((application) => (
               <div
                 key={application._id}
-                className="flex justify-between items-center"
+                className="flex flex-wrap justify-between items-center gap-4"
               >
-                <div>
+                <div className="w-full sm:w-auto">
                   <h3 className="font-medium">
                     {userNames[application.userEmail] || "Loading..."}
                   </h3>
@@ -109,7 +105,7 @@ const JobEmployeePopUp: React.FC<Props> = ({
                   onClick={() =>
                     handleChangeStatus(application._id, application.userEmail)
                   }
-                  className="bg-orange-400 text-white px-4 py-2 rounded disabled:bg-gray-400"
+                  className="bg-orange-400 text-white px-4 py-2 rounded disabled:bg-gray-400 sm:w-auto w-full"
                   disabled={application.status === "Sent"}
                 >
                   {application.status === "Sent"
