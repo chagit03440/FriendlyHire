@@ -52,11 +52,10 @@ const ApplyEditModal: React.FC<ApplyEditModalProps> = ({
           <button
             onClick={onApplyNow}
             disabled={loading} // Disable button while loading
-            className={`flex items-center gap-2 px-4 py-2 rounded-lg ${
-              loading
-                ? "bg-gray-400 text-gray-600 cursor-not-allowed"
-                : "bg-orange-400 text-white hover:bg-orange-600"
-            }`}
+            className={`flex items-center gap-2 px-4 py-2 rounded-lg ${loading
+              ? "bg-gray-400 text-gray-600 cursor-not-allowed"
+              : "bg-orange-400 text-white hover:bg-orange-600"
+              }`}
           >
             <FaPaperPlane className="text-base" />
             {loading ? "Applying..." : "Apply Now"} {/* Update button text */}

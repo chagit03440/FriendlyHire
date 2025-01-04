@@ -121,13 +121,12 @@ const JobCard: React.FC<JobCardProps> = ({ job, missingSkills }) => {
               job.requirements.map((req, index) => (
                 <span
                   key={index}
-                  className={`px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 ${
-                    missingSkills?.includes(req)
+                  className={`px-2 py-0.5 text-xs font-medium rounded-full bg-gray-100 ${missingSkills?.includes(req)
                       ? "text-red-600 border border-red-300"
                       : missingSkills
-                      ? "text-green-600 border border-green-300"
-                      : "text-orange-400 border border-orange-300"
-                  }`}
+                        ? "text-green-600 border border-green-300"
+                        : "text-orange-400 border border-orange-300"
+                    }`}
                 >
                   {req}
                 </span>

@@ -49,7 +49,7 @@ const ResumeControlBar = ({
     }
     try {
       console.log("nameeeee", fileName);
-      
+
       const file = new File([instance.blob], fileName, { type: instance.blob.type });
 
       const formData = new FormData();
@@ -81,7 +81,7 @@ const ResumeControlBar = ({
 
   return (
     <>
-     <Toaster />
+      <Toaster />
       <div className="sticky bottom-0 left-0 right-0 flex h-[var(--resume-control-bar-height)] items-center justify-center px-[var(--resume-padding)] text-gray-600 lg:justify-between">
         <div className="flex items-center gap-2">
           <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />

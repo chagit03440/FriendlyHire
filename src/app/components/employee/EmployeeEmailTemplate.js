@@ -1,4 +1,8 @@
-export const getEmployeeEmailTemplate = ({ jobCreatorName, userName, jobTitle }) => {
+export const getEmployeeEmailTemplate = ({
+  jobCreatorName,
+  userName,
+  jobTitle,
+}) => {
   return `
     <!DOCTYPE html>
     <html>
@@ -74,4 +78,3 @@ export const getEmployeeEmailTemplate = ({ jobCreatorName, userName, jobTitle })
     </html>
   `;
 };
-    

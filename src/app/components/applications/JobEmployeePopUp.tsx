@@ -18,24 +18,9 @@ const JobEmployeePopUp: React.FC<Props> = ({
   onClose,
   onUpdateStatus,
 }) => {
-  const [localApplications, setLocalApplications] =
-    useState<IApplication[]>(applications);
+  const [localApplications, setLocalApplications] = useState<IApplication[]>(applications);
   const [userNames, setUserNames] = useState<{ [key: string]: string }>({});
   const [loading, setLoading] = useState<boolean>(true);
-
-  useEffect(() => {
-    const fetchUserNames = async () => {
-      const names: { [key: string]: string } = {};
-      for (const application of applications) {
-        const candidate = await getUser(application.userEmail);
-        names[application.userEmail] = candidate.name;
-      }
-      setUserNames(names);
-      setLoading(false);
-    };
-
-    fetchUserNames();
-  }, [applications]);
 
   const handleChangeStatus = async (
     applicationId: string,
@@ -60,13 +45,27 @@ const JobEmployeePopUp: React.FC<Props> = ({
       prevApplications.map((app) =>
         app._id === applicationId
           ? ({
-              ...app,
-              status: "Sent",
-            } as IApplication)
+            ...app,
+            status: "Sent",
+          } as IApplication)
           : app
       )
     );
   };
+
+  useEffect(() => {
+    const fetchUserNames = async () => {
+      const names: { [key: string]: string } = {};
+      for (const application of applications) {
+        const candidate = await getUser(application.userEmail);
+        names[application.userEmail] = candidate.name;
+      }
+      setUserNames(names);
+      setLoading(false);
+    };
+
+    fetchUserNames();
+  }, [applications]);
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-gray-500 bg-opacity-50 px-4">

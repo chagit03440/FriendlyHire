@@ -19,9 +19,7 @@ export const Tooltip = ({
 }) => {
   const spanRef = useRef<HTMLSpanElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
-
   const [tooltipPos, setTooltipPos] = useState({ top: 0, left: 0 });
-
   const [show, setShow] = useState(false);
   const showTooltip = () => setShow(true);
   const hideTooltip = () => setShow(false);

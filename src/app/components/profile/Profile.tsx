@@ -199,7 +199,7 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
               )}
             </div>
             {/* Add Resume Button */}
-            {!((profileData as ICandidate).fileUrl) && isEditing &&(
+            {!((profileData as ICandidate).fileUrl) && isEditing && (
               <div className="mt-4 flex justify-center">
                 <button
                   className="bg-orange-400 text-white px-4 py-2 rounded hover:bg-orange-300"
@@ -212,8 +212,6 @@ const ProfilePage: React.FC<Props> = ({ user }) => {
           </div>
 
         )}
-
-
       </div>
 
       <div className="mt-6 flex justify-end space-x-4">

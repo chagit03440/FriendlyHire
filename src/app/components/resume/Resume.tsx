@@ -2,19 +2,13 @@
 import { useState, useMemo } from "react";
 import { ResumeIframeCSR } from "./ResumeIFrame";
 import { ResumePDF } from "./resumePDF/ResumePDF";
-import {
-  ResumeControlBarCSR,
-  ResumeControlBarBorder,
-} from "./ResumeControlBar";
+import { ResumeControlBarCSR, ResumeControlBarBorder, } from "./ResumeControlBar";
 import { FlexboxSpacer } from "../common/FlexboxSpacer";
 import { useAppSelector } from "@/app/lib/redux/hooks";
 import { selectResume } from "@/app/lib/redux/resumeSlice";
 import { selectSettings } from "@/app/lib/redux/settingsSlice";
 import { DEBUG_RESUME_PDF_FLAG } from "@/app/lib/constants";
-import {
-  useRegisterReactPDFFont,
-  useRegisterReactPDFHyphenationCallback,
-} from "../fonts/hooks";
+import { useRegisterReactPDFFont, useRegisterReactPDFHyphenationCallback, } from "../fonts/hooks";
 import { NonEnglishFontsCSSLazyLoader } from "../fonts/NonEnglishFontsCSSLoader";
 
 export const Resume = () => {

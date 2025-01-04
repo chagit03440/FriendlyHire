@@ -112,8 +112,8 @@ const JobList: React.FC<JobListProps> = ({ jobs: initialJobs }) => {
   const sortedJobs =
     role === "candidate"
       ? [...enrichedJobs].sort(
-          (a, b) => b.matchPercentage! - a.matchPercentage!
-        )
+        (a, b) => b.matchPercentage! - a.matchPercentage!
+      )
       : enrichedJobs;
 
   const totalPageCount = Math.ceil(sortedJobs.length / jobsPerPage);

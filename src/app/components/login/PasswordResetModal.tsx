@@ -1,9 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import {
-  sendResetPasswordCode,
-  resetPassword,
-} from "@/app/services/passwordResetService";
+import { sendResetPasswordCode, resetPassword, } from "@/app/services/passwordResetService";
 import toast from "react-hot-toast";
 
 interface PasswordResetModalProps {

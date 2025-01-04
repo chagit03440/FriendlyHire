@@ -28,7 +28,7 @@ export const useRegisterReactPDFFont = () => {
 
 export const useRegisterReactPDFHyphenationCallback = (fontFamily: string) => {
   useEffect(() => {
-    if (ENGLISH_FONT_FAMILIES.includes(fontFamily as string )) {
+    if (ENGLISH_FONT_FAMILIES.includes(fontFamily as string)) {
       // Disable hyphenation for English Font Family so the word wraps each line
       // https://github.com/diegomura/react-pdf/issues/311#issuecomment-548301604
       Font.registerHyphenationCallback((word) => [word]);

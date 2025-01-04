@@ -1,5 +1,4 @@
 "use client";
-
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getJobs } from "../../services/jobServices";
@@ -28,6 +27,23 @@ const CandidateDashboard: React.FC = () => {
   const [isLoading, setIsLoading] = useState(false); // Loading state
   const [error, setError] = useState<string | null>(null);
   const [userHasSkills, setUserHasSkills] = useState<boolean>(true);
+
+  // Fetch user applications using react-query
+  const {
+    data: userApplications = [],
+    isLoading: isApplicationsLoading,
+    error: applicationsError,
+  } = useQuery({
+    queryKey: ["userApplications", mail],
+    queryFn: () => getUserApplications(mail),
+    enabled: !!mail,
+  });
+
+  // Filter out jobs that the user has already applied for
+  const filteredJobs = jobs.filter(
+    (job: IJob) =>
+      !userApplications.some((app: IApplication) => app.jobId._id === job._id)
+  );
 
   // Check if user has skills
   useEffect(() => {
@@ -58,31 +74,15 @@ const CandidateDashboard: React.FC = () => {
     fetchJobs(); // Trigger the function
   }, []); // Empty dependency array means it runs once on mount
 
-  // Fetch user applications using react-query
-  const {
-    data: userApplications = [],
-    isLoading: isApplicationsLoading,
-    error: applicationsError,
-  } = useQuery({
-    queryKey: ["userApplications", mail],
-    queryFn: () => getUserApplications(mail),
-    enabled: !!mail,
-  });
-
   if (isLoading || isApplicationsLoading)
     return (
       <div>
         <LoadSpinner />
       </div>
     );
+
   if (error || applicationsError)
     return <div className="text-red-500">Error: {error}</div>;
-
-  // Filter out jobs that the user has already applied for
-  const filteredJobs = jobs.filter(
-    (job: IJob) =>
-      !userApplications.some((app: IApplication) => app.jobId._id === job._id)
-  );
 
   return (
     <JobActionsProvider>

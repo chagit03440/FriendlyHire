@@ -18,7 +18,7 @@ export function calculateSkillsMatch(
 ): SkillMatch {
   const matchedSkills: string[] = [];
   const missingSkills: string[] = [];
-  
+
   // If the user has no skills, return a default high match percentage
   if (!userSkills) {
     return { matchPercentage: 100, matchedSkills, missingSkills };

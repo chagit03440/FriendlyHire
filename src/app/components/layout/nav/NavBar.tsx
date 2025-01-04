@@ -15,7 +15,6 @@ const NavBar: React.FC = () => {
   const { role, mail, setRole, setMail } = useUser();
   const [isOpen, setIsOpen] = useState(false);
   const [userName, setUserName] = useState("");
-
   const { handleLogout, router } = useNavigation(setRole, setMail);
   const roleOptions = useRoleOptions(router, handleLogout);
 
@@ -73,7 +72,7 @@ const NavBar: React.FC = () => {
           </div>
         ) : (
           <>
-              <NavButton href="/pages/login" text="Login" />
+            <NavButton href="/pages/login" text="Login" />
             <div className="relative mr-5 ml-2">
               <NavButton href="/pages/signup" text="Sign Up" />
             </div>

@@ -7,7 +7,7 @@ export const Logo = () => {
 
   return (
     <div
-      className="flex items-center space-x-4" // space between logo and text
+      className="flex items-center space-x-4" 
       onClick={() => router.push("/pages/home")}
     >
       {/* Smaller logo with transparency */}

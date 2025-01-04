@@ -7,7 +7,6 @@ interface ConfirmationModalProps {
   onCancel: () => void;
 }
 
-
 const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
   message,
   errorMessage,

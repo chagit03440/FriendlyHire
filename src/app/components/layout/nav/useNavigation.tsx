@@ -27,7 +27,7 @@ export const useNavigation = (
 
     queryClient.clear(); // Clear all cached data
 
-    router.push("/pages/login");
+    router.push("/");
   }, [setRole, setMail, router]);
 
   return { handleLogout, router };

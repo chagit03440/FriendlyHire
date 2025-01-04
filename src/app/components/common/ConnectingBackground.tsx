@@ -78,7 +78,6 @@ const ConnectingBackground = () => {
         };
 
         draw();
-
         return () => {
             window.removeEventListener("resize", () => { });
         };
@@ -104,14 +103,14 @@ const ConnectingBackground = () => {
                    rounded-lg font-semibold shadow-md hover:shadow-lg
                    transform hover:-translate-y-0.5 transition-all duration-200
                    focus:outline-none focus:ring-4 focus:ring-orange-200"
-                   onClick={() => router.push("/pages/signup")} >
+                    onClick={() => router.push("/pages/signup")} >
                     Join Us →
                 </button>
                 <button className="py-2 px-4 text-white bg-gray-700 hover:bg-gray-800 
                    rounded-lg font-semibold shadow-md hover:shadow-lg
                    transform hover:-translate-y-0.5 transition-all duration-200
                    focus:outline-none focus:ring-4 focus:ring-orange-200"
-                   onClick={() => router.push("/pages/login")} >
+                    onClick={() => router.push("/pages/login")} >
                     Enter
                 </button>
             </div>

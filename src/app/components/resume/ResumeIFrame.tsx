@@ -72,10 +72,10 @@ const ResumeIframe = ({
 
   if (enablePDFViewer) {
     return (
-        <DynamicPDFViewer className="h-full w-full">
+      <DynamicPDFViewer className="h-full w-full">
         {children as React.ReactElement}
       </DynamicPDFViewer>
-      
+
     );
   }
   const width = isA4 ? A4_WIDTH_PX : LETTER_WIDTH_PX;

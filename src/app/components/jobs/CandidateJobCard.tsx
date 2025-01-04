@@ -83,19 +83,17 @@ const CandidateJobCard: React.FC<CandidateJobCardProps> = ({
           <button
             onClick={onSaveJob}
             disabled={isSaved}
-            className={`w-full h-14 flex justify-center items-center rounded-full text-orange-400 ${
-              isSaved
+            className={`w-full h-14 flex justify-center items-center rounded-full text-orange-400 ${isSaved
                 ? "bg-gray-400 cursor-not-allowed"
                 : "bg-transparent group-hover:bg-orange-400 group-hover:text-white transition-all duration-200"
-            }`}
+              }`}
             title="Save Job"
           >
             <FaBookmark
-              className={`${
-                isSaved
+              className={`${isSaved
                   ? "text-gray-400"
                   : "text-orange-400 group-hover:text-white"
-              } transition-all duration-200`}
+                } transition-all duration-200`}
             />
           </button>
         </div>

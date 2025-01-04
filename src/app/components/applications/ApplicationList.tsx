@@ -9,7 +9,7 @@ import { FaPaperPlane, FaArchive, FaEye } from "react-icons/fa"; // Save, Apply,
 import JobDetailsPopUp from "../jobs/JobDetailsPopUp";
 import IJob from "@/app/types/job";
 import { getJobById } from "@/app/services/jobServices";
-import toast , { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 interface Props {
   applications: IApplication[];
@@ -23,7 +23,6 @@ const ApplicationList: React.FC<Props> = ({ applications }) => {
   const [viewingJob, setViewingJob] = useState<IJob | null>(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false); // Controls JobDetailsPopUp visibility
   const router = useRouter();
-
 
   const handleApplyButtonClick = (jobId: string) => {
     setModalJobId(jobId);
@@ -84,100 +83,99 @@ const ApplicationList: React.FC<Props> = ({ applications }) => {
   return (
     <>
       <Toaster />
-        <div className="application-list">
-          <div className="bg-white text-black p-6 rounded-lg shadow-lg">
-            <div className="overflow-x-auto">
-              <div className="space-y-4">
-                {applications.map((application) => (
-                  <div
-                    key={application._id}
-                    className="flex justify-between items-center p-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition-colors"
-                  >
-                    <div className="flex-1">
-                      <h3 className="text-lg font-medium">
-                        {typeof application.jobId === "object" && "title" in application.jobId
-                          ? application.jobId.title
-                          : "N/A"}
-                      </h3>
-                      <p className="text-sm text-gray-400">
-                        {typeof application.jobId === "object" && "company" in application.jobId
-                          ? application.jobId.company
-                          : "N/A"}
-                      </p>
-                    </div>
+      <div className="application-list">
+        <div className="bg-white text-black p-6 rounded-lg shadow-lg">
+          <div className="overflow-x-auto">
+            <div className="space-y-4">
+              {applications.map((application) => (
+                <div
+                  key={application._id}
+                  className="flex justify-between items-center p-4 bg-gray-800 text-white rounded-lg shadow-sm hover:bg-gray-700 transition-colors"
+                >
+                  <div className="flex-1">
+                    <h3 className="text-lg font-medium">
+                      {typeof application.jobId === "object" && "title" in application.jobId
+                        ? application.jobId.title
+                        : "N/A"}
+                    </h3>
+                    <p className="text-sm text-gray-400">
+                      {typeof application.jobId === "object" && "company" in application.jobId
+                        ? application.jobId.company
+                        : "N/A"}
+                    </p>
+                  </div>
 
-                    <div className="flex items-center space-x-4">
-                      <span
-                        className={`text-sm font-medium ${
-                          application.status === "Saved"
-                            ? "text-gray-500"
-                            : application.status === "Applied"
+                  <div className="flex items-center space-x-4">
+                    <span
+                      className={`text-sm font-medium ${application.status === "Saved"
+                          ? "text-gray-500"
+                          : application.status === "Applied"
                             ? "text-gray-500"
                             : application.status === "Sent"
-                            ? "text-gray-500"
-                            : application.status === "Archived"
-                            ? "text-gray-400"
-                            : "text-gray-500"
+                              ? "text-gray-500"
+                              : application.status === "Archived"
+                                ? "text-gray-400"
+                                : "text-gray-500"
                         }`}
-                      >
-                        {application.status}
-                      </span>
+                    >
+                      {application.status}
+                    </span>
 
+                    <button
+                      onClick={() => handleViewDetails(application)}
+                      className="p-2 rounded-full text-blue-400 hover:bg-blue-400 hover:text-white transition-all duration-200"
+                      title="View Details"
+                    >
+                      <FaEye className="text-xl" />
+                    </button>
+
+                    {application.status === "Saved" && (
                       <button
-                        onClick={() => handleViewDetails(application)}
-                        className="p-2 rounded-full text-blue-400 hover:bg-blue-400 hover:text-white transition-all duration-200"
-                        title="View Details"
+                        onClick={() =>
+                          handleApplyButtonClick(application.jobId._id.toString())
+                        }
+                        disabled={applyingJob === application.jobId._id.toString()}
+                        className="p-2 rounded-full text-orange-400 hover:bg-orange-400 hover:text-white transition-all duration-200"
+                        title="Apply Now"
                       >
-                        <FaEye className="text-xl" />
+                        <FaPaperPlane className="text-xl" />
                       </button>
+                    )}
 
-                      {application.status === "Saved" && (
-                        <button
-                          onClick={() =>
-                            handleApplyButtonClick(application.jobId._id.toString())
-                          }
-                          disabled={applyingJob === application.jobId._id.toString()}
-                          className="p-2 rounded-full text-orange-400 hover:bg-orange-400 hover:text-white transition-all duration-200"
-                          title="Apply Now"
-                        >
-                          <FaPaperPlane className="text-xl" />
-                        </button>
-                      )}
-
-                      {application.status !== "Archived" && (
-                        <button
-                          onClick={() =>
-                            handleArchiveButtonClick(application.jobId._id.toString())
-                          }
-                          disabled={archivingJob === application.jobId._id.toString()}
-                          className="p-2 rounded-full text-orange-400 hover:bg-orange-400 hover:text-white transition-all duration-200"
-                          title="Move to Archive"
-                        >
-                          <FaArchive className="text-xl" />
-                        </button>
-                      )}
-                    </div>
+                    {application.status !== "Archived" && (
+                      <button
+                        onClick={() =>
+                          handleArchiveButtonClick(application.jobId._id.toString())
+                        }
+                        disabled={archivingJob === application.jobId._id.toString()}
+                        className="p-2 rounded-full text-orange-400 hover:bg-orange-400 hover:text-white transition-all duration-200"
+                        title="Move to Archive"
+                      >
+                        <FaArchive className="text-xl" />
+                      </button>
+                    )}
                   </div>
-                ))}
-              </div>
+                </div>
+              ))}
             </div>
           </div>
+        </div>
 
-          <ApplyEditModal
-            isOpen={modalJobId !== null}
-            onClose={() => setModalJobId(null)}
-            onApplyNow={handleApplyNow}
-            onEditResume={handleEditResume}
-            loading={applyingJob === modalJobId}
+        <ApplyEditModal
+          isOpen={modalJobId !== null}
+          onClose={() => setModalJobId(null)}
+          onApplyNow={handleApplyNow}
+          onEditResume={handleEditResume}
+          loading={applyingJob === modalJobId}
+        />
+
+        {viewingJob && (
+          <JobDetailsPopUp
+            job={viewingJob}
+            isOpen={isPopupOpen}
+            onClose={handleClosePopup}
           />
-
-          {viewingJob && (
-            <JobDetailsPopUp
-              job={viewingJob}
-              isOpen={isPopupOpen}
-              onClose={handleClosePopup}
-            />
-          )}
+        )}
       </div>
     </>
   );
