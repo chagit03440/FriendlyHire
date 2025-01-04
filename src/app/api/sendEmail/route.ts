@@ -7,7 +7,6 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 export async function POST(req: NextRequest) {
   // Parse the request body
   const body = await req.json();
-  console.log(`the body of the email ${body.attachmentUrl}`);
   const { to, subject, htmlContent, attachmentUrl } = body;
 
   // Validate required fields
@@ -54,11 +53,9 @@ export async function POST(req: NextRequest) {
 
     // Add attachment if provided
     if (attachmentUrl) {
-      console.log(`found attachmentUrl ${attachmentUrl}`);
       try {
         const response = await fetch(attachmentUrl);
         if (!response.ok) {
-          console.log(`Failed to fetch file: ${response.statusText}`);
           throw new Error(`Failed to fetch file: ${response.statusText}`);
         }
 
