@@ -48,7 +48,6 @@ const ResumeControlBar = ({
       return;
     }
     try {
-      console.log("nameeeee", fileName);
 
       const file = new File([instance.blob], fileName, { type: instance.blob.type });
 
@@ -62,7 +61,6 @@ const ResumeControlBar = ({
         const response = await updateCandidate(updatedProfileData.email, updatedProfileData);
         if (response) {
           toast.success("Resume saved succesfully!");
-          console.log("Resume saved succesfully!")
         } else {
           toast.error("Error saving file.");
         }

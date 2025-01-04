@@ -23,7 +23,6 @@ const formTypeToComponent: { [type in ShowForm]: () => JSX.Element } = {
   skills: SkillsForm,
   custom: CustomForm,
 };
-// console.log(formTypeToComponent.workExperiences);
 
 export const ResumeForm = () => {
   useSetInitialStore();

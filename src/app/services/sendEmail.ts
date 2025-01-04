@@ -4,7 +4,6 @@ export async function sendEmail(
   htmlContent: string,
   attachmentUrl?: string
 ) {
-  // console.log(`in the servise, the file url is: ${attachmentUrl}`);
   try {
     const response = await fetch("/api/sendEmail", {
       method: "POST",

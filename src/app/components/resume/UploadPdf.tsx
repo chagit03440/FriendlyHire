@@ -24,7 +24,6 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
         if (event.target.files) {
             const selectedFile = event.target.files[0];
             setFile(selectedFile);
-            console.log("Selected file:", selectedFile);
         }
     };
     const handleSubmit = async () => {
@@ -39,7 +38,6 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
             if (profileData) {
                 const resumeUrl = await uploadResume(file, profileData);
                 if (resumeUrl) {
-                    console.log("url new:", resumeUrl);
                     const updatedProfileData = { ...profileData, fileUrl: resumeUrl } as (IUser & ICandidate);
                     setProfileData(updatedProfileData);
                     const response = await updateCandidate(updatedProfileData.email, updatedProfileData);
@@ -58,7 +56,6 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
     };
     const handleEdit = async () => {
         const resume = await parseResumeFromPdf(String(profileData?.fileUrl));
-        console.log("resume", resume);
         const settings = deepClone(initialSettings);
         if (getHasUsedAppBefore()) {
             const sections = Object.keys(settings.formToShow) as ShowForm[];

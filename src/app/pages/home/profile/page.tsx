@@ -60,7 +60,6 @@ const Page = () => {
         } else if (role === "admin") {
           const thisUser = await getUser(mail);
           setUser(thisUser);
-          console.log("user", thisUser);
         }
       } catch (error) {
         console.error("Error fetching user data:", error);

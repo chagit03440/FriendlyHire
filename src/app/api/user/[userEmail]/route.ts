@@ -138,7 +138,6 @@ export async function DELETE(
         // Check if this employee has any associated jobs
         const jobs = await Job.find({ createdBy: userEmail });
 
-        console.log(jobs)
         // If the employee has any associated jobs, check if there are applications linked to them
         if (jobs.length > 0) {
           const applications = await Application.find().populate({
@@ -146,7 +145,6 @@ export async function DELETE(
             select: "title company createdBy",
             match: { createdBy: user.email },
           });
-          console.log(applications)
           if (applications.length > 0) {
             return NextResponse.json(
               { message: "Cannot delete employee with associated applications" },

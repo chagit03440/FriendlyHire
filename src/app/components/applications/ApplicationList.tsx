@@ -120,40 +120,41 @@ const ApplicationList: React.FC<Props> = ({ applications }) => {
                     >
                       {application.status}
                     </span>
+                    <div className="flex flex-col lg:flex-row items-center space-y-4 lg:space-y-0 lg:space-x-4">
+                            <button
+                              onClick={() => handleViewDetails(application)}
+                              className="p-2 rounded-full text-blue-400 hover:bg-blue-400 hover:text-white transition-all duration-200"
+                              title="View Details"
+                            >
+                              <FaEye className="text-xl" />
+                            </button>
 
-                    <button
-                      onClick={() => handleViewDetails(application)}
-                      className="p-2 rounded-full text-blue-400 hover:bg-blue-400 hover:text-white transition-all duration-200"
-                      title="View Details"
-                    >
-                      <FaEye className="text-xl" />
-                    </button>
+                            {application.status === "Saved" && (
+                              <button
+                                onClick={() =>
+                                  handleApplyButtonClick(application.jobId._id.toString())
+                                }
+                                disabled={applyingJob === application.jobId._id.toString()}
+                                className="p-2 rounded-full text-orange-400 hover:bg-orange-400 hover:text-white transition-all duration-200"
+                                title="Apply Now"
+                              >
+                                <FaPaperPlane className="text-xl" />
+                              </button>
+                            )}
 
-                    {application.status === "Saved" && (
-                      <button
-                        onClick={() =>
-                          handleApplyButtonClick(application.jobId._id.toString())
-                        }
-                        disabled={applyingJob === application.jobId._id.toString()}
-                        className="p-2 rounded-full text-orange-400 hover:bg-orange-400 hover:text-white transition-all duration-200"
-                        title="Apply Now"
-                      >
-                        <FaPaperPlane className="text-xl" />
-                      </button>
-                    )}
-
-                    {application.status !== "Archived" && (
-                      <button
-                        onClick={() =>
-                          handleArchiveButtonClick(application.jobId._id.toString())
-                        }
-                        disabled={archivingJob === application.jobId._id.toString()}
-                        className="p-2 rounded-full text-orange-400 hover:bg-orange-400 hover:text-white transition-all duration-200"
-                        title="Move to Archive"
-                      >
-                        <FaArchive className="text-xl" />
-                      </button>
-                    )}
+                            {application.status !== "Archived" && (
+                              <button
+                                onClick={() =>
+                                  handleArchiveButtonClick(application.jobId._id.toString())
+                                }
+                                disabled={archivingJob === application.jobId._id.toString()}
+                                className="p-2 rounded-full text-orange-400 hover:bg-orange-400 hover:text-white transition-all duration-200"
+                                title="Move to Archive"
+                              >
+                                <FaArchive className="text-xl" />
+                              </button>
+                            )}
+                          </div>
                   </div>
                 </div>
               ))}
