@@ -58,7 +58,7 @@ const UploadPdf: React.FC<Props> = ({ user }) => {
     };
     const handleEdit = async () => {
         const resume = await parseResumeFromPdf(String(profileData?.fileUrl));
-        console.log("resume", resume);
+        // console.log("resume", resume);
         const settings = deepClone(initialSettings);
         if (getHasUsedAppBefore()) {
             const sections = Object.keys(settings.formToShow) as ShowForm[];
