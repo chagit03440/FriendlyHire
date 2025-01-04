@@ -15,6 +15,8 @@ import { sendEmail } from "../services/sendEmail";
 import IJob from "../types/job";
 import { getUser } from "../services/userServices";
 import { getEmployeeEmailTemplate } from "../components/employee/EmployeeEmailTemplate";
+import { toast } from "react-hot-toast";
+import { AxiosError } from "axios";
 
 // Define the shape of the context's values
 interface JobActionsContextProps {
@@ -92,13 +94,12 @@ export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({
     }
   };
 
-  // Handle applying for a job
   const handleApplyJob = async (jobId: string) => {
     if (!mail) {
       console.error("User email is required to apply for the job.");
       return;
     }
-
+  
     const sendJobNotification = async (
       job: IJob,
       userName: string,
@@ -110,7 +111,7 @@ export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({
         userName: userName,
         jobTitle: job.title,
       };
-
+  
       try {
         await sendEmail(
           job.createdBy,
@@ -122,31 +123,59 @@ export const JobActionsProvider: React.FC<{ children: React.ReactNode }> = ({
         console.error("Error sending notification email:", error);
       }
     };
-
+  
     try {
       const existingApplication = await doesApplicationExist(jobId);
       const job = await getJobById(jobId);
       const user = await getUser(mail);
-
+  
+      if (job.status === "Closed") {
+        toast.error("Cannot apply to a job that is closed."); // Show error toast
+        return;
+      }
+  
       if (existingApplication) {
         existingApplication.status = ApplicationStatus.Applied;
-        await updateApplication(existingApplication);
-        queryClient.invalidateQueries({ queryKey: ["userApplications", mail] });
+        try {
+          await updateApplication(existingApplication);
+          queryClient.invalidateQueries({ queryKey: ["userApplications", mail] });
+        } catch (error:unknown ) {
+          if (error instanceof AxiosError &&
+            error.response &&
+            error.response.status === 400 &&
+            error.response.data.message.includes("job is closed")
+          ) {
+            console.error("Error: The job is closed.");
+            alert("This job is closed and cannot accept applications.");
+          } else {
+            console.error("Error updating the application:", error);
+            alert("An unexpected error occurred while applying for the job.");
+          }
+          return;
+        }
       } else {
-        await createApplication({
-          userEmail: mail,
-          jobId,
-          fileUrl: user.fileUrl,
-          status: ApplicationStatus.Applied,
-        });
-        queryClient.invalidateQueries({ queryKey: ["userApplications", mail] });
+        try {
+          await createApplication({
+            userEmail: mail,
+            jobId,
+            fileUrl: user.fileUrl,
+            status: ApplicationStatus.Applied,
+          });
+          queryClient.invalidateQueries({ queryKey: ["userApplications", mail] });
+        } catch (error) {
+          console.error("Error creating the application:", error);
+          alert("An unexpected error occurred while applying for the job.");
+          return;
+        }
       }
-
+  
       await sendJobNotification(job, user.name, user.fileUrl);
     } catch (error) {
       console.error("Error processing job application:", error);
+      alert("An error occurred while processing the application.");
     }
   };
+  
 
   // Handle archiving a job
   const handleArchiveJob = async (jobId: string) => {

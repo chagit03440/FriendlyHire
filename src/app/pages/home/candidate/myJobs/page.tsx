@@ -1,6 +1,5 @@
-"use client";
-
-import React, { useState, useEffect } from "react";
+"use client"
+import React, { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { getUserApplications } from "@/app/services/applicationServices";
 import { useUser } from "@/app/store/UserContext";
@@ -9,13 +8,13 @@ import IApplication from "@/app/types/application";
 import { JobActionsProvider } from "@/app/store/JobActionsContext";
 import { ApplicationStatus } from "@/app/types/enums";
 import LoadSpinner from "@/app/components/common/LoadSpinner";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 
 const CandidateApplications = () => {
   const { mail, role } = useUser();
   const [statusFilter, setStatusFilter] = useState<ApplicationStatus | null>(null);
-  const [statusCount, setStatusCount] = useState<Record<string, number>>({});
-  const router = useRouter();
+  // const [statusCount, setStatusCount] = useState<Record<string, number>>({});
+  // const router = useRouter();
 
   const {
     data: applications = [],
@@ -28,18 +27,12 @@ const CandidateApplications = () => {
     enabled: !!mail,
   });
 
-  useEffect(() => {
-    // Calculate status counts once when the data is fetched
-    const counts = applications.reduce((acc: { [x: string]: number; }, application: { status: ApplicationStatus; }) => {
-      const status = application.status;
-      if (!acc[status]) {
-        acc[status] = 0;
-      }
-      acc[status]++;
-      return acc;
-    }, {} as Record<string, number>);
-    setStatusCount(counts);
-  }, [applications]); 
+  // Calculate status counts directly in render
+  const statusCount = applications.reduce((acc: Record<string, number>, application: IApplication) => {
+    const status = application.status;
+    acc[status] = (acc[status] || 0) + 1;
+    return acc;
+  }, {});
 
   const filteredApplications = statusFilter
     ? applications.filter((application: IApplication) => application.status === statusFilter)
@@ -48,6 +41,10 @@ const CandidateApplications = () => {
   const handleStatusChange = (status: ApplicationStatus | "all") => {
     setStatusFilter(status === "all" ? null : (status as ApplicationStatus));
   };
+
+  if (!mail || role !== "candidate") {
+    return <div>Redirecting...</div>;
+  }
 
   if (isLoading) return <div><LoadSpinner /></div>;
   if (error instanceof Error) return <div>Error: {error.message}</div>;

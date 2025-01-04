@@ -48,19 +48,40 @@ export const createUser = async (userDataAndCode:CreateUserParams) => {
 export const deleteUser = async (userEmail: string) => {
   try {
     const response = await axios.delete(`/api/user/${userEmail}`);
-    return {
-      success: true,
-      message: "User deleted successfully",
-      data: response.data,
-    };
+    
+    if (response.status === 200) {
+      return {
+        success: true,
+        message: response.data.message,
+      };
+    } else {
+      return {
+        success: false,
+        message: response.data.message,
+      };
+    }
   } catch (error) {
-    console.error("Error deleting user:", error);
+    if (axios.isAxiosError(error)) {
+      // Handle errors with response status 400 or others
+      if (error.response?.status === 400) {
+        return {
+          success: false,
+          message: error.response.data.message,
+        };
+      } else {
+        return {
+          success: false,
+          message: "An unexpected error occurred while deleting the user",
+        };
+      }
+    }
     return {
       success: false,
-      message: "Failed to delete user",
+      message: "An error occurred while deleting the user",
     };
   }
 };
+
 
 
 export async function getRoleFromToken() {
