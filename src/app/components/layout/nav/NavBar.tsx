@@ -59,7 +59,7 @@ const NavBar: React.FC = () => {
                 </div>
               }
             />
-  
+
             {/* Avatar and User Menu */}
             <div className="nav-menu relative">
               <AvatarButton onClick={toggleMenu} />
@@ -80,7 +80,7 @@ const NavBar: React.FC = () => {
               href="/pages/login"
               text="Login"
             />
-  
+
             {/* Sign-Up Button */}
             <NavButton
               href="/pages/signup"
@@ -90,7 +90,7 @@ const NavBar: React.FC = () => {
         )}
       </div>
     </nav>
-  );  
+  );
 
 };
 
