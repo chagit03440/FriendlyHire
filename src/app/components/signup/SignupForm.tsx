@@ -54,7 +54,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
         console.error("Error during signup:", err);
         setError("An error occurred. Please try again.");
       } finally {
-        setIsSubmitting(false); 
+        setIsSubmitting(false);
       }
     } else {
       setError("Please correct the errors below");
@@ -81,7 +81,6 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
             {error}
           </div>
         )}
-
         <div>
           <label htmlFor="name" className={labelClassName}>
             Name
