@@ -99,9 +99,7 @@ export async function getRoleFromToken() {
 }
 
 export const addUser = async (user: IUser) => {
-  try {
-    console.log(user);
-    
+  try { 
     const response = await axios.post("/api/user", user);
     const data = response.data;
 

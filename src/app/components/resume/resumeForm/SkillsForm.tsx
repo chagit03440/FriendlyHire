@@ -53,7 +53,6 @@ export const SkillsForm = () => {
         skills: mergedSkills,
       };
       await updateCandidate(String(mail), updatedUser);
-      console.log("Skills successfully updated:", mergedSkills);
       toast.success("Skills added successfully!");
     } catch (error) {
       console.error("Error adding skills to profile:", error);

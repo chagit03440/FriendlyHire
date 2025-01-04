@@ -23,7 +23,6 @@ const EmailVerification: React.FC<EmailVerificationProps> = ({
   // Resend verification code handler
   const handleSendVerificationCode = async () => {
     const response = await sendVerificationCode(userData.email);
-    console.log("responseeee", response);
 
     if (response.success) {
       toast.success(response.message || "Verification code sent successfully.");
