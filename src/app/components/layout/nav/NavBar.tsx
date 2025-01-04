@@ -44,20 +44,23 @@ const NavBar: React.FC = () => {
   }, [isOpen, mail]);
 
   return (
-    <nav className="flex items-center justify-between bg-gray-800 text-white shadow-md relative h-20">
+    <nav className="flex flex-wrap items-center justify-between bg-gray-800 text-white shadow-md px-4 py-2 md:h-20">
       <Logo />
-      <div className="flex items-center gap-4">
+      <div className="flex flex-wrap items-center justify-center gap-2 w-full md:w-auto">
         {role ? (
-          <div className="flex items-center gap-4">
+          <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4">
+            {/* Home Button */}
             <NavButton
               href="/pages/home"
               text={
-                <div className="flex flex-col items-center justify-center text-center p-2">
-                  <IoHome className="text-xl mt-3" />
-                  <span className="text-xs mb-2">Home</span>
+                <div className="flex flex-col items-center justify-center text-center px-1 md:px-2">
+                  <IoHome className="text-lg md:text-xl mt-1 md:mt-2" />
+                  <span className="text-xs md:text-sm">Home</span>
                 </div>
               }
             />
+  
+            {/* Avatar and User Menu */}
             <div className="nav-menu relative">
               <AvatarButton onClick={toggleMenu} />
               <UserMenu
@@ -71,16 +74,24 @@ const NavBar: React.FC = () => {
             </div>
           </div>
         ) : (
-          <>
-            <NavButton href="/pages/login" text="Login" />
-            <div className="relative mr-5 ml-2">
-              <NavButton href="/pages/signup" text="Sign Up" />
-            </div>
-          </>
+          <div className="flex flex-wrap items-center justify-center gap-2 md:gap-4">
+            {/* Login Button */}
+            <NavButton
+              href="/pages/login"
+              text="Login"
+            />
+  
+            {/* Sign-Up Button */}
+            <NavButton
+              href="/pages/signup"
+              text="Sign Up"
+            />
+          </div>
         )}
       </div>
     </nav>
-  );
+  );  
+
 };
 
 export default NavBar;
