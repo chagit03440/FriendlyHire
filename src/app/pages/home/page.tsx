@@ -7,6 +7,7 @@ import { useUser } from "@/app/store/UserContext";
 import checkAccess from "@/app/utils/checkAccess";
 import LoadSpinner from "@/app/components/common/LoadSpinner";
 import AdminDashboard from "@/app/components/admin/AdminDashboard";
+import HomeLayout from "./layout";
 
 const Dashboard = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -47,6 +48,7 @@ const Dashboard = () => {
   }
 
   return (
+    <HomeLayout>
     <div>
       {localRole === "employee" ? (
         <EmployeeDashboard />
@@ -58,6 +60,7 @@ const Dashboard = () => {
         <p>Unrecognized Role</p> // Default message if role is undefined
       )}
     </div>
+    </HomeLayout>
   );
 };
 

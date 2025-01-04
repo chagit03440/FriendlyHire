@@ -48,7 +48,7 @@ const SignupForm: React.FC<SignupFormProps> = ({ onSignupSuccess }) => {
     if (validateForm()) {
       setIsSubmitting(true);
       try {
-        await new Promise((resolve) => setTimeout(resolve, 4000));
+        await new Promise((resolve) => setTimeout(resolve, 5000));
         onSignupSuccess(userData);
       } catch (err) {
         console.error("Error during signup:", err);

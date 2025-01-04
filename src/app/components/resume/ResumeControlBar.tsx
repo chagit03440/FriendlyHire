@@ -109,7 +109,7 @@ const ResumeControlBar = ({
           </label>
         </div>
         <a
-          className="ml-1 flex items-center gap-1 rounded-md border border-gray-300 px-3 py-0.5 hover:bg-gray-100 lg:ml-8"
+          className="ml-1 flex items-center gap-1 rounded-md border border-gray-300 px-3 py-0.5 hover:bg-gray-100 lg:ml-4"
           href={instance.url || "#"}
           download={fileName}
           onClick={(e) => {
@@ -123,7 +123,7 @@ const ResumeControlBar = ({
           <span className="whitespace-nowrap">Download Resume</span>
         </a>
         <button
-          className="ml-4 flex items-center gap-1 rounded-md bg-orange-400 px-3 py-0.5 text-white hover:bg-orange-500"
+          className="ml-4 flex items-center gap-1 rounded-md bg-orange-400 px-3 py-0.5 text-white hover:bg-orange-500 w-full sm:w-auto"
           onClick={handleSaveResume}
         >
           <span className="whitespace-nowrap">Save Resume</span>

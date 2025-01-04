@@ -9,11 +9,13 @@ import IApplication from "@/app/types/application";
 import { JobActionsProvider } from "@/app/store/JobActionsContext";
 import { ApplicationStatus } from "@/app/types/enums";
 import LoadSpinner from "@/app/components/common/LoadSpinner";
+import { useRouter } from "next/navigation";
 
 const CandidateApplications = () => {
   const { mail, role } = useUser();
   const [statusFilter, setStatusFilter] = useState<ApplicationStatus | null>(null);
   const [statusCount, setStatusCount] = useState<Record<string, number>>({});
+  const router = useRouter();
 
   const {
     data: applications = [],
@@ -37,7 +39,7 @@ const CandidateApplications = () => {
       return acc;
     }, {} as Record<string, number>);
     setStatusCount(counts);
-  }, [applications]); // Recalculate count if applications change
+  }, [applications]); 
 
   const filteredApplications = statusFilter
     ? applications.filter((application: IApplication) => application.status === statusFilter)
@@ -72,7 +74,7 @@ const CandidateApplications = () => {
                 onClick={() => handleStatusChange(status)}
                 className={`px-4 py-2 rounded-full text-sm font-medium border ${
                   statusFilter === status ? "bg-orange-400 text-white" : "bg-gray-200 text-black"
-                } hover:bg-orange-600 hover:text-white`}
+                } hover:bg-orange-500 hover:text-white`}
               >
                 {status} ({statusCount[status] || 0})
               </button>

@@ -2,11 +2,10 @@
 import "./globals.css";
 import NavBar from "./components/layout/nav/NavBar";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { UserProvider, useUser } from "./store/UserContext";
 import Footer from "./components/layout/Footer";
 import { useRouter } from "next/navigation";
-import checkAccess from "./utils/checkAccess";
 
 import Script from "next/script";
 
@@ -16,26 +15,9 @@ const LayoutContent: React.FC<{ children: React.ReactNode }> = ({
   const [queryClient] = useState(() => new QueryClient());
   const { setRole, setMail } = useUser();
   const router = useRouter();
+  const hasMounted = useRef(false);
 
-  useEffect(() => {
-    const validateAccess = async () => {
-      try {
-        const accessData = await checkAccess();
 
-        if (!accessData.hasAccess) {
-          router.push("/pages/login");
-        } else {
-          setRole(accessData.role.toLowerCase());
-          setMail(accessData.email);
-        }
-      } catch (error) {
-        console.error("Validation error:", error);
-        router.push("/pages/login");
-      }
-    };
-
-    validateAccess();
-  }, [router, setRole, setMail]);
 
   return (
     <html lang="en">
