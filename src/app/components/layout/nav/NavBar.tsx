@@ -78,13 +78,13 @@ const NavBar: React.FC = () => {
             {/* Login Button */}
             <NavButton
               href="/pages/login"
-              text="Login"
+              text="Log in"
             />
 
             {/* Sign-Up Button */}
             <NavButton
               href="/pages/signup"
-              text="Sign Up"
+              text="Sign up"
             />
           </div>
         )}

@@ -6,7 +6,7 @@ export const Logo = () => {
 
   return (
     <div
-      className="flex flex-col items-center justify-center w-full md:flex-row md:items-center md:justify-start md:w-auto" // Center on small screens, align left on larger screens
+      className="flex flex-col items-center justify-center w-full space-x-2 md:flex-row md:items-center md:justify-start md:w-auto" 
       onClick={() => router.push("/pages/home")}
     >
       {/* Smaller logo with transparency */}
