@@ -80,8 +80,9 @@ const ResumeControlBar = ({
   return (
     <>
       <Toaster />
-      <div className="sticky bottom-0 left-0 right-0 flex h-[var(--resume-control-bar-height)] items-center justify-center px-[var(--resume-padding)] text-gray-600 lg:justify-between">
-        <div className="flex items-center gap-2">
+      <div className="sticky bottom-0 left-0 right-0 flex flex-wrap items-center justify-center gap-3 px-4 py-2 text-gray-600 sm:px-[var(--resume-padding)] lg:justify-between">
+        {/* Left Section: Scale Controls */}
+        <div className="flex flex-wrap items-center gap-3">
           <MagnifyingGlassIcon className="h-5 w-5" aria-hidden="true" />
           <input
             type="range"
@@ -93,10 +94,10 @@ const ResumeControlBar = ({
               setScaleOnResize(false);
               setScale(Number(e.target.value));
             }}
-            className="w-32 accent-orange-400"
+            className="w-36 sm:w-40 accent-orange-400"
           />
-          <div className="w-10">{`${Math.round(scale * 100)}%`}</div>
-          <label className="hidden items-center gap-1 lg:flex">
+          <div className="w-12 text-center">{`${Math.round(scale * 100)}%`}</div>
+          <label className="hidden items-center gap-2 lg:flex">
             <input
               type="checkbox"
               className="mt-0.5 h-4 w-4 accent-orange-400"
@@ -106,8 +107,10 @@ const ResumeControlBar = ({
             <span className="select-none">Autoscale</span>
           </label>
         </div>
+
+        {/* Middle Section: Download Button */}
         <a
-          className="ml-1 flex items-center gap-1 rounded-md border border-gray-300 px-3 py-0.5 hover:bg-gray-100 lg:ml-4"
+          className="flex items-center gap-2 rounded-md border border-gray-300 px-3 py-1 text-sm hover:bg-gray-100"
           href={instance.url || "#"}
           download={fileName}
           onClick={(e) => {
@@ -120,16 +123,18 @@ const ResumeControlBar = ({
           <ArrowDownTrayIcon className="h-4 w-4" />
           <span className="whitespace-nowrap">Download Resume</span>
         </a>
+
+        {/* Right Section: Save Button */}
         <button
-          className="ml-4 flex items-center gap-1 rounded-md bg-orange-400 px-3 py-0.5 text-white hover:bg-orange-500 w-full sm:w-auto"
+          className="flex w-full items-center justify-center gap-2 rounded-md bg-orange-400 px-4 py-2 text-white hover:bg-orange-500 sm:w-auto"
           onClick={handleSaveResume}
         >
-          <span className="whitespace-nowrap">Save Resume</span>
+          <span className="whitespace-nowrap text-sm">Save Resume</span>
         </button>
-
       </div>
     </>
   );
+
 };
 
 /**

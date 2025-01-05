@@ -111,7 +111,7 @@ const ConnectingBackground = () => {
                    transform hover:-translate-y-0.5 transition-all duration-200
                    focus:outline-none focus:ring-4 focus:ring-orange-200"
                     onClick={() => router.push("/pages/login")} >
-                    Enter
+                    Continue Your Journey →
                 </button>
             </div>
         </div>
