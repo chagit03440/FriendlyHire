@@ -27,14 +27,13 @@ const LayoutContent: React.FC<{ children: React.ReactNode }> = ({
           </div>
         </QueryClientProvider>
         <Script
-          src="https://cdn.enable.co.il/licenses/enable-L33736ao60vh5q9z-1124-66724/init.js"
+          src="https://cdn.enable.co.il/licenses/enable-L33736ao60vh5q9z-1124-67238/init.js"
           strategy="afterInteractive"
         />
       </body>
     </html>
   );
 };
-
 export default function RootLayout({
   children,
 }: {
