@@ -4,8 +4,8 @@ import {
   FONT_FAMILY_TO_STANDARD_SIZE_IN_PT,
   FONT_FAMILY_TO_DISPLAY_NAME,
   type FontFamily,
-} from "../../../fonts/constants";
-import { getAllFontFamiliesToLoad } from "../../../fonts/lib";
+} from "../../../../constants/constants";
+import { getAllFontFamiliesToLoad } from "../../../../constants/lib";
 import dynamic from "next/dynamic";
 
 const Selection = ({

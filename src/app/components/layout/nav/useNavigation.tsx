@@ -1,4 +1,3 @@
-// hooks/useNavigation.ts
 import { useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { UserContextType } from "@/app/store/UserContext";

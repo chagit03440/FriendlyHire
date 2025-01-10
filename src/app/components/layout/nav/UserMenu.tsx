@@ -1,5 +1,5 @@
 // components/nav/UserMenu.tsx
-import { NavOption } from "./types";
+import { NavOption } from "../../../types/navTypes";
 import { AvatarButton } from "./Avatar";
 
 interface UserMenuProps {

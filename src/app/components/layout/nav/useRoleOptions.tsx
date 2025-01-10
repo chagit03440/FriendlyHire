@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { RoleOptions } from "./types";
+import { RoleOptions } from "../../../types/navTypes";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 import { FaUser, FaSignOutAlt, FaRegListAlt } from "react-icons/fa";
 import { MdWork } from "react-icons/md";

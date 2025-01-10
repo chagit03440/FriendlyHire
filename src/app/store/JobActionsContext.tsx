@@ -14,7 +14,7 @@ import { deleteJob, getJobById } from "../services/jobServices";
 import { sendEmail } from "../services/sendEmail";
 import IJob from "../types/job";
 import { getUser } from "../services/userServices";
-import { getEmployeeEmailTemplate } from "../components/employee/EmployeeEmailTemplate";
+import { getEmployeeEmailTemplate } from "../constants/EmployeeEmailTemplate";
 import { toast } from "react-hot-toast";
 import { AxiosError } from "axios";
 

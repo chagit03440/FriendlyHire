@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { Font } from "@react-pdf/renderer";
-import { ENGLISH_FONT_FAMILIES } from "./constants";
-import { getAllFontFamiliesToLoad } from "./lib";
+import { ENGLISH_FONT_FAMILIES } from "../../constants/constants";
+import { getAllFontFamiliesToLoad } from "../../constants/lib";
 
 /**
  * Register all fonts to React PDF so it can render fonts correctly in PDF

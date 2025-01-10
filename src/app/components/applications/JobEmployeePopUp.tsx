@@ -3,7 +3,7 @@ import IApplication from "@/app/types/application";
 import { sendEmail } from "@/app/services/sendEmail";
 import React, { useState, useEffect } from "react";
 import { getUser } from "@/app/services/userServices";
-import { getCandidateEmailTemplate } from "./CandidateEmailTemplate";
+import { getCandidateEmailTemplate } from "../../constants/CandidateEmailTemplate";
 
 interface Props {
   job: IJob;

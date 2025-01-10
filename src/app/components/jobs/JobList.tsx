@@ -11,9 +11,9 @@ import CandidateJobCard from "./CandidateJobCard";
 import JobEmployeePopUp from "../applications/JobEmployeePopUp";
 import EditJobForm from "../employee/EditJobForm ";
 import Pagination from "./Pagination";
-import { useJobList } from "./useJobList";
+import { useJobList } from "../../store/UseJobList";
 import { getUser } from "@/app/services/userServices";
-import { calculateSkillsMatch } from "../candidate/calculateSkillsMatch";
+import { calculateSkillsMatch } from "../../utils/calculateSkillsMatch";
 
 interface IUser {
   skills: string[];

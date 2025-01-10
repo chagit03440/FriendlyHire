@@ -8,8 +8,8 @@ import { NavButton } from "./NavButton";
 import { Logo } from "./Logo";
 import { UserMenu } from "./UserMenu";
 import { AvatarButton } from "./Avatar";
-import { useNavigation } from "./useNavigation";
-import { useRoleOptions } from "./useRoleOptions";
+import { useNavigation } from "./UseNavigation";
+import { useRoleOptions } from "./UseRoleOptions";
 
 const NavBar: React.FC = () => {
   const { role, mail, setRole, setMail } = useUser();

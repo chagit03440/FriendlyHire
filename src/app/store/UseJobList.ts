@@ -1,7 +1,7 @@
 import { useState } from "react";
 import IJob from "@/app/types/job";
 import IApplication from "@/app/types/application";
-import { updateJob } from "../../services/jobServices";
+import { updateJob } from "../services/jobServices";
 import { getJobApplications } from "@/app/services/applicationServices";
 
 export const useJobList = (initialJobs: IJob[]) => {

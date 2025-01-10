@@ -11,7 +11,7 @@ import {
   LETTER_WIDTH_PT,
 } from "@/app/lib/constants";
 import dynamic from "next/dynamic";
-import { getAllFontFamiliesToLoad } from "../fonts/lib";
+import { getAllFontFamiliesToLoad } from "../../constants/lib";
 
 const getIframeInitialContent = (isA4: boolean) => {
   const width = isA4 ? A4_WIDTH_PT : LETTER_WIDTH_PT;
